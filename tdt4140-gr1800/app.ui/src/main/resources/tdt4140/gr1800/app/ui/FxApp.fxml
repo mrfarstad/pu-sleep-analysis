@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import fxmapcontrol.Map?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="tdt4140.gr1800.app.ui.FxAppController"
+	prefHeight="750" prefWidth="1000">
+	<top>
+		<VBox>
+			<MenuBar>
+				<menus>
+					<fx:include fx:id="fileMenu" source="FileMenu.fxml"/>
+				</menus>
+			</MenuBar>
+			<ComboBox fx:id="geoLocationsSelector">
+				<BorderPane.margin>
+					<Insets left="5" right="5" top="5" bottom="5" />
+				</BorderPane.margin>
+			</ComboBox>
+		</VBox>
+	</top>
+	<center>
+		<Map fx:id="mapView" center="63,10" maxZoomLevel="15">
+		</Map>
+	</center>
+	<bottom>
+		<Slider fx:id="zoomSlider" min="1" max="20" value="9">
+			<BorderPane.margin>
+				<Insets left="5" right="5" top="5" bottom="5" />
+			</BorderPane.margin>
+		</Slider>
+	</bottom>
+</BorderPane>

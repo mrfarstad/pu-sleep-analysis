@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+
+<Menu xmlns:fx="http://javafx.com/fxml" text="File" fx:controller="tdt4140.gr1800.app.ui.FileMenuController">
+	<items>
+		<MenuItem text="New" onAction="#handleNewAction"/>
+		<MenuItem text="Open..." onAction="#handleOpenAction"/>
+		<Menu fx:id="recentMenu" text="Open Recent"/>
+		<MenuItem text="Save" onAction="#handleSaveAction"/>
+		<MenuItem text="Save As..." onAction="#handleSaveAsAction"/>
+		<MenuItem text="Save Copy As..." onAction="#handleSaveCopyAsAction"/>
+	</items>
+</Menu>
