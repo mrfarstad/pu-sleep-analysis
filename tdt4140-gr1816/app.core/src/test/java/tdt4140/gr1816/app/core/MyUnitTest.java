@@ -1,3 +1,5 @@
+package tdt4140.gr1816.app.core;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Test;
