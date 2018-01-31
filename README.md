@@ -14,5 +14,3 @@ TBA 🎓
 - ___Developer___: Ingeborg Sætersdal Sollid
 - ___Developer___: Odin Ugedal
 - ___Developer___: Mathias Wahl
-
-
