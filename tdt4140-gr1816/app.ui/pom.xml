@@ -8,6 +8,31 @@
 		<artifactId>tdt4140-gr1816</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+	
+	<profiles>
+		<profile>
+			<id>gitlab-ci</id>
+			<activation>
+				<property>
+					<name>gitlab-ci</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<!-- 
+			<properties>
+				<skip-ui-tests>true</skip-ui-tests>
+			</properties>
+			 -->
+			<dependencies>
+				<dependency>
+		            <groupId>org.testfx</groupId>
+		            <artifactId>openjfx-monocle</artifactId>
+		            <version>8u76-b04</version> <!-- jdk-9+181 for Java 9 -->
+		            <scope>test</scope>
+		        </dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 
 	<dependencies>
 		<dependency>

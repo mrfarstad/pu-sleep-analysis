@@ -51,7 +51,24 @@ public class App {
 		}
 		return null;
 	}
-	
+
+	public Collection<GeoLocations> getGeoLocations(String... names) {
+		Collection<GeoLocations> result = new ArrayList<GeoLocations>();
+		if (geoLocations != null) {
+			if (names != null) {
+				for (String name : names) {
+					GeoLocations gl = getGeoLocations(name);
+					if (gl != null) {
+						result.add(gl);
+					}
+				}
+			} else {
+				result.addAll(geoLocations);
+			}
+		}
+		return result;
+	}
+
 	// 
 
 	private DocumentStorageImpl<Collection<GeoLocations>, File> documentStorage = new DocumentStorageImpl<Collection<GeoLocations>, File>() {
