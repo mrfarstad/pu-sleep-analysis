@@ -1,0 +1,3 @@
+[submodule "examples"]
+	path = examples
+	url = https://gitlab.stud.iie.ntnu.no/tdt4140-staff/examples.git
