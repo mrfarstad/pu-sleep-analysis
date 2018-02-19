@@ -4,7 +4,7 @@
 ### Start server
 
 ```
-$ cd tdt4140-gr1816
+$ cd tdt4140-gr1816/app.core
 $ mv jetty:run
 ```
 
