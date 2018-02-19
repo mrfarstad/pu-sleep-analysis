@@ -1,0 +1,21 @@
+type Link {
+  url: String!
+  description: String!
+}
+
+type User{
+  name: String!
+  isDoctor: Boolean!
+  gender: String!
+  age: Int!
+}
+
+type Query {
+  allLinks: [Link]
+  allUsers: [User]
+}
+
+schema {
+  query: Query
+}
+

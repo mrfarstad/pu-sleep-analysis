@@ -1,6 +1,15 @@
 # Gruppe 16 - TDT4140
 > Programvareutvikling
 
+### Start server
+
+```
+$ cd tdt4140-gr1816
+$ mv jetty:run
+```
+
+Then open http://localhost:8080
+
 ### About
 
 TBA 🎓
