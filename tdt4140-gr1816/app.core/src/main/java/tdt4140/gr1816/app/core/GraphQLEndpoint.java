@@ -22,7 +22,11 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
 	private static GraphQLSchema buildSchema() {
 		LinkRepository linkRepository = new LinkRepository();
 		UserRepository userRepository = new UserRepository();
-		return SchemaParser.newParser().file("/schema.graphqls").resolvers(new Query(linkRepository, userRepository))
-				.build().makeExecutableSchema();
+		return SchemaParser
+				.newParser()
+				.file("/schema.graphqls")
+				.resolvers(new Query(linkRepository, userRepository), new Mutation(linkRepository, userRepository))
+				.build()
+				.makeExecutableSchema();
 	}
 }

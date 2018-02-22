@@ -9,7 +9,6 @@ public class LinkRepository {
 
     public LinkRepository() {
         links = new ArrayList<>();
-        //add some links to start off with
         links.add(new Link("http://howtographql.com", "Your favorite GraphQL page"));
         links.add(new Link("http://graphql.org/learn/", "The official docks"));
     }
