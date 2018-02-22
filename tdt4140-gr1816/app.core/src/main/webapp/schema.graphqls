@@ -1,12 +1,13 @@
 type Link {
-  url: String!
-  description: String!
+	id: ID!
+	url: String!
+  	description: String!
 }
 
 type Query {
-  allLinks: [Link]
+  	allLinks: [Link]
 }
 
 schema {
-  query: Query
+	query: Query
 }
