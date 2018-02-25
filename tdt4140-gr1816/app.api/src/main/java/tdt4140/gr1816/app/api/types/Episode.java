@@ -1,4 +1,4 @@
-package com.coxautodev.graphql.tools.example.types;
+package tdt4140.gr1816.app.api.types;
 
 public enum Episode {
     NEWHOPE,

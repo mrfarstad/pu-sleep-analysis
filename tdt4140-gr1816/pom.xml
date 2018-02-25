@@ -13,6 +13,7 @@
 
 	<modules>
 		<module>app.core</module>
+		<module>app.api</module>
 		<module>app.ui</module>
 	</modules>
 </project>

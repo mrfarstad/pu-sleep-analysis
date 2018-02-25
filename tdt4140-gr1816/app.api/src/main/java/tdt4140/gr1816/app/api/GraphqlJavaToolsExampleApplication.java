@@ -1,4 +1,4 @@
-package com.coxautodev.graphql.tools.example;
+package tdt4140.gr1816.app.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

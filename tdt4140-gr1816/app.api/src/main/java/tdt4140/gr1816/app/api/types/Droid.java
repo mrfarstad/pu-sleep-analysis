@@ -1,21 +1,21 @@
-package com.coxautodev.graphql.tools.example.types;
+package tdt4140.gr1816.app.api.types;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Human implements Character {
+public class Droid implements Character {
     private String id;
     private String name;
     private List<Character> friends = new ArrayList<>();
     private List<Episode> appearsIn;
-    private String homePlanet;
+    private String primaryFunction;
 
-    public Human(String id, String name, List<Episode> appearsIn, String homePlanet) {
+    public Droid(String id, String name, List<Episode> appearsIn, String primaryFunction) {
         this.id = id;
         this.name = name;
         this.appearsIn = appearsIn;
-        this.homePlanet = homePlanet;
+        this.primaryFunction = primaryFunction;
     }
 
     public void addFriends(Character ... friends) {
@@ -42,7 +42,7 @@ public class Human implements Character {
         return appearsIn;
     }
 
-    public String getHomePlanet() {
-        return homePlanet;
+    public String getPrimaryFunction() {
+        return primaryFunction;
     }
 }
