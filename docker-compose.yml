@@ -1,18 +1,18 @@
 version: '2'
 
 services:
-  db:
-    image: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: gruppe16
-      MYSQL_DATABASE: gruppe16
-      MYSQL_USER: gruppe16
-      MYSQL_PASSWORD: gruppe16
-    ports:
-      - 3306:3306
+ mongodb:
+  image: mongo:latest
+  container_name: "mongodb"
+  environment:
+    - MONGO_DATA_DIR=/data/db
+    - MONGO_LOG_DIR=/dev/null
+    - MONGO_INITDB_ROOT_USERNAME=gruppe16
+    - MONGO_INITDB_ROOT_PASSWORD=gruppe16
+    - MONGO_INITDB_DATABASE=grupp16
+  #volumes:
+    #- ./data/db:/data/db
+  ports:
+    - 27017:27017
+  command: mongod --smallfiles --logpath=/dev/null
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
