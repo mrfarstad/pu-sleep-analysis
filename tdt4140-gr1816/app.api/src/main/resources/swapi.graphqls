@@ -7,6 +7,16 @@ type Query {
     droid(id: String!): Droid
     # Find character by id
     character(id: String!): Character
+    allLinks: [Link]
+}
+
+type Link {
+  url: String!
+  description: String!
+}
+
+schema {
+  query: Query
 }
 
 # One of the films in the Star Wars Trilogy
