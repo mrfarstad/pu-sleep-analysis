@@ -4,14 +4,6 @@ services:
  mongodb:
   image: mongo:latest
   container_name: "mongodb"
-  environment:
-    - MONGO_DATA_DIR=/data/db
-    - MONGO_LOG_DIR=/dev/null
-    - MONGO_INITDB_ROOT_USERNAME=gruppe16
-    - MONGO_INITDB_ROOT_PASSWORD=gruppe16
-    - MONGO_INITDB_DATABASE=grupp16
-  #volumes:
-    #- ./data/db:/data/db
   ports:
     - 27017:27017
   command: mongod --smallfiles --logpath=/dev/null
