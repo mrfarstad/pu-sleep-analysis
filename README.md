@@ -5,6 +5,14 @@
 
 TBA 🎓
 
+### Database
+
+
+To start mongodb
+```bash
+$ docker-compose up -d
+```
+
 ### Run shiz
 
 ```bash
@@ -15,6 +23,8 @@ $ java -jar app.api/target/tdt4140-gr1816.app.api-0.0.1-SNAPSHOT.jar # Start API
 ```
 
 Then open http://localhost:8080/graphiql
+
+just werkz^{tm}
 
 ## Roles
 
