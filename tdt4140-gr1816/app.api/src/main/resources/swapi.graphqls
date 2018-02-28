@@ -8,6 +8,7 @@ type Query {
     # Find character by id
     character(id: String!): Character
     allLinks: [Link]
+    allUsers: [User]
 }
 
 type Link {
@@ -15,8 +16,18 @@ type Link {
   description: String!
 }
 
+type User {
+	id: ID!
+	username: String!
+	password: String!
+	isDoctor: Boolean!
+	gender: String!
+	age: Int!
+}
+
 type Mutation {
   createLink(url: String!, description: String!): Link
+  createUser(id: ID!, username: String!, password: String!, isDoctor: String!, gender: String!, age: Int!): User 
 }
 
 schema {

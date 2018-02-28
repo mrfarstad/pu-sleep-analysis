@@ -46,4 +46,5 @@ public class LinkRepository {
                 doc.getString("url"),
                 doc.getString("description"));
     }
+
 }

@@ -12,24 +12,38 @@ import com.mongodb.client.MongoDatabase;
 import graphql.schema.DataFetchingEnvironment;
 import tdt4140.gr1816.app.api.CharacterRepository;
 import tdt4140.gr1816.app.api.LinkRepository;
+import tdt4140.gr1816.app.api.UserRepository;
 import tdt4140.gr1816.app.api.types.Character;
 import tdt4140.gr1816.app.api.types.Droid;
 import tdt4140.gr1816.app.api.types.Episode;
 import tdt4140.gr1816.app.api.types.Human;
 import tdt4140.gr1816.app.api.types.Link;
+import tdt4140.gr1816.app.api.types.User;
 
 @Component
 public class Query implements GraphQLQueryResolver {
 	
     private static final LinkRepository linkRepository;
+    private static final UserRepository userRepository;
 
     static {
         MongoDatabase mongo = new MongoClient().getDatabase("gruppe16");
         linkRepository = new LinkRepository(mongo.getCollection("links"));
+        userRepository = new UserRepository(mongo.getCollection("users"));
     }
-
+    
+	public List<Link> allLinks() {
+		return linkRepository.getAllLinks();
+	}
+	
+	public List<User> allUsers() {
+		return userRepository.getAllUsers();
+	}
+	
+	
 	@Autowired
 	private CharacterRepository characterRepository;
+
 
 	public Character hero(Episode episode) {
 		return episode != null ? characterRepository.getHeroes().get(episode)
@@ -52,8 +66,5 @@ public class Query implements GraphQLQueryResolver {
 		return characterRepository.getCharacters().get(id);
 	}
 
-	public List<Link> allLinks() {
-		return linkRepository.getAllLinks();
-	}
 
 }
