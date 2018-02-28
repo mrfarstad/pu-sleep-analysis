@@ -20,6 +20,11 @@ public class UserRepository {
         this.users = users;
     }
     
+    public User findByUsername(String username) {
+        Document doc = users.find(eq("username", username)).first();
+        return user(doc);
+    }
+    
     public User findById(String id) {
         Document doc = users.find(eq("_id", new ObjectId(id))).first();
         return user(doc);
@@ -33,20 +38,31 @@ public class UserRepository {
         return allUsers;
     }
     
-    public void saveUser(User user) {
+    public User saveUser(User user) {
         Document doc = new Document();
         doc.append("id", user.getId().toString());
+        doc.append("name", user.getName());
         doc.append("username", user.getUsername());
         doc.append("password", user.getPassword());
         doc.append("isDoctor", user.isDoctor());
         doc.append("gender", user.getGender());
         doc.append("age", user.getAge());
         users.insertOne(doc);
+        return new User(
+        			doc.get("_id").toString(),
+        			user.getName(),
+        			user.getUsername(),
+        			user.getPassword(),
+        			user.isDoctor(),
+        			user.getGender(),
+        			user.getAge()
+        		);
     }
     
     private User user(Document doc) {
         return new User(
                 doc.get("_id").toString(),
+                doc.getString("name"),
                 doc.getString("username"),
                 doc.getString("password"),
         			doc.getBoolean("isDoctor"),

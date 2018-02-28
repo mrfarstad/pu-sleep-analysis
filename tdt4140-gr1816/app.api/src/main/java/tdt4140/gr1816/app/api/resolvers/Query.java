@@ -25,11 +25,11 @@ public class Query implements GraphQLQueryResolver {
 	
     private static final LinkRepository linkRepository;
     private static final UserRepository userRepository;
-
+    
     static {
-        MongoDatabase mongo = new MongoClient().getDatabase("gruppe16");
-        linkRepository = new LinkRepository(mongo.getCollection("links"));
-        userRepository = new UserRepository(mongo.getCollection("users"));
+            MongoDatabase mongo = new MongoClient().getDatabase("gruppe16");
+            linkRepository = new LinkRepository(mongo.getCollection("links"));
+            userRepository = new UserRepository(mongo.getCollection("users"));
     }
     
 	public List<Link> allLinks() {
