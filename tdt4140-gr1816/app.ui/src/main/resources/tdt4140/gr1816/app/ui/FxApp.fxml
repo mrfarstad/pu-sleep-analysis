@@ -6,12 +6,11 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.FxAppController">
    <top>
       <VBox alignment="CENTER" prefHeight="50.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="136.0" text="Innlogging">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="112.0" text="Innlogging">
                <font>
                   <Font size="18.0" />
                </font>
@@ -46,31 +45,36 @@
       </HBox>
    </left>
    <center>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="203.0" prefWidth="232.0" BorderPane.alignment="CENTER">
          <children>
             <VBox prefHeight="350.0" prefWidth="183.0">
                <children>
-                  <TextField prefHeight="27.0" prefWidth="123.0">
+                  <TextField fx:id="usernameField" prefHeight="27.0" prefWidth="123.0">
                      <VBox.margin>
-                        <Insets left="40.0" top="50.0" />
+                        <Insets left="20.0" right="20.0" top="50.0" />
                      </VBox.margin>
                   </TextField>
-                  <PasswordField>
+                  <PasswordField fx:id="passwordField">
                      <opaqueInsets>
                         <Insets top="40.0" />
                      </opaqueInsets>
                      <VBox.margin>
-                        <Insets left="40.0" top="5.0" />
+                        <Insets left="20.0" right="20.0" top="7.0" />
                      </VBox.margin>
                   </PasswordField>
+                  <Button mnemonicParsing="false" onAction="#handleLogin" prefHeight="27.0" prefWidth="142.0" text="Logg inn">
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="10.0" />
+                     </VBox.margin>
+                  </Button>
                   <Button mnemonicParsing="false" text="Lag ny bruker">
                      <VBox.margin>
-                        <Insets left="50.0" top="50.0" />
+                        <Insets left="40.0" top="70.0" />
                      </VBox.margin>
                   </Button>
                </children>
             </VBox>
          </children>
-      </HBox>
+      </AnchorPane>
    </center>
 </BorderPane>
