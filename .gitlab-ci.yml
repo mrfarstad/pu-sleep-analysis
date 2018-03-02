@@ -17,7 +17,6 @@ variables:
 build-job:
   stage: build
   script:
-    - "mvn clean compile -f tdt4140-gr1800/pom.xml $MAVEN_CLI_OPTS"
     - "mvn clean compile -f tdt4140-gr1816/pom.xml $MAVEN_CLI_OPTS"
 
 unittest-job:
@@ -25,14 +24,11 @@ unittest-job:
   dependencies:
     - build-job
   script:
-    - "mvn package -f tdt4140-gr1800/pom.xml $MAVEN_CLI_OPTS"
     - "mvn package -f tdt4140-gr1816/pom.xml $MAVEN_CLI_OPTS"
-    - "cat tdt4140-gr1800/app.core/target/site/jacoco/index.html"
 
 integrationtest-job:
   stage: test
   dependencies:
     - build-job
   script:
-    - "mvn verify -f tdt4140-gr1800/pom.xml $MAVEN_CLI_OPTS"
     - "mvn verify -f tdt4140-gr1816/pom.xml $MAVEN_CLI_OPTS"
