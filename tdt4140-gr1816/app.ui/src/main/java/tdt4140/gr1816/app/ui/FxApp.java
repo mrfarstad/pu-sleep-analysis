@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import java.io.IOException;
 
 public class FxApp extends Application {
 
@@ -14,7 +15,16 @@ public class FxApp extends Application {
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
-
+	}
+	
+	public static void showDocterScene() throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(FxApp.class.getResource("DoctorGUI.fxml"));
+	}
+	
+	public static void showPasientScene() throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(FxApp.class.getResource("UserGUI.fxml"));
 	}
 
 	public static void main(String[] args) {
