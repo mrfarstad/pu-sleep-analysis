@@ -18,6 +18,15 @@
       #graphiql {
         height: 100vh;
       }
+            }
+      .token {
+        background: linear-gradient(#f7f7f7, #e2e2e2);
+        border-bottom: 1px solid #d0d0d0;
+        font-family: system, -apple-system, 'San Francisco', '.SFNSDisplay-Regular', 'Segoe UI', Segoe, 'Segoe WP', 'Helvetica Neue', helvetica, 'Lucida Grande', arial, sans-serif;
+        padding: 7px 14px 6px;
+        font-size: 14px;
+      }
+
     </style>
 
     <!--
@@ -37,13 +46,15 @@
       copy them directly into your environment, or perhaps include them in your
       favored resource bundler.
      -->
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphiql@0.11.2/graphiql.css" />
-	<script src="//cdn.jsdelivr.net/npm/graphiql@0.11.2/graphiql.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/graphiql@0.11.11/graphiql.css" />
+	<script src="//cdn.jsdelivr.net/npm/graphiql@0.11.11/graphiql.js"></script>
 
   </head>
   <body>
+    <div class="token">Token goes here: <input id="token" placeholder="Token goes here :smile:"></div>
     <div id="graphiql">Loading...</div>
     <script>
+document.getElementById('token').value = localStorage.getItem('graphiql:token');
 /**
  * This GraphiQL example illustrates how to use some of GraphiQL's props
  * in order to enable reading and updating the URL parameters, making
@@ -121,12 +132,15 @@ function updateURL() {
 function graphQLFetcher(graphQLParams) {
   // This example expects a GraphQL server at the path /graphql.
   // Change this to point wherever you host your GraphQL server.
+  const token = document.getElementById('token').value;
+  localStorage.setItem('graphiql:token', token);
+
   return fetch('/graphql', {
     method: 'post',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: 'Bearer 5a9bf4fdc13edf307a4e13f7'
+      Authorization: token ? `Bearer ${token}`: null
     },
     body: JSON.stringify(graphQLParams),
     credentials: 'include'
