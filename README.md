@@ -13,17 +13,48 @@ To start mongodb
 $ docker-compose up -d
 ```
 
-### Run shiz
+### Run API
 
 ```bash
-$ cd tdt4140-gr1816/
-$ mvn install
-$ java -jar app.api/target/tdt4140-gr1816.app.api-0.0.1-SNAPSHOT.jar # Start API
-
+cd tdt4140-gr1816/app.api
+mvn jetty:run
 ```
 
-Then open http://localhost:8080/graphiql
+Then open http://localhost:8080
 
+Lag en bruker i GraphiQL:
+
+```
+mutation createUser {
+  createUser(
+    id: "1337"
+    name: "test"
+    authProvider: {
+      username: "test",
+      password: "test"
+    },
+    isDoctor: true,
+    gender: "male"
+    age: 22,
+    ) {
+
+    	username
+  }
+}
+```
+
+Logg inn med brukeren:
+
+```
+mutation {
+  signinUser(auth: {
+    username: "test"
+    password: "test"
+  }) {
+    token
+  }
+}
+```
 just werkz^{tm}
 
 ## Roles

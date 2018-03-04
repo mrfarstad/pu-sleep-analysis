@@ -1,26 +1,60 @@
 package tdt4140.gr1816.app.api.resolvers;
 
+
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+
+import com.coxautodev.graphql.tools.GraphQLRootResolver;
+
+import graphql.GraphQLException;
+import graphql.schema.DataFetchingEnvironment;
 import tdt4140.gr1816.app.api.LinkRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
-import org.springframework.stereotype.Component;
+import tdt4140.gr1816.app.api.UserRepository;
+import tdt4140.gr1816.app.api.VoteRepository;
+import tdt4140.gr1816.app.api.auth.AuthContext;
+import tdt4140.gr1816.app.api.auth.AuthData;
 import tdt4140.gr1816.app.api.types.Link;
-import com.coxautodev.graphql.tools.GraphQLMutationResolver;
+import tdt4140.gr1816.app.api.types.SigninPayload;
+import tdt4140.gr1816.app.api.types.User;
+import tdt4140.gr1816.app.api.types.Vote;
 
-@Component
-public class Mutation implements GraphQLMutationResolver {
+public class Mutation implements GraphQLRootResolver {
     
-    private static final LinkRepository linkRepository;
+    private final LinkRepository linkRepository;
+    private final UserRepository userRepository;
+    private final VoteRepository voteRepository;
 
-    static {
-        MongoDatabase mongo = new MongoClient().getDatabase("gruppe16");
-        linkRepository = new LinkRepository(mongo.getCollection("links"));
+    public Mutation(LinkRepository linkRepository, UserRepository userRepository, VoteRepository voteRepository) {
+        this.linkRepository = linkRepository;
+        this.userRepository = userRepository;
+        this.voteRepository = voteRepository;
     }
     
-    public Link createLink(String url, String description) {
-        Link newLink = new Link(url, description);
+    //The way to inject the context is via DataFetchingEnvironment
+    public Link createLink(String url, String description, DataFetchingEnvironment env) {
+        AuthContext context = env.getContext();
+        Link newLink = new Link(url, description, context.getUser().getId());
         linkRepository.saveLink(newLink);
         return newLink;
+    }
+
+    
+    public User createUser(AuthData auth, boolean isDoctor, String gender, int age) {
+        User newUser = new User(auth.getUsername(), auth.getPassword(), isDoctor, gender, age);
+        return userRepository.saveUser(newUser);
+    }
+    
+    public Vote createVote(String linkId, String userId) {
+        ZonedDateTime now = Instant.now().atZone(ZoneOffset.ofHours(1));
+        return voteRepository.saveVote(new Vote(now, userId, linkId));
+    }
+    
+    public SigninPayload signinUser(AuthData auth) throws IllegalAccessException {
+        User user = userRepository.findByUsername(auth.getUsername());
+        if (user.getPassword().equals(auth.getPassword())) {
+            return new SigninPayload(user.getId(), user);
+        }
+        throw new GraphQLException("Invalid credentials");
     }
 }

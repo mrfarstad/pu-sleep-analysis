@@ -8,15 +8,51 @@ type Query {
     # Find character by id
     character(id: String!): Character
     allLinks: [Link]
+    allUsers: [User]
 }
 
-type Link {
-  url: String!
-  description: String!
-}
 
 type Mutation {
-  createLink(url: String!, description: String!): Link
+  createLink(url: String!, description: String!): Link 
+  createUser(authProvider: AuthData!, isDoctor: Boolean!, gender: String!, age: Int!): User
+  signinUser(auth: AuthData): SigninPayload
+  createVote(linkId: ID, userId: ID): Vote
+}
+
+type Vote {
+    id: ID!
+    createdAt: DateTime!
+    user: User!
+    link: Link!
+}
+
+scalar DateTime
+
+input AuthData {
+	username: String!
+	password: String!
+}
+
+
+type Link {
+	id: ID!
+  	url: String!
+  	description: String!
+  	postedBy: User
+}
+
+type User {
+	id: ID!
+	username: String
+	password: String
+	isDoctor: Boolean
+	gender: String
+	age: Int
+}
+
+type SigninPayload {
+  token: String
+  user: User
 }
 
 schema {

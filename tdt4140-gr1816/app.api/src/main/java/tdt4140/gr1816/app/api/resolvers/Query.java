@@ -2,34 +2,39 @@ package tdt4140.gr1816.app.api.resolvers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
+import com.coxautodev.graphql.tools.GraphQLRootResolver;
 
 import graphql.schema.DataFetchingEnvironment;
 import tdt4140.gr1816.app.api.CharacterRepository;
 import tdt4140.gr1816.app.api.LinkRepository;
+import tdt4140.gr1816.app.api.UserRepository;
 import tdt4140.gr1816.app.api.types.Character;
 import tdt4140.gr1816.app.api.types.Droid;
 import tdt4140.gr1816.app.api.types.Episode;
 import tdt4140.gr1816.app.api.types.Human;
 import tdt4140.gr1816.app.api.types.Link;
+import tdt4140.gr1816.app.api.types.User;
 
-@Component
-public class Query implements GraphQLQueryResolver {
-	
-    private static final LinkRepository linkRepository;
+public class Query implements GraphQLRootResolver {
+    
+    private final LinkRepository linkRepository;
+    private final UserRepository userRepository;
 
-    static {
-        MongoDatabase mongo = new MongoClient().getDatabase("gruppe16");
-        linkRepository = new LinkRepository(mongo.getCollection("links"));
+    public Query(LinkRepository linkRepository, UserRepository userRepository) {
+        this.linkRepository = linkRepository;
+        this.userRepository = userRepository;
     }
 
-	@Autowired
+    public List<Link> allLinks() {
+        return linkRepository.getAllLinks();
+    }
+
+	public List<User> allUsers() {
+		return userRepository.getAllUsers();
+	}
+	
 	private CharacterRepository characterRepository;
+
 
 	public Character hero(Episode episode) {
 		return episode != null ? characterRepository.getHeroes().get(episode)
@@ -51,9 +56,4 @@ public class Query implements GraphQLQueryResolver {
 	public Character character(String id) {
 		return characterRepository.getCharacters().get(id);
 	}
-
-	public List<Link> allLinks() {
-		return linkRepository.getAllLinks();
-	}
-
 }
