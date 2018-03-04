@@ -49,6 +49,10 @@ public class Mutation implements GraphQLRootResolver {
 
   public SigninPayload signinUser(AuthData auth) throws IllegalAccessException {
     User user = userRepository.findByUsername(auth.getUsername());
+    if (user == null) {
+      throw new GraphQLException("Invalid user");
+    }
+
     if (user.getPassword().equals(auth.getPassword())) {
       return new SigninPayload(user.getId(), user);
     }

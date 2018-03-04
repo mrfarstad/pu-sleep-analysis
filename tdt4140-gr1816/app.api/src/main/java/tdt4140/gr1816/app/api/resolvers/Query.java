@@ -6,6 +6,7 @@ import java.util.List;
 import tdt4140.gr1816.app.api.CharacterRepository;
 import tdt4140.gr1816.app.api.LinkRepository;
 import tdt4140.gr1816.app.api.UserRepository;
+import tdt4140.gr1816.app.api.auth.AuthContext;
 import tdt4140.gr1816.app.api.types.Character;
 import tdt4140.gr1816.app.api.types.Droid;
 import tdt4140.gr1816.app.api.types.Episode;
@@ -63,5 +64,10 @@ public class Query implements GraphQLRootResolver {
 
   public Character character(String id) {
     return characterRepository.getCharacters().get(id);
+  }
+
+  public User viewer(DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    return context.getUser();
   }
 }
