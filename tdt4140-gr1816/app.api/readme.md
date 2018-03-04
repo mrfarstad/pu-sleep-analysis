@@ -1,29 +1,25 @@
 mutation createUser {
-	createUser(
-    id: "1"
-    name: "martin"
+  createUser(
+    id: "1337"
+    name: "test"
     authProvider: {
-      username:"gruppe16"
-      password: "gruppe16"
-    }
-    isDoctor: false
-    gender: "apache helicopter"
-    age: 22
-  ) {
-    id
-    name
+      username: "test",
+      password: "test"
+    },
+    isDoctor: true,
+    gender: "male"
+    age: 22,
+    ) {
+    	
+    	username
   }
 }
 
-mutation signIn {
+mutation {
   signinUser(auth: {
-    username: "gruppe16"
-    password: "gruppe16"
+    username: "test"
+    password: "test"
   }) {
     token
-    user {
-      id
-      name
-    }
   }
 }
