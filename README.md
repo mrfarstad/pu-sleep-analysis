@@ -57,6 +57,17 @@ mutation {
 ```
 just werkz^{tm}
 
+### Code formatting
+
+We use [google-java-format](https://github.com/google/google-java-format) to format the source code.
+There is a custom plugin for eclipse [here](https://github.com/google/google-java-format#eclipse)
+
+```bash
+$ mvn verify # Verify your code
+$ mvn com.coveo:fmt-maven-plugin:format # This will format the code
+```
+
+
 ## Roles
 
 - ___Scrum master___: Ole Kristian Vingdal

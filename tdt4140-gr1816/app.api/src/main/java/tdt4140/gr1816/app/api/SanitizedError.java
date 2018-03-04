@@ -5,14 +5,14 @@ import graphql.ExceptionWhileDataFetching;
 
 // Error wrapper for better exception handling
 public class SanitizedError extends ExceptionWhileDataFetching {
-    
-    public SanitizedError(ExceptionWhileDataFetching inner) {
-        super(inner.getException());
-    }
 
-    @Override
-    @JsonIgnore
-    public Throwable getException() {
-        return super.getException();
-    }
+  public SanitizedError(ExceptionWhileDataFetching inner) {
+    super(inner.getException());
+  }
+
+  @Override
+  @JsonIgnore
+  public Throwable getException() {
+    return super.getException();
+  }
 }

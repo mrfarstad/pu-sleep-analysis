@@ -2,48 +2,48 @@ package tdt4140.gr1816.app.api.types;
 
 public class User {
 
-	private String id;
-	private String username;
-	private String password;
-	private boolean isDoctor;
-	private String gender;
-	private int age;
-	
-	public User(String username, String password, boolean isDoctor, String gender, int age) {
-		this(null, username, password, isDoctor, gender, age);
-	}
-	
-	public User(String id, String username, String password, boolean isDoctor, String gender, int age) {
-		this.id = id;
-		this.username = username;
-		this.password = password;
-		this.isDoctor = isDoctor;
-		this.gender = gender;
-		this.age = age;
-	}
+  private String id;
+  private String username;
+  private String password;
+  private boolean isDoctor;
+  private String gender;
+  private int age;
 
-	public String getId() {
-		return id;
-	}
+  public User(String username, String password, boolean isDoctor, String gender, int age) {
+    this(null, username, password, isDoctor, gender, age);
+  }
 
-	public String getUsername() {
-		return username;
-	}
+  public User(
+      String id, String username, String password, boolean isDoctor, String gender, int age) {
+    this.id = id;
+    this.username = username;
+    this.password = password;
+    this.isDoctor = isDoctor;
+    this.gender = gender;
+    this.age = age;
+  }
 
-	public String getPassword() {
-		return password;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public boolean isDoctor() {
-		return isDoctor;
-	}
+  public String getUsername() {
+    return username;
+  }
 
-	public String getGender() {
-		return gender;
-	}
+  public String getPassword() {
+    return password;
+  }
 
-	public int getAge() {
-		return age;
-	}
-	
+  public boolean isDoctor() {
+    return isDoctor;
+  }
+
+  public String getGender() {
+    return gender;
+  }
+
+  public int getAge() {
+    return age;
+  }
 }
