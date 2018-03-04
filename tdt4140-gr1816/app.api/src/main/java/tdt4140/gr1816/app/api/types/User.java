@@ -3,16 +3,18 @@ package tdt4140.gr1816.app.api.types;
 public class User {
 
 	private String id;
-	private String name;
 	private String username;
 	private String password;
 	private boolean isDoctor;
 	private String gender;
 	private int age;
 	
-	public User(String id, String name, String username, String password, boolean isDoctor, String gender, int age) {
+	public User(String username, String password, boolean isDoctor, String gender, int age) {
+		this(null, username, password, isDoctor, gender, age);
+	}
+	
+	public User(String id, String username, String password, boolean isDoctor, String gender, int age) {
 		this.id = id;
-		this.name = name;
 		this.username = username;
 		this.password = password;
 		this.isDoctor = isDoctor;
@@ -42,11 +44,6 @@ public class User {
 
 	public int getAge() {
 		return age;
-	}
-	
-	public String getName() {
-		return name;
-		
 	}
 	
 }

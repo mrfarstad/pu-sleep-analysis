@@ -1,10 +1,7 @@
 package tdt4140.gr1816.app.api.resolvers;
 
-import org.springframework.stereotype.Component;
 
-import com.coxautodev.graphql.tools.GraphQLMutationResolver;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
+import com.coxautodev.graphql.tools.GraphQLRootResolver;
 
 import graphql.GraphQLException;
 import tdt4140.gr1816.app.api.LinkRepository;
@@ -14,16 +11,14 @@ import tdt4140.gr1816.app.api.types.Link;
 import tdt4140.gr1816.app.api.types.SigninPayload;
 import tdt4140.gr1816.app.api.types.User;
 
-@Component
-public class Mutation implements GraphQLMutationResolver {
-
-    private static final LinkRepository linkRepository;
-    private static final UserRepository userRepository;
+public class Mutation implements GraphQLRootResolver {
     
-    static {
-            MongoDatabase mongo = new MongoClient().getDatabase("gruppe16");
-            linkRepository = new LinkRepository(mongo.getCollection("links"));
-            userRepository = new UserRepository(mongo.getCollection("users"));
+    private final LinkRepository linkRepository;
+    private final UserRepository userRepository;
+
+    public Mutation(LinkRepository linkRepository, UserRepository userRepository) {
+        this.linkRepository = linkRepository;
+        this.userRepository = userRepository;
     }
     
     public Link createLink(String url, String description) {
@@ -31,9 +26,10 @@ public class Mutation implements GraphQLMutationResolver {
         linkRepository.saveLink(newLink);
         return newLink;
     }
+
     
-    public User createUser(String id, String name, AuthData auth, boolean isDoctor, String gender, int age) {
-        User newUser = new User(id, name, auth.getUsername(), auth.getPassword(), isDoctor, gender, age);
+    public User createUser(AuthData auth, boolean isDoctor, String gender, int age) {
+        User newUser = new User(auth.getUsername(), auth.getPassword(), isDoctor, gender, age);
         return userRepository.saveUser(newUser);
     }
     

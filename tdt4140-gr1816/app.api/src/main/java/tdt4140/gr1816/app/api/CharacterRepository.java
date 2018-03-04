@@ -8,14 +8,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.stereotype.Component;
-
 import tdt4140.gr1816.app.api.types.Character;
 import tdt4140.gr1816.app.api.types.Droid;
 import tdt4140.gr1816.app.api.types.Episode;
 import tdt4140.gr1816.app.api.types.Human;
 
-@Component
 public class CharacterRepository {
 
 	private Map<String, Character> characters;

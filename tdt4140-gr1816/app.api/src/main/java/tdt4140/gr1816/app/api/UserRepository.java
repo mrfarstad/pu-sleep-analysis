@@ -41,7 +41,6 @@ public class UserRepository {
     public User saveUser(User user) {
         Document doc = new Document();
         doc.append("id", user.getId().toString());
-        doc.append("name", user.getName());
         doc.append("username", user.getUsername());
         doc.append("password", user.getPassword());
         doc.append("isDoctor", user.isDoctor());
@@ -50,7 +49,6 @@ public class UserRepository {
         users.insertOne(doc);
         return new User(
         			doc.get("_id").toString(),
-        			user.getName(),
         			user.getUsername(),
         			user.getPassword(),
         			user.isDoctor(),
@@ -60,13 +58,15 @@ public class UserRepository {
     }
     
     private User user(Document doc) {
-        return new User(
-                doc.get("_id").toString(),
-                doc.getString("name"),
-                doc.getString("username"),
-                doc.getString("password"),
-        			doc.getBoolean("isDoctor"),
-        			doc.getString("gender"),
-        			doc.getInteger("age"));
-    }
+    	if (doc == null) {
+    		return null;
+    	}
+	    return new User(
+	            doc.get("_id").toString(),
+	            doc.getString("username"),
+	            doc.getString("password"),
+	    			doc.getBoolean("isDoctor"),
+	    			doc.getString("gender"),
+	    			doc.getInteger("age"));
+	    }
 }

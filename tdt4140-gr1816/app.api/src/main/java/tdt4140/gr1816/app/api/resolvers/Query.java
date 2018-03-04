@@ -2,12 +2,7 @@ package tdt4140.gr1816.app.api.resolvers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
+import com.coxautodev.graphql.tools.GraphQLRootResolver;
 
 import graphql.schema.DataFetchingEnvironment;
 import tdt4140.gr1816.app.api.CharacterRepository;
@@ -20,28 +15,24 @@ import tdt4140.gr1816.app.api.types.Human;
 import tdt4140.gr1816.app.api.types.Link;
 import tdt4140.gr1816.app.api.types.User;
 
-@Component
-public class Query implements GraphQLQueryResolver {
-	
-    private static final LinkRepository linkRepository;
-    private static final UserRepository userRepository;
+public class Query implements GraphQLRootResolver {
     
-    static {
-            MongoDatabase mongo = new MongoClient().getDatabase("gruppe16");
-            linkRepository = new LinkRepository(mongo.getCollection("links"));
-            userRepository = new UserRepository(mongo.getCollection("users"));
+    private final LinkRepository linkRepository;
+    private final UserRepository userRepository;
+
+    public Query(LinkRepository linkRepository, UserRepository userRepository) {
+        this.linkRepository = linkRepository;
+        this.userRepository = userRepository;
     }
-    
-	public List<Link> allLinks() {
-		return linkRepository.getAllLinks();
-	}
-	
+
+    public List<Link> allLinks() {
+        return linkRepository.getAllLinks();
+    }
+
 	public List<User> allUsers() {
 		return userRepository.getAllUsers();
 	}
 	
-	
-	@Autowired
 	private CharacterRepository characterRepository;
 
 
@@ -65,6 +56,4 @@ public class Query implements GraphQLQueryResolver {
 	public Character character(String id) {
 		return characterRepository.getCharacters().get(id);
 	}
-
-
 }

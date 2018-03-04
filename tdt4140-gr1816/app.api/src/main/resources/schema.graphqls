@@ -18,7 +18,6 @@ type Link {
 
 type User {
 	id: ID!
-	name: String!
 	username: String
 	password: String
 	isDoctor: Boolean!
@@ -33,7 +32,7 @@ input AuthData {
 
 type Mutation {
   createLink(url: String!, description: String!): Link 
-  createUser(id: String!, name: String!, authProvider: AuthData!, isDoctor: Boolean!, gender: String!, age: Int!): User
+  createUser(authProvider: AuthData!, isDoctor: Boolean!, gender: String!, age: Int!): User
   signinUser(auth: AuthData): SigninPayload
 }
 
