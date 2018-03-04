@@ -9,6 +9,8 @@ type Query {
     character(id: String!): Character
     allLinks: [Link]
     allUsers: [User]
+
+    viewer: User
 }
 
 
@@ -41,10 +43,10 @@ type Link {
   	postedBy: User
 }
 
+# A user can be a doctor, but does not have to be
 type User {
 	id: ID!
 	username: String
-	password: String
 	isDoctor: Boolean
 	gender: String
 	age: Int
