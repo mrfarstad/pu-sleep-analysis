@@ -134,14 +134,17 @@ function graphQLFetcher(graphQLParams) {
   // Change this to point wherever you host your GraphQL server.
   const token = document.getElementById('token').value;
   localStorage.setItem('graphiql:token', token);
+  let headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  if (token){
+    headers['Authorization'] = `Bearer ${token}`;
+  }
 
   return fetch('/graphql', {
     method: 'post',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: token ? `Bearer ${token}`: null
-    },
+    headers,
     body: JSON.stringify(graphQLParams),
     credentials: 'include'
   })

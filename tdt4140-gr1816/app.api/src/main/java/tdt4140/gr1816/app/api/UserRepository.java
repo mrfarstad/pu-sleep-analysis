@@ -40,7 +40,6 @@ public class UserRepository {
     
     public User saveUser(User user) {
         Document doc = new Document();
-        doc.append("id", user.getId().toString());
         doc.append("username", user.getUsername());
         doc.append("password", user.getPassword());
         doc.append("isDoctor", user.isDoctor());
