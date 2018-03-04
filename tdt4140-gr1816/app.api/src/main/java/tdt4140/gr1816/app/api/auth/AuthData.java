@@ -1,4 +1,4 @@
-package tdt4140.gr1816.app.api.types;
+package tdt4140.gr1816.app.api.auth;
 
 public class AuthData {
 

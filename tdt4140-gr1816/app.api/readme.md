@@ -1,7 +1,6 @@
 mutation createUser {
 	createUser(
     id: "1"
-    name: "martin"
     authProvider: {
       username:"gruppe16"
       password: "gruppe16"
