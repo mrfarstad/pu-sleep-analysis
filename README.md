@@ -22,13 +22,11 @@ mvn jetty:run
 
 Then open http://localhost:8080
 
-Lag en bruker i GraphiQL:
+### Lag en bruker i GraphiQL:
 
 ```
 mutation createUser {
   createUser(
-    id: "1337"
-    name: "test"
     authProvider: {
       username: "test",
       password: "test"
@@ -43,7 +41,7 @@ mutation createUser {
 }
 ```
 
-Logg inn med brukeren:
+### Logg inn med brukeren:
 
 ```
 mutation {
