@@ -1,7 +1,6 @@
 type Query {
     allLinks: [Link]
     allUsers: [User]
-
     viewer: User
 }
 
