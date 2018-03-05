@@ -51,6 +51,11 @@ public class UserRepository {
         user.getGender(),
         user.getAge());
   }
+/*
+  public void deleteUser(User user){
+    Document doc = users.find(eq("_id", new ObjectId(user.getId()))).first();
+    users.deleteOne(doc);
+  }*/
 
   private User user(Document doc) {
     if (doc == null) {
