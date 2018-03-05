@@ -3,6 +3,7 @@ package tdt4140.gr1816.app.api;
 import static com.mongodb.client.model.Filters.eq;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.result.DeleteResult;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
@@ -51,11 +52,12 @@ public class UserRepository {
         user.getGender(),
         user.getAge());
   }
-/*
-  public void deleteUser(User user){
+
+  public boolean deleteUser(User user) {
     Document doc = users.find(eq("_id", new ObjectId(user.getId()))).first();
-    users.deleteOne(doc);
-  }*/
+    DeleteResult result = users.deleteOne(doc);
+    return result.wasAcknowledged();
+  }
 
   private User user(Document doc) {
     if (doc == null) {

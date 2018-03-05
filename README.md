@@ -53,6 +53,18 @@ mutation {
   }
 }
 ```
+
+### Slett brukeren:
+
+```
+mutation {
+  deleteUser(auth: {
+    username: "test"
+    password: "test"
+  })
+}
+```
+
 just werkz^{tm}
 
 ### Code formatting
