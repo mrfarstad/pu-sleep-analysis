@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import tdt4140.gr1816.app.core.UserDataFetch;
 
 public class UserController implements Initializable {
 
@@ -18,33 +19,46 @@ public class UserController implements Initializable {
 	private Button dataButton;
 	
 	@FXML
+	private Button acceptDoctorButton;
+	
+	@FXML
+	private Button removeDoctorButton;
+	
+	@FXML
 	private ListView<String> doctorsListView;
 	
-	@FXML
-	private TextField doctorTextField;
-	
-	@FXML
-	private Button doctorAddButton;
-	
-	@FXML
-	private Button doctorDeleteButton;
 	
 	private boolean dataGatheringOn;
-	
-	final ObservableList<String> doctorsList = FXCollections.observableArrayList("Add Items here");
-	
-	this.doctorsList.add("Doktor Proktor");
-
+	ObservableList<String> listViewItems;
 
 	public void handleDataButton() {
 		if (dataGatheringOn) {
 			dataButton.setText("Turn on");
 			dataGatheringOn = false;
+			turnOffDataGathering();
+			List<User> users = UserDataFetch.getAllUsers();
 		}
 		else {
 			dataButton.setText("Turn off");
 			dataGatheringOn = true;
+			turnOnDataGathering();
 		}	
+	}
+	
+	public void handleRemoveDoctorButton() {
+		listViewItems.remove(doctorsListView.getSelectionModel().getSelectedItem());
+	}
+	
+	public void handleAcceptDoctorButton() {
+		acceptDoctorButton.setVisible(false);
+	}
+	
+	public void turnOffDataGathering() {
+		//CODE TO TURN OFF DATA GATHERING
+	}
+	
+	public void turnOnDataGathering() {
+		//CODE TO TURN ON DATA GATHERING
 	}
 
 	@Override
@@ -61,7 +75,11 @@ public class UserController implements Initializable {
 		}		
 		
 		//SET LISTVIEW ITEMS
-		doctorsListView.setItems(doctorsList);
+		listViewItems = doctorsListView.getItems();
+		listViewItems.add("Doctor 1");
+		listViewItems.add("Doctor 2");
+		listViewItems.add("Doctor 3");
+		listViewItems.add("Doctor 4");
 		
 		
 	}
