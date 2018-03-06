@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <TabPane>
+         <tabs>
+            <Tab closable="false" text="Profile">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+            <Tab closable="false" text="Patient">
+               <content>
+                  <SplitPane dividerPositions="0.7066666666666667" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <ListView prefHeight="398.0" prefWidth="174.0" />
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <Button layoutX="38.0" layoutY="104.0" mnemonicParsing="false" text="View Data" />
+                              <Button layoutX="24.0" layoutY="229.0" mnemonicParsing="false" text="Send Message" />
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </center>
+</BorderPane>
