@@ -47,6 +47,19 @@ public class Mutation implements GraphQLRootResolver {
     return voteRepository.saveVote(new Vote(now, userId, linkId));
   }
 
+  public boolean deleteUser(AuthData auth) {
+    User user = userRepository.findByUsername(auth.getUsername());
+    if (user == null) {
+      throw new GraphQLException("Nonexistent username");
+    }
+
+    if (user.getPassword().equals(auth.getPassword())) {
+      boolean acknowledged = userRepository.deleteUser(user);
+      return acknowledged;
+    }
+    throw new GraphQLException("Invalid credentials");
+  }
+
   public SigninPayload signinUser(AuthData auth) throws IllegalAccessException {
     User user = userRepository.findByUsername(auth.getUsername());
     if (user == null) {
