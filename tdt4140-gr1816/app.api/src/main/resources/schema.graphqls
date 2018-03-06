@@ -17,9 +17,8 @@ type Mutation {
   signinUser(auth: AuthData): SigninPayload
   createVote(linkId: ID, userId: ID): Vote
   deleteUser(auth: AuthData!): Boolean
-
+  
   requestDataAccess(dataOwnerId: ID!): DataAccessRequest
-
   answerDataAccessRequest(dataAccessRequestId: ID!, status: DataAccessRequestStatus!): DataAccessRequest
 }
 

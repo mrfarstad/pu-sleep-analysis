@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -44,56 +45,69 @@ public class UserDataFetch {
     return responseJson;
   }
 
-  public static List<User> getAllUsers() {
-
-    String query = "{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}";
-    String responseJson = UserDataFetch.getData(query);
-    ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
-    JsonParser parser;
-    List<User> userList = null;
-    try {
-      parser = factory.createParser(responseJson);
-      JsonNode root = mapper.readTree(parser);
-      JsonNode allUsers = root.get("data").get("allUsers");
-      userList = mapper.readerFor(new TypeReference<List<User>>() {}).readValue(allUsers);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return userList;
-  }
-
-  public static User getCurrentUser() {
-    String query = "{\"query\":\"query{viewer{id username isDoctor gender age}}\"}";
-    String responseJson = UserDataFetch.getData(query);
-    ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
-    JsonParser parser;
-    User user = null;
-    try {
-      parser = factory.createParser(responseJson);
-      JsonNode root = mapper.readTree(parser);
-      JsonNode viewer = root.get("data").get("viewer");
-      user = mapper.readerFor(new TypeReference<User>() {}).readValue(viewer);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return user;
-  }
-
   public static void signIn() {
     String query =
         "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
     String responseJson = UserDataFetch.getData(query);
   }
 
+  public static <T> T accessRequests(Class<T> cls, String query, String jsonNodeName) {
+    String responseJson = UserDataFetch.getData(query);
+    ObjectMapper mapper = new ObjectMapper();
+    JsonFactory factory = mapper.getFactory();
+    JsonParser parser;
+    T requests = null;
+    try {
+      parser = factory.createParser(responseJson);
+      JsonNode root = mapper.readTree(parser);
+      JsonNode thirdJsonObject = root.get("data").get(jsonNodeName);
+      requests = mapper.readerFor(new TypeReference<T>() {}).readValue(thirdJsonObject);
+    } catch (JsonParseException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return requests;
+  }
+
+  @SuppressWarnings("unchecked")
+  public static List<User> getAllUsers() {
+    String query = "{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}";
+    String jsonNodeName = "allUsers";
+    List<User> cls = new ArrayList<>();
+    return (List<User>) accessRequests(cls.getClass(), query, jsonNodeName);
+  }
+
+  public static User getCurrentUser() {
+    String query = "{\"query\":\"query{viewer{id username isDoctor gender age}}\"}";
+    String jsonNodeName = "viewer";
+    User cls = new User("1", "test", "test", true, "test", 420);
+    return (User) accessRequests(cls.getClass(), query, jsonNodeName);
+  }
+
+  @SuppressWarnings("unchecked")
+  public static List<DataAccessRequest> accessRequestsToUser() {
+    String query =
+        "{\"query\":\"query{dataAccessRequestsForMe{requestedBy{username isDoctor gender age}status}}\"}";
+    String jsonNodeName = "dataAccessRequestsForMe";
+    List<DataAccessRequest> cls = new ArrayList<>();
+    return (List<DataAccessRequest>) accessRequests(cls.getClass(), query, jsonNodeName);
+  }
+
+  @SuppressWarnings("unchecked")
+  public static List<DataAccessRequest> accessRequestsByDoctor() {
+    String query =
+        "{\"query\":\"query{myDataAccessRequests{dataOwner{username isDoctor gender age}status}}\"}";
+    String jsonNodeName = "myDataAccessRequests";
+    List<DataAccessRequest> cls = new ArrayList<>();
+    return (List<DataAccessRequest>) accessRequests(cls.getClass(), query, jsonNodeName);
+  }
+
   public static void main(String[] args) {
-    List<User> users = UserDataFetch.getAllUsers();
+    System.out.println(UserDataFetch.getAllUsers());
     UserDataFetch.signIn();
-    User user = UserDataFetch.getCurrentUser();
+    System.out.println(UserDataFetch.getCurrentUser());
+    System.out.println(UserDataFetch.accessRequestsToUser());
+    System.out.println(UserDataFetch.accessRequestsByDoctor());
   }
 }
