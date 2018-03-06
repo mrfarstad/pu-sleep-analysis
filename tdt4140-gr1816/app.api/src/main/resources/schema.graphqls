@@ -2,6 +2,12 @@ type Query {
     allLinks: [Link]
     allUsers: [User]
     viewer: User
+
+    # DataAccess requested by you
+    myDataAccessRequests: [DataAccessRequest]
+
+    # DataAccess requested by others, for you
+    dataAccessRequestsForMe: [DataAccessRequest]
 }
 
 
@@ -11,6 +17,10 @@ type Mutation {
   signinUser(auth: AuthData): SigninPayload
   createVote(linkId: ID, userId: ID): Vote
   deleteUser(auth: AuthData!): Boolean
+
+  requestDataAccess(dataOwnerId: ID!): DataAccessRequest
+
+  answerDataAccessRequest(dataAccessRequestId: ID!, status: DataAccessRequestStatus!): DataAccessRequest
 }
 
 type Vote {
@@ -33,6 +43,19 @@ type Link {
   	url: String!
   	description: String!
   	postedBy: User
+}
+
+enum DataAccessRequestStatus {
+        PENDING,
+        ACCEPTED,
+        REJECTED
+}
+
+type DataAccessRequest {
+        id: ID!
+        dataOwner: User!
+        requestedBy: User!
+        status: DataAccessRequestStatus!
 }
 
 # A user can be a doctor, but does not have to be

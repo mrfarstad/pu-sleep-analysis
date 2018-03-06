@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import tdt4140.gr1816.app.api.auth.AuthContext;
+import tdt4140.gr1816.app.api.resolvers.DataAccessRequestResolver;
 import tdt4140.gr1816.app.api.resolvers.LinkResolver;
 import tdt4140.gr1816.app.api.resolvers.Mutation;
 import tdt4140.gr1816.app.api.resolvers.Query;
@@ -28,12 +29,15 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
   private static final LinkRepository linkRepository;
   private static final UserRepository userRepository;
   private static final VoteRepository voteRepository;
+  private static final DataAccessRequestRepository dataAccessRequestRepository;
 
   static {
     MongoDatabase mongo = new MongoClient().getDatabase("gruppe16");
     linkRepository = new LinkRepository(mongo.getCollection("links"));
     userRepository = new UserRepository(mongo.getCollection("users"));
     voteRepository = new VoteRepository(mongo.getCollection("votes"));
+    dataAccessRequestRepository =
+        new DataAccessRequestRepository(mongo.getCollection("dataAccessRequests"));
   }
 
   public GraphQLEndpoint() {
@@ -44,11 +48,13 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
     return SchemaParser.newParser()
         .file("schema.graphqls")
         .resolvers(
-            new Query(linkRepository, userRepository),
-            new Mutation(linkRepository, userRepository, voteRepository),
+            new Query(linkRepository, userRepository, dataAccessRequestRepository),
+            new Mutation(
+                linkRepository, userRepository, voteRepository, dataAccessRequestRepository),
             new SigninResolver(),
             new LinkResolver(userRepository),
-            new VoteResolver(linkRepository, userRepository))
+            new VoteResolver(linkRepository, userRepository),
+            new DataAccessRequestResolver(userRepository))
         .scalars(Scalars.dateTime)
         .build()
         .makeExecutableSchema();

@@ -6,11 +6,14 @@ import graphql.schema.DataFetchingEnvironment;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import tdt4140.gr1816.app.api.DataAccessRequestRepository;
 import tdt4140.gr1816.app.api.LinkRepository;
 import tdt4140.gr1816.app.api.UserRepository;
 import tdt4140.gr1816.app.api.VoteRepository;
 import tdt4140.gr1816.app.api.auth.AuthContext;
 import tdt4140.gr1816.app.api.auth.AuthData;
+import tdt4140.gr1816.app.api.types.DataAccessRequest;
+import tdt4140.gr1816.app.api.types.DataAccessRequestStatus;
 import tdt4140.gr1816.app.api.types.Link;
 import tdt4140.gr1816.app.api.types.SigninPayload;
 import tdt4140.gr1816.app.api.types.User;
@@ -21,12 +24,17 @@ public class Mutation implements GraphQLRootResolver {
   private final LinkRepository linkRepository;
   private final UserRepository userRepository;
   private final VoteRepository voteRepository;
+  private final DataAccessRequestRepository dataAccessRequestRepository;
 
   public Mutation(
-      LinkRepository linkRepository, UserRepository userRepository, VoteRepository voteRepository) {
+      LinkRepository linkRepository,
+      UserRepository userRepository,
+      VoteRepository voteRepository,
+      DataAccessRequestRepository dataAccessRequestRepository) {
     this.linkRepository = linkRepository;
     this.userRepository = userRepository;
     this.voteRepository = voteRepository;
+    this.dataAccessRequestRepository = dataAccessRequestRepository;
   }
 
   // The way to inject the context is via DataFetchingEnvironment
@@ -70,5 +78,24 @@ public class Mutation implements GraphQLRootResolver {
       return new SigninPayload(user.getId(), user);
     }
     throw new GraphQLException("Invalid credentials");
+  }
+
+  public DataAccessRequest requestDataAccess(String dataOwnerId, DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      throw new GraphQLException("Invalid user");
+    }
+    if (!user.isDoctor()) {
+      throw new GraphQLException("User must be a doctor....");
+    }
+    return dataAccessRequestRepository.createDataRequest(dataOwnerId, user);
+  }
+
+  public DataAccessRequest answerDataAccessRequest(
+      String dataAccessRequestId, DataAccessRequestStatus status, DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    return dataAccessRequestRepository.answerDataAccessRequest(dataAccessRequestId, status, user);
   }
 }
