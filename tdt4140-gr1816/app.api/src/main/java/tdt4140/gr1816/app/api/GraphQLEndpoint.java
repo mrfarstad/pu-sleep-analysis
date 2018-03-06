@@ -32,7 +32,9 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
   private static final DataAccessRequestRepository dataAccessRequestRepository;
 
   static {
-    MongoDatabase mongo = new MongoClient().getDatabase("gruppe16");
+    String dbname = System.getenv("DB_NAME");
+    System.out.println(dbname);
+    MongoDatabase mongo = new MongoClient().getDatabase(dbname == null ? "gruppe16" : dbname);
     linkRepository = new LinkRepository(mongo.getCollection("links"));
     userRepository = new UserRepository(mongo.getCollection("users"));
     voteRepository = new VoteRepository(mongo.getCollection("votes"));
@@ -44,7 +46,7 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
     super(buildSchema());
   }
 
-  private static GraphQLSchema buildSchema() {
+  public static GraphQLSchema buildSchema() {
     return SchemaParser.newParser()
         .file("schema.graphqls")
         .resolvers(
