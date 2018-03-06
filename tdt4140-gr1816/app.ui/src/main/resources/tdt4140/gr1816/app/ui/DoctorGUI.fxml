@@ -5,10 +5,14 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.DoctorController">
    <center>
       <TabPane>
          <tabs>
@@ -24,12 +28,20 @@
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
                               <ListView prefHeight="398.0" prefWidth="174.0" />
+                              <VBox layoutX="174.0" prefHeight="400.0" prefWidth="246.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add Patient" />
+                                    <TextField fx:id="requestTextField" promptText="Person ID" />
+                                    <Button fx:id="requestButton" mnemonicParsing="false" onAction="#handleRequestButton" text="Request Access" />
+                                 </children>
+                              </VBox>
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <Button layoutX="38.0" layoutY="104.0" mnemonicParsing="false" text="View Data" />
-                              <Button layoutX="24.0" layoutY="229.0" mnemonicParsing="false" text="Send Message" />
+                              <Button layoutX="39.0" layoutY="136.0" mnemonicParsing="false" text="View Data" />
+                              <Button layoutX="25.0" layoutY="216.0" mnemonicParsing="false" text="Send Message" />
+                              <TextArea layoutX="15.0" layoutY="14.0" prefHeight="85.0" prefWidth="142.0" text="You do not have&#10;permission for&#10;these data" />
                            </children>
                         </AnchorPane>
                     </items>
