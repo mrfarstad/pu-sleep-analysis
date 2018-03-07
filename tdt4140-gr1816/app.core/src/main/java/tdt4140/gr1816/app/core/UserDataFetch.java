@@ -179,16 +179,4 @@ public class UserDataFetch {
 
     return requests;
   }
-
-  public static void main(String[] args) {
-    UserDataFetch userDataFetch = new UserDataFetch(new DataGetter());
-    System.out.println(userDataFetch.getAllUsers());
-    userDataFetch.createUser();
-    System.out.println(userDataFetch.getAllUsers());
-    userDataFetch.signIn();
-    System.out.println(userDataFetch.getCurrentUser());
-    System.out.println(userDataFetch.getAccessRequestsToUser());
-    System.out.println(userDataFetch.getAccessRequestsByDoctor());
-    userDataFetch.deleteUser();
-  }
 }

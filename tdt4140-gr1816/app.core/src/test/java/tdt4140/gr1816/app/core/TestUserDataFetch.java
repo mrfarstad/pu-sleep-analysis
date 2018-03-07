@@ -1,10 +1,15 @@
 package tdt4140.gr1816.app.core;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 import org.junit.Test;
+import tdt4140.gr1816.app.core.DataAccessRequest.DataAccessRequestStatus;
 
 public class TestUserDataFetch {
 
@@ -19,6 +24,8 @@ public class TestUserDataFetch {
       "{\"data\":{\"dataAccessRequestsForMe\":[{\"requestedBy\":{\"username\":\"boye\",\"isDoctor\":true,\"gender\":\"male\",\"age\":33},\"status\":\"PENDING\"}]}}";
   private static String getAccessRequestsByDoctorResponse =
       "{\"data\":{\"myDataAccessRequests\":[{\"dataOwner\":{\"username\":\"mathiawa\",\"isDoctor\":false,\"gender\":\"male\",\"age\":21},\"status\":\"PENDING\"},{\"dataOwner\":{\"username\":\"doctor\",\"isDoctor\":true,\"gender\":\"male\",\"age\":40},\"status\":\"PENDING\"}]}}";
+  private static String signInResponse =
+      "{\"data\":{\"signinUser\":{\"token\":\"5aa111f3c13edf582b796abe\"}}}";
 
   //  create mock
   private DataGetter test = mock(DataGetter.class);
@@ -56,7 +63,7 @@ public class TestUserDataFetch {
   @Test
   public void testGetAllUsersQuery() {
     // define what the mock class returns when methods are called
-    // this mock the http response from the API
+    // this mocks the http response from the API
     when(test.getData(userDataFetch.allUsersQuery, null)).thenReturn(getAllUsersResponse);
 
     // test mock class
@@ -126,5 +133,33 @@ public class TestUserDataFetch {
     assertTrue(user.isDoctor());
     assertTrue(user.getGender().equals("male"));
     assertTrue(user.getAge() == 22);
+  }
+
+  @Test
+  public void testSignIn() {
+    when(test.getData(userDataFetch.signInQuery, null)).thenReturn(signInResponse);
+    userDataFetch.signIn();
+  }
+
+  @Test
+  public void testDataAccessRequest() {
+    User testUser1 = new User("5a9e8503c13edf22f93825e7", "test", "test", true, "female", 22);
+    User testUser2 = new User("5a9e85cac13edf22f93825e8", "testo", "testo", true, "male", 22);
+    DataAccessRequest request = new DataAccessRequest(null, testUser1, testUser2, "ACCEPTED");
+    assertTrue(request.toString() instanceof String);
+    assertNull(request.getId());
+    assertTrue(request.getDataOwner() instanceof User);
+    assertTrue(request.getRequestedBy() instanceof User);
+    assertTrue(
+        DataAccessRequest.statusFromString(request.getStatusAsString())
+            instanceof DataAccessRequestStatus);
+    assertTrue(DataAccessRequest.statusFromString("PENDING") instanceof DataAccessRequestStatus);
+    assertTrue(DataAccessRequest.statusFromString("REJECTED") instanceof DataAccessRequestStatus);
+    assertTrue(DataAccessRequest.statusFromString("") instanceof DataAccessRequestStatus);
+    assertTrue(request.getStatusAsString() instanceof String);
+    assertTrue(request.getStatus() instanceof DataAccessRequestStatus);
+    assertTrue(DataAccessRequest.statusToString(DataAccessRequestStatus.PENDING) instanceof String);
+    assertTrue(
+        DataAccessRequest.statusToString(DataAccessRequestStatus.REJECTED) instanceof String);
   }
 }
