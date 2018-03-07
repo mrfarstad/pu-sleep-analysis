@@ -13,6 +13,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class UserDataFetch {
 
@@ -28,7 +29,7 @@ public class UserDataFetch {
       connection.setRequestProperty("Accept-Charset", charset);
       connection.setRequestProperty(
           "Content-Type", "application/x-www-form-urlencoded;charset=" + charset);
-      connection.setRequestProperty("Authorization", "Bearer 5a9e8503c13edf22f93825e7");
+      connection.setRequestProperty("Authorization", "Bearer 5a9fed68a7cb8c1f64fb59b1");
 
       try (OutputStream output = connection.getOutputStream()) {
         output.write(query.getBytes(charset));
@@ -109,6 +110,14 @@ public class UserDataFetch {
     return requests;
   }
 
+  public static User getUserByID(String id) {
+    return getAllUsers()
+        .stream()
+        .filter(user -> user.getId() == id)
+        .collect(Collectors.toList())
+        .get(0);
+  }
+
   public static List<DataAccessRequest> getAccessRequestsToUser() {
     String responseJson =
         UserDataFetch.getData(
@@ -136,7 +145,7 @@ public class UserDataFetch {
   public static List<DataAccessRequest> getAccessRequestsByDoctor() {
     String responseJson =
         UserDataFetch.getData(
-            "{\"query\":\"query{myDataAccessRequests{dataOwner{username isDoctor gender age}status}}\"}");
+            "{\"query\":\"query{myDataAccessRequests{dataOwner{username isDoctor gender age}, status}}\"}");
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
