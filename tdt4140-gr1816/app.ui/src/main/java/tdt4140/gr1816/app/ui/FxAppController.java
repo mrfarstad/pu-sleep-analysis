@@ -16,14 +16,14 @@ public class FxAppController {
 	@FXML
 	private Button signinButton;
 	@FXML
-	private Button createNewButton;
+	private Button createNewUserButton;
 	
 	
 	public void handleSigninButton() {
 		// if (doctor) FxApp.showDocterScene() 
 		// else  FxApp.showPatientScene()
 	}
-	public void handleCreateNewButton() throws IOException {
+	public void handleCreateNewUserButton() throws IOException {
 		FxApp.showCreateNewUserScene();
 	}
 	public TextField getUser() {
