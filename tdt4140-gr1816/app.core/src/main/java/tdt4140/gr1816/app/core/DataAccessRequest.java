@@ -31,8 +31,8 @@ public class DataAccessRequest {
   public DataAccessRequest(String dataOwnerId, String requestedById, String status) {
     this(
         null,
-        UserDataFetch.userDataFetch.getUserByID(dataOwnerId),
-        UserDataFetch.userDataFetch.getUserByID(requestedById),
+        UserDataFetch.userDataFetch.getUserById(dataOwnerId),
+        UserDataFetch.userDataFetch.getUserById(requestedById),
         status);
   }
 

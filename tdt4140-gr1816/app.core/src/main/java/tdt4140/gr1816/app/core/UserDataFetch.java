@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserDataFetch {
 
@@ -52,14 +51,6 @@ public class UserDataFetch {
     return requests;
   }
 
-  public User getUserById(String id) {
-    return getAllUsers()
-        .stream()
-        .filter(user -> user.getId() == id)
-        .collect(Collectors.toList())
-        .get(0);
-  }
-
   public User getCurrentUser() {
     String responseJson = dataGetter.getData(currentUserQuery);
     ObjectMapper mapper = new ObjectMapper();
@@ -79,12 +70,8 @@ public class UserDataFetch {
     return requests;
   }
 
-  public User getUserByID(String id) {
-    return getAllUsers()
-        .stream()
-        .filter(user -> user.getId() == id)
-        .collect(Collectors.toList())
-        .get(0);
+  public User getUserById(String id) {
+    return getAllUsers().stream().filter(user -> user.getId().equals(id)).findFirst().get();
   }
 
   public List<DataAccessRequest> getAccessRequestsToUser() {
@@ -119,12 +106,10 @@ public class UserDataFetch {
       parser = factory.createParser(responseJson);
       JsonNode root = mapper.readTree(parser);
       JsonNode thirdJsonObject = root.get("data").get("myDataAccessRequests");
-      System.out.println(requests);
       requests =
           mapper
               .readerFor(new TypeReference<List<DataAccessRequest>>() {})
               .readValue(thirdJsonObject);
-      System.out.println(requests);
     } catch (JsonParseException e) {
       e.printStackTrace();
     } catch (IOException e) {

@@ -75,4 +75,20 @@ public class TestUserDataFetch {
       assertTrue(requests.get(0) instanceof DataAccessRequest);
     }
   }
+
+  @Test
+  public void testGetUserById() {
+    when(test.getData(userDataFetch.allUsersQuery)).thenReturn(getAllUsersResponse);
+
+    // test mock class
+    assertEquals(test.getData(userDataFetch.allUsersQuery), getAllUsersResponse);
+
+    User user = userDataFetch.getUserById("5a9e8503c13edf22f93825e7");
+    assertTrue(user instanceof User);
+    assertNotNull(user);
+    assertTrue(user.getUsername().equals("test"));
+    assertTrue(user.isDoctor());
+    assertTrue(user.getGender().equals("male"));
+    assertTrue(user.getAge() == 22);
+  }
 }
