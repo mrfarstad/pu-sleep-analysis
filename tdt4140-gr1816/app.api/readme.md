@@ -1,3 +1,6 @@
+### Lag en bruker i GraphiQL:
+
+```
 mutation createUser {
   createUser(
     authProvider: {
@@ -8,11 +11,15 @@ mutation createUser {
     gender: "male"
     age: 22,
     ) {
-    	
+
     	username
   }
 }
+```
 
+### Logg inn med brukeren:
+
+```
 mutation {
   signinUser(auth: {
     username: "test"
@@ -21,3 +28,15 @@ mutation {
     token
   }
 }
+```
+
+### Slett brukeren:
+
+```
+mutation {
+  deleteUser(auth: {
+    username: "test"
+    password: "test"
+  })
+}
+```
