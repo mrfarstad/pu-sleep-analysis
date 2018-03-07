@@ -6,6 +6,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Button;
+import javafx.event.ActionEvent;
 
 public class CreateNewUserController {
 
@@ -13,6 +14,8 @@ public class CreateNewUserController {
 	private TextField signupUsernameField;
 	@FXML 
 	private PasswordField signupPasswordField;
+	@FXML
+	private TextField ageField;
 	@FXML
 	private RadioButton femaleRadioButton;
 	@FXML
@@ -24,8 +27,22 @@ public class CreateNewUserController {
 	@FXML
 	private Button createUserButton;
 	
-	public void handleCreateUser() {
+	
+	public void handleCreateUser(ActionEvent event) {
 		//code for creating new user
 	}
+	
+	public String getGenderSelected(ActionEvent event) {
+		String gender;
+		if (femaleRadioButton.isSelected()) {
+			gender = "female";
+		} else if (maleRadioButton.isSelected()){
+			gender = "male";
+		}else {
+			gender= "other";
+		}
+		return gender;
+	}
+	
 	
 }

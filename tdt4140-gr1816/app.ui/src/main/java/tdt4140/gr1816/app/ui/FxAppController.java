@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.*;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
 
 public class FxAppController {
 	
@@ -12,8 +13,13 @@ public class FxAppController {
 	private TextField usernameField;
 	@FXML
 	private PasswordField passwordField;
+	@FXML
+	private Button signinButton;
+	@FXML
+	private Button createNewButton;
 	
-	public void handleLogin() {
+	
+	public void handleSigninButton() {
 		// if (doctor) FxApp.showDocterScene() 
 		// else  FxApp.showPatientScene()
 	}

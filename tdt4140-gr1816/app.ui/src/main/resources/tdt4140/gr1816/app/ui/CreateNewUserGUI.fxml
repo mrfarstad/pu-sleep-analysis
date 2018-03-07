@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.CreateNewUserControllertroller">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.CreateNewUserController">
    <children>
       <BorderPane prefHeight="400.0" prefWidth="400.0">
          <top>
@@ -94,13 +94,16 @@
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="genderRB" />
+                           </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="maleRadioButton" mnemonicParsing="false" text="Male">
+                        <RadioButton fx:id="maleRadioButton" mnemonicParsing="false" text="Male" toggleGroup="$genderRB">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>
                         </RadioButton>
-                        <RadioButton fx:id="ofterGenderRadioButton" mnemonicParsing="false" text="Other">
+                        <RadioButton fx:id="otherGenderRadioButton" mnemonicParsing="false" text="Other" toggleGroup="$genderRB">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>
@@ -112,7 +115,7 @@
                   </HBox>
                   <HBox prefHeight="23.0" prefWidth="243.0">
                      <children>
-                        <RadioButton fx:id="isDoctorRadiobutton" mnemonicParsing="false" text="Yes">
+                        <RadioButton fx:id="isDoctorRadioButton" mnemonicParsing="false" text="Yes">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
