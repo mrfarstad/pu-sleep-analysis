@@ -1,5 +1,4 @@
 type Query {
-    allLinks: [Link]
     allUsers: [User]
     viewer: User
 
@@ -12,36 +11,17 @@ type Query {
 
 
 type Mutation {
-  createLink(url: String!, description: String!): Link 
   createUser(authProvider: AuthData!, isDoctor: Boolean!, gender: String!, age: Int!): User
   signinUser(auth: AuthData): SigninPayload
-  createVote(linkId: ID, userId: ID): Vote
   deleteUser(auth: AuthData!): Boolean
   
   requestDataAccess(dataOwnerId: ID!): DataAccessRequest
   answerDataAccessRequest(dataAccessRequestId: ID!, status: DataAccessRequestStatus!): DataAccessRequest
 }
 
-type Vote {
-    id: ID!
-    createdAt: DateTime!
-    user: User!
-    link: Link!
-}
-
-scalar DateTime
-
 input AuthData {
 	username: String!
 	password: String!
-}
-
-
-type Link {
-	id: ID!
-  	url: String!
-  	description: String!
-  	postedBy: User
 }
 
 enum DataAccessRequestStatus {
