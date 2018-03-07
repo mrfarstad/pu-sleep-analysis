@@ -12,7 +12,7 @@
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="112.0" text="Login">
                <font>
-                  <Font size="18.0" />
+                  <Font size="24.0" />
                </font>
             </Label>
          </children>
@@ -67,7 +67,7 @@
                         <Insets left="20.0" right="20.0" top="10.0" />
                      </VBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="159.0" text="Sign up">
+                  <Button fx:id="CreateNewButton" mnemonicParsing="false" onAction="#handleCreateNewButton" prefHeight="27.0" prefWidth="159.0" text="Create new user">
                      <VBox.margin>
                         <Insets left="20.0" right="20.0" top="70.0" />
                      </VBox.margin>
