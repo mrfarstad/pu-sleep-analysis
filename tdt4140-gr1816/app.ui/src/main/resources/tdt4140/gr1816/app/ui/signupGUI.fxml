@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.SignUpController">
+   <children>
+      <BorderPane prefHeight="400.0" prefWidth="400.0">
+         <top>
+            <VBox alignment="CENTER" prefHeight="56.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="55.0" prefWidth="103.0" text="Sign up">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="40.0" />
+               </BorderPane.margin>
+            </VBox>
+         </top>
+         <left>
+            <VBox prefHeight="344.0" prefWidth="157.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label text="User name: ">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="20.0" top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Password">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="20.0" top="13.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Age:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="20.0" top="13.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Gender:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="20.0" top="13.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Are you a doctor?">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="20.0" top="13.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+         </left>
+         <center>
+            <VBox prefHeight="344.0" prefWidth="183.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TextField fx:id="signupUsernameField" maxWidth="-Infinity" prefHeight="27.0" prefWidth="180.0">
+                     <VBox.margin>
+                        <Insets right="40.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <PasswordField fx:id="signupPasswordField" maxWidth="-Infinity" prefWidth="180.0">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </PasswordField>
+                  <TextField fx:id="ageField" maxWidth="180.0" prefHeight="27.0" prefWidth="180.0">
+                     <VBox.margin>
+                        <Insets right="40.0" top="5.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <HBox prefHeight="31.0" prefWidth="243.0">
+                     <children>
+                        <RadioButton fx:id="femaleRadioButton" mnemonicParsing="false" text="Female">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </RadioButton>
+                        <RadioButton fx:id="maleRadioButton" mnemonicParsing="false" text="Male">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </RadioButton>
+                        <RadioButton fx:id="ofterGenderRadioButton" mnemonicParsing="false" text="Other">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </RadioButton>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox prefHeight="23.0" prefWidth="243.0">
+                     <children>
+                        <RadioButton fx:id="isDoctorRadiobutton" mnemonicParsing="false" text="Yes">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </RadioButton>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="createUserButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleCreateUser" prefHeight="27.0" prefWidth="155.0" text="Create user">
+                           <HBox.margin>
+                              <Insets left="10.0" top="40.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </center></BorderPane>
+   </children>
+</AnchorPane>
