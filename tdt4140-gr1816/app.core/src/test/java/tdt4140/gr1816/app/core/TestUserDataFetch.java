@@ -26,10 +26,10 @@ public class TestUserDataFetch {
   public void testGetAllUsersQuery() {
     // define what the mock class returns when methods are called
     // this mock the http response from the API
-    when(test.getData(userDataFetch.allUsersQuery)).thenReturn(getAllUsersResponse);
+    when(test.getData(userDataFetch.allUsersQuery, null)).thenReturn(getAllUsersResponse);
 
     // test mock class
-    assertEquals(test.getData(userDataFetch.allUsersQuery), getAllUsersResponse);
+    assertEquals(test.getData(userDataFetch.allUsersQuery, null), getAllUsersResponse);
 
     // UserDataFetch.getAllUsers() should return List<User>
     assertTrue(userDataFetch.getAllUsers() instanceof List);
@@ -41,19 +41,23 @@ public class TestUserDataFetch {
 
   @Test
   public void testGetCurrentUserQuery() {
-    when(test.getData(userDataFetch.currentUserQuery)).thenReturn(getCurrentUserResponse);
+    when(test.getData(userDataFetch.currentUserQuery, userDataFetch.currentToken))
+        .thenReturn(getCurrentUserResponse);
 
-    assertEquals(test.getData(userDataFetch.currentUserQuery), getCurrentUserResponse);
+    assertEquals(
+        test.getData(userDataFetch.currentUserQuery, userDataFetch.currentToken),
+        getCurrentUserResponse);
     assertTrue(userDataFetch.getCurrentUser() instanceof User);
   }
 
   @Test
   public void testGetAccessRequestsToUser() {
-    when(test.getData(userDataFetch.accessRequestsToUserQuery))
+    when(test.getData(userDataFetch.accessRequestsToUserQuery, userDataFetch.currentToken))
         .thenReturn(getAccessRequestsToUserResponse);
 
     assertEquals(
-        test.getData(userDataFetch.accessRequestsToUserQuery), getAccessRequestsToUserResponse);
+        test.getData(userDataFetch.accessRequestsToUserQuery, userDataFetch.currentToken),
+        getAccessRequestsToUserResponse);
 
     assertTrue(userDataFetch.getAccessRequestsToUser() instanceof List);
     List<DataAccessRequest> requests = userDataFetch.getAccessRequestsToUser();
@@ -64,10 +68,11 @@ public class TestUserDataFetch {
 
   @Test
   public void testGetAccessRequestsByDoctor() {
-    when(test.getData(userDataFetch.accessRequestsByDoctorQuery))
+    when(test.getData(userDataFetch.accessRequestsByDoctorQuery, userDataFetch.currentToken))
         .thenReturn(getAccessRequestsByDoctorResponse);
     assertEquals(
-        test.getData(userDataFetch.accessRequestsByDoctorQuery), getAccessRequestsByDoctorResponse);
+        test.getData(userDataFetch.accessRequestsByDoctorQuery, userDataFetch.currentToken),
+        getAccessRequestsByDoctorResponse);
 
     assertTrue(userDataFetch.getAccessRequestsByDoctor() instanceof List);
     List<DataAccessRequest> requests = userDataFetch.getAccessRequestsByDoctor();
@@ -78,10 +83,10 @@ public class TestUserDataFetch {
 
   @Test
   public void testGetUserById() {
-    when(test.getData(userDataFetch.allUsersQuery)).thenReturn(getAllUsersResponse);
+    when(test.getData(userDataFetch.allUsersQuery, null)).thenReturn(getAllUsersResponse);
 
     // test mock class
-    assertEquals(test.getData(userDataFetch.allUsersQuery), getAllUsersResponse);
+    assertEquals(test.getData(userDataFetch.allUsersQuery, null), getAllUsersResponse);
 
     User user = userDataFetch.getUserById("5a9e8503c13edf22f93825e7");
     assertTrue(user instanceof User);

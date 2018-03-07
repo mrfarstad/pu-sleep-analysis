@@ -11,6 +11,8 @@ import java.util.List;
 
 public class UserDataFetch {
 
+  protected String currentToken = null;
+
   public String signInQuery =
       "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
   public String allUsersQuery = "{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}";
@@ -29,11 +31,26 @@ public class UserDataFetch {
   }
 
   public void signIn() {
-    dataGetter.getData(signInQuery);
+    String responseJson = dataGetter.getData(signInQuery, null);
+    ObjectMapper mapper = new ObjectMapper();
+    JsonFactory factory = mapper.getFactory();
+    JsonParser parser;
+    String token = null;
+    try {
+      parser = factory.createParser(responseJson);
+      JsonNode root = mapper.readTree(parser);
+      JsonNode thirdJsonObject = root.get("data").get("signinUser").get("token");
+      token = mapper.readerFor(new TypeReference<String>() {}).readValue(thirdJsonObject);
+    } catch (JsonParseException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    this.currentToken = token;
   }
 
   public List<User> getAllUsers() {
-    String responseJson = dataGetter.getData(allUsersQuery);
+    String responseJson = dataGetter.getData(allUsersQuery, null);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
@@ -52,7 +69,7 @@ public class UserDataFetch {
   }
 
   public User getCurrentUser() {
-    String responseJson = dataGetter.getData(currentUserQuery);
+    String responseJson = dataGetter.getData(currentUserQuery, this.currentToken);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
@@ -75,7 +92,7 @@ public class UserDataFetch {
   }
 
   public List<DataAccessRequest> getAccessRequestsToUser() {
-    String responseJson = dataGetter.getData(accessRequestsToUserQuery);
+    String responseJson = dataGetter.getData(accessRequestsToUserQuery, this.currentToken);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
@@ -97,7 +114,7 @@ public class UserDataFetch {
   }
 
   public List<DataAccessRequest> getAccessRequestsByDoctor() {
-    String responseJson = dataGetter.getData(accessRequestsByDoctorQuery);
+    String responseJson = dataGetter.getData(accessRequestsByDoctorQuery, this.currentToken);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
