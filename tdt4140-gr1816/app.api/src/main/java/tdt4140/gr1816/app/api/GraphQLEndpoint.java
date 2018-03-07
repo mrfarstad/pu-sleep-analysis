@@ -16,26 +16,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import tdt4140.gr1816.app.api.auth.AuthContext;
 import tdt4140.gr1816.app.api.resolvers.DataAccessRequestResolver;
-import tdt4140.gr1816.app.api.resolvers.LinkResolver;
 import tdt4140.gr1816.app.api.resolvers.Mutation;
 import tdt4140.gr1816.app.api.resolvers.Query;
 import tdt4140.gr1816.app.api.resolvers.SigninResolver;
-import tdt4140.gr1816.app.api.resolvers.VoteResolver;
 import tdt4140.gr1816.app.api.types.User;
 
 @WebServlet(urlPatterns = "/graphql")
 public class GraphQLEndpoint extends SimpleGraphQLServlet {
 
-  private static final LinkRepository linkRepository;
-  private static final UserRepository userRepository;
-  private static final VoteRepository voteRepository;
+  public static final UserRepository userRepository;
   private static final DataAccessRequestRepository dataAccessRequestRepository;
 
+  public static MongoDatabase mongo;
+
   static {
-    MongoDatabase mongo = new MongoClient().getDatabase("gruppe16");
-    linkRepository = new LinkRepository(mongo.getCollection("links"));
+    String dbname = System.getenv("DB_NAME");
+    String host = System.getenv("MONGO_HOST");
+    mongo =
+        new MongoClient(host == null ? "localhost" : host)
+            .getDatabase(dbname == null ? "gruppe16" : dbname);
     userRepository = new UserRepository(mongo.getCollection("users"));
-    voteRepository = new VoteRepository(mongo.getCollection("votes"));
     dataAccessRequestRepository =
         new DataAccessRequestRepository(mongo.getCollection("dataAccessRequests"));
   }
@@ -44,18 +44,14 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
     super(buildSchema());
   }
 
-  private static GraphQLSchema buildSchema() {
+  public static GraphQLSchema buildSchema() {
     return SchemaParser.newParser()
         .file("schema.graphqls")
         .resolvers(
-            new Query(linkRepository, userRepository, dataAccessRequestRepository),
-            new Mutation(
-                linkRepository, userRepository, voteRepository, dataAccessRequestRepository),
+            new Query(userRepository, dataAccessRequestRepository),
+            new Mutation(userRepository, dataAccessRequestRepository),
             new SigninResolver(),
-            new LinkResolver(userRepository),
-            new VoteResolver(linkRepository, userRepository),
             new DataAccessRequestResolver(userRepository))
-        .scalars(Scalars.dateTime)
         .build()
         .makeExecutableSchema();
   }
