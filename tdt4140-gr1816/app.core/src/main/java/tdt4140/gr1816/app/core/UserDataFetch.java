@@ -17,6 +17,17 @@ import java.util.stream.Collectors;
 
 public class UserDataFetch {
 
+  public static String signInQuery =
+      "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
+  public static String allUsersQuery =
+      "{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}";
+  public static String currentUserQuery =
+      "{\"query\":\"query{viewer{id username isDoctor gender age}}\"}";
+  public static String accessRequestsToUserQuery =
+      "{\"query\":\"query{dataAccessRequestsForMe{requestedBy{username isDoctor gender age}status}}\"}";
+  public static String accessRequestsByDoctorQuery =
+      "{\"query\":\"query{myDataAccessRequests{dataOwner{username isDoctor gender age}status}}\"}";
+
   public static String getData(String query) {
     String url = "http://localhost:8080/graphql";
     String charset = java.nio.charset.StandardCharsets.UTF_8.name();
@@ -46,33 +57,11 @@ public class UserDataFetch {
   }
 
   public static void signIn() {
-    String query =
-        "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
-    UserDataFetch.getData(query);
-  }
-
-  public static <T> T accessRequests(Class<T> cls, String query, String jsonNodeName) {
-    String responseJson = UserDataFetch.getData(query);
-    ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
-    JsonParser parser;
-    T requests = null;
-    try {
-      parser = factory.createParser(responseJson);
-      JsonNode root = mapper.readTree(parser);
-      JsonNode thirdJsonObject = root.get("data").get(jsonNodeName);
-      requests = mapper.readerFor(new TypeReference<T>() {}).readValue(thirdJsonObject);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return requests;
+    UserDataFetch.getData(signInQuery);
   }
 
   public static List<User> getAllUsers() {
-    String responseJson =
-        UserDataFetch.getData("{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}");
+    String responseJson = UserDataFetch.getData(allUsersQuery);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
@@ -91,8 +80,7 @@ public class UserDataFetch {
   }
 
   public static User getCurrentUser() {
-    String responseJson =
-        UserDataFetch.getData("{\"query\":\"query{viewer{id username isDoctor gender age}}\"}");
+    String responseJson = UserDataFetch.getData(currentUserQuery);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
@@ -119,9 +107,7 @@ public class UserDataFetch {
   }
 
   public static List<DataAccessRequest> getAccessRequestsToUser() {
-    String responseJson =
-        UserDataFetch.getData(
-            "{\"query\":\"query{dataAccessRequestsForMe{requestedBy{username isDoctor gender age}status}}\"}");
+    String responseJson = UserDataFetch.getData(accessRequestsToUserQuery);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
@@ -143,9 +129,8 @@ public class UserDataFetch {
   }
 
   public static List<DataAccessRequest> getAccessRequestsByDoctor() {
-    String responseJson =
-        UserDataFetch.getData(
-            "{\"query\":\"query{myDataAccessRequests{dataOwner{username isDoctor gender age}, status}}\"}");
+    String responseJson = UserDataFetch.getData(accessRequestsByDoctorQuery);
+    System.out.println(responseJson);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
