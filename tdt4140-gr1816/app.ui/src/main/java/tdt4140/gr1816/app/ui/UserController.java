@@ -77,8 +77,12 @@ public class UserController implements Initializable {
 	}
 	
 	public void handleAcceptDoctorButton() {
-		doctorsListViewItems.add(doctorRequestListView.getSelectionModel().getSelectedItem());
-		doctorRequestListViewItems.remove(doctorRequestListView.getSelectionModel().getSelectedItem());
+		String selected = doctorRequestListView.getSelectionModel().getSelectedItem();
+		if (selected != null) {
+			doctorsListViewItems.add(selected);
+			doctorRequestListViewItems.remove(selected);
+		}
+		
 	}
 	
 	public void turnOffDataGathering() {
