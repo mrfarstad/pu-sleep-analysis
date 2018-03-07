@@ -10,12 +10,12 @@ public class FxAppController {
 	
 	@FXML
 	private TextField usernameField;
+	@FXML
 	private PasswordField passwordField;
 	
 	public void handleLogin() {
-		// if usernameField.isDoctor()
-		// finner ut om bruker er lege
-		// if setning som åpner riktig vindu
+		// if (doctor) FxApp.showDocterScene() 
+		// else  FxApp.showPatientScene()
 	}
 	public void handleCreateNewButton() throws IOException {
 		FxApp.showCreateNewUserScene();
