@@ -1,9 +1,14 @@
 package tdt4140.gr1816.app.core;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
-import tdt4140.gr1816.app.core.UserDataFetch.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.Test;
 
 public class TestUserDataFetch {
 
@@ -18,16 +23,18 @@ public class TestUserDataFetch {
 
   @Test
   public void testGetAllUsersQuery() {
-
     //  create mock
     UserDataFetch test = mock(UserDataFetch.class);
+    // define what the mock class returns when methods are called
+    when(test.getData(UserDataFetch.allUsersQuery)).thenReturn(getAllUsersResponse);
 
-    // define return value for method getUniqueId()
-    when(test.getData()).thenReturn(getAllUsersResponse);
-
-    // use mock in test....
-    assertEquals(test.getUniqueId(), 43);
-
-    assertEquals();
+    // test mock class
+    assertEquals(test.getData(UserDataFetch.allUsersQuery), getAllUsersResponse);
+    // UserDataFetch.getAllUsers() should return List<User>
+    assertTrue(test.getAllUsers() instanceof List);
+    List<User> users = test.getAllUsers();
+    if (!users.isEmpty()) {
+      assertTrue(users.get(0) instanceof User);
+    }
   }
 }

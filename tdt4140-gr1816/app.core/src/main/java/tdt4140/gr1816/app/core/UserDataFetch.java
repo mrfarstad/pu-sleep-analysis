@@ -28,7 +28,9 @@ public class UserDataFetch {
   public static String accessRequestsByDoctorQuery =
       "{\"query\":\"query{myDataAccessRequests{dataOwner{username isDoctor gender age}status}}\"}";
 
-  public static String getData(String query) {
+  public static UserDataFetch UserDataFetch = new UserDataFetch();
+
+  public String getData(String query) {
     String url = "http://localhost:8080/graphql";
     String charset = java.nio.charset.StandardCharsets.UTF_8.name();
 
@@ -56,11 +58,11 @@ public class UserDataFetch {
     return responseJson;
   }
 
-  public static void signIn() {
+  public void signIn() {
     UserDataFetch.getData(signInQuery);
   }
 
-  public static List<User> getAllUsers() {
+  public List<User> getAllUsers() {
     String responseJson = UserDataFetch.getData(allUsersQuery);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
@@ -79,7 +81,7 @@ public class UserDataFetch {
     return requests;
   }
 
-  public static User getCurrentUser() {
+  public User getCurrentUser() {
     String responseJson = UserDataFetch.getData(currentUserQuery);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
@@ -128,7 +130,7 @@ public class UserDataFetch {
     return requests;
   }
 
-  public static List<DataAccessRequest> getAccessRequestsByDoctor() {
+  public List<DataAccessRequest> getAccessRequestsByDoctor() {
     String responseJson = UserDataFetch.getData(accessRequestsByDoctorQuery);
     System.out.println(responseJson);
     ObjectMapper mapper = new ObjectMapper();
