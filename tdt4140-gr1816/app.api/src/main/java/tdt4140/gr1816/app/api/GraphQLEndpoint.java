@@ -31,8 +31,10 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
 
   static {
     String dbname = System.getenv("DB_NAME");
-    System.out.println(dbname);
-    mongo = new MongoClient().getDatabase(dbname == null ? "gruppe16" : dbname);
+    String host = System.getenv("MONGO_HOST");
+    mongo =
+        new MongoClient(host == null ? "localhost" : host)
+            .getDatabase(dbname == null ? "gruppe16" : dbname);
     userRepository = new UserRepository(mongo.getCollection("users"));
     dataAccessRequestRepository =
         new DataAccessRequestRepository(mongo.getCollection("dataAccessRequests"));

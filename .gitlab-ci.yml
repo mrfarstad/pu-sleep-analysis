@@ -3,6 +3,8 @@ image: krissrex/docker-java8-maven-testfxmonocle:1.0
 # image: maven:3.3.9-jdk-8
 
 # most of this taken from https://stackoverflow.com/questions/37785154/how-to-enable-maven-artifact-caching-for-gitlab-ci-runner
+services:
+  - mongo:latest
 
 cache:
   paths:
@@ -13,6 +15,7 @@ cache:
 variables:
   MAVEN_OPTS: "-Djava.awt.headless=true -Dmaven.repo.local=.m2/repository"
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -Dgitlab-ci=true"
+  MONGO_HOST: "mongo"
 
 build-job:
   stage: build
