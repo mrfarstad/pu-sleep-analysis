@@ -1,19 +1,22 @@
 package tdt4140.gr1816.app.api;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.coxautodev.graphql.tools.SchemaParser;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
+
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
 import graphql.schema.GraphQLSchema;
 import graphql.servlet.GraphQLContext;
 import graphql.servlet.SimpleGraphQLServlet;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import tdt4140.gr1816.app.api.auth.AuthContext;
 import tdt4140.gr1816.app.api.resolvers.DataAccessRequestResolver;
 import tdt4140.gr1816.app.api.resolvers.LinkResolver;
@@ -30,11 +33,13 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
   private static final UserRepository userRepository;
   private static final VoteRepository voteRepository;
   private static final DataAccessRequestRepository dataAccessRequestRepository;
+  
+  public static MongoDatabase mongo;
 
   static {
     String dbname = System.getenv("DB_NAME");
     System.out.println(dbname);
-    MongoDatabase mongo = new MongoClient().getDatabase(dbname == null ? "gruppe16" : dbname);
+    mongo = new MongoClient().getDatabase(dbname == null ? "gruppe16" : dbname);
     linkRepository = new LinkRepository(mongo.getCollection("links"));
     userRepository = new UserRepository(mongo.getCollection("users"));
     voteRepository = new VoteRepository(mongo.getCollection("votes"));

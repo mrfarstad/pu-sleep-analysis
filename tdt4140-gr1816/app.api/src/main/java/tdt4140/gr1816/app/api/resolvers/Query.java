@@ -34,6 +34,9 @@ public class Query implements GraphQLRootResolver {
 
   public User viewer(DataFetchingEnvironment env) {
     AuthContext context = env.getContext();
+    if (context == null) {
+      return null;
+    }
     return context.getUser();
   }
 
