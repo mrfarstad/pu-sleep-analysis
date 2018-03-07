@@ -1,18 +1,19 @@
 package tdt4140.gr1816.app.ui;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.matcher.control.ListViewMatchers;
 
 public class UserGUITest extends ApplicationTest {
 
@@ -41,18 +42,35 @@ public class UserGUITest extends ApplicationTest {
 
   @Test
   public void testDataButton() {
-	  // Check if databutton is on by defult
-	  Button dataButton = lookup("#dataButton").query();
-	  assertEquals("Turn off", dataButton.getText());
-	  // Click button and check of text changes
-	  clickOn(dataButton);
-	  assertEquals("Turn on", dataButton.getText());
+    // Check if databutton is on by defult
+    Button dataButton = lookup("#dataButton").query();
+    assertEquals("Turn off", dataButton.getText());
+    // Click button and check of text changes
+    clickOn(dataButton);
+    assertEquals("Turn on", dataButton.getText());
   }
-  
+
   @Test
   public void testDoctorRemoval() {
-	  ListView doctorList = lookup("#doctorsListView").query();
-	  Button removeDoctorButton = lookup("#removeDoctorButton").query();
-	  verifyThat(doctorList, containsRow("Doctor 1"));
+    ListView doctorList = lookup("#doctorsListView").query();
+    Button removeDoctorButton = lookup("#removeDoctorButton").query();
+
+    // Check if list has "Doctor 5"
+    assertThat(doctorList, ListViewMatchers.hasListCell("Doctor 5"));
+    // Remove "Doctor 5"
+    moveTo(doctorList);
+    press(MouseButton.PRIMARY);
+    release(MouseButton.PRIMARY);
+    clickOn(removeDoctorButton);
+
+    // Check "Doctor 5" is removed
+    // assertThat(doctorList, ListViewMatchers.hasListCell("Doctor 5"));
+  }
+
+  @Test
+  public void testTabs() {
+    clickOn("#sleepTab");
+    clickOn("#doctorTab");
+    clickOn("#profileTab");
   }
 }
