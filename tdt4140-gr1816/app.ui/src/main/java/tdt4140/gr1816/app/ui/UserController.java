@@ -26,6 +26,9 @@ public class UserController implements Initializable {
 	private Button removeDoctorButton;
 	
 	@FXML
+	private Button deleteDataButton;
+	
+	@FXML
 	private Text nameText;
 	
 	@FXML
@@ -38,15 +41,17 @@ public class UserController implements Initializable {
 	private ListView<String> doctorsListView;
 	
 	@FXML
+	private ListView<String> dataListView;
+	
+	@FXML
 	private ListView<String> doctorRequestListView;
 	
-	private User user;
-	private UserDataFetch userDataFetch;
+	//private User user;
+	//private UserDataFetch userDataFetch;
 	
-	
-	private List<DataAccessRequest> accessRequestList;
 	
 	private boolean dataGatheringOn;
+	ObservableList<String> dataListViewItems;
 	ObservableList<String> doctorsListViewItems;
 	ObservableList<String> doctorRequestListViewItems;
 
@@ -55,13 +60,16 @@ public class UserController implements Initializable {
 			dataButton.setText("Turn on");
 			dataGatheringOn = false;
 			turnOffDataGathering();
-			List<User> users = UserDataFetch.getAllUsers();
 		}
 		else {
 			dataButton.setText("Turn off");
 			dataGatheringOn = true;
 			turnOnDataGathering();
 		}	
+	}
+	
+	public void handleDeleteDataButton() {
+		dataListViewItems.remove(dataListView.getSelectionModel().getSelectedItem());
 	}
 	
 	public void handleRemoveDoctorButton() {
@@ -83,13 +91,15 @@ public class UserController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		UserDataFetch.signIn();
-		user = UserDataFetch.getCurrentUser();
-		accessRequestList = UserDataFetch.getAccessRequestsToUser();
+		//UserDataFetch.signIn();
+		//user = UserDataFetch.getCurrentUser();
+		//accessRequestList = UserDataFetch.getAccessRequestsToUser();
 		
 		setProfileValues();
 		
 		setInitialDataButtonValue();
+		
+		setDataListViewItems();
 			
 		setDoctorsListViewItems();
 		
@@ -99,9 +109,13 @@ public class UserController implements Initializable {
 	
 	public void setProfileValues() {
 		
-		String name = user.getUsername();
-		Integer age = user.getAge();
-		String gender = user.getGender();
+		String name = "Sondre Grav Skjåstad";
+		Integer age = 21;
+		String gender = "Male";
+		
+		//String name = user.getUsername();
+		//Integer age = user.getAge();
+		//String gender = user.getGender();
 		
 		nameText.setText(name);
 		ageText.setText(age.toString());
@@ -120,8 +134,11 @@ public class UserController implements Initializable {
 		}	
 	}
 	
-	public void setListViews() {
-		List<DataAccessRequest> dataAccessRequest = UserDataFetch.getAccessRequestsToUser();
+	public void setDataListViewItems() {
+		dataListViewItems = dataListView.getItems();
+		dataListViewItems.add("Data 1");
+		dataListViewItems.add("Data 2");
+		dataListViewItems.add("Data 3");
 	}
 	
 	public void setDoctorsListViewItems() {

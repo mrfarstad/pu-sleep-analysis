@@ -6,7 +6,6 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -87,7 +86,8 @@
                <content>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Delete data" />
+                        <ListView fx:id="dataListView" prefHeight="200.0" prefWidth="200.0" />
+                        <Button fx:id="deleteDataButton" mnemonicParsing="false" onAction="#handleDeleteDataButton" text="Delete selected data" />
                      </children>
                   </HBox>
                </content></Tab>
