@@ -11,6 +11,12 @@ import java.util.List;
 
 public class UserDataFetch {
 
+  protected String currentToken = null;
+
+  public String createUserQuery =
+      "{\"query\":\"mutation{createUser(authProvider:{username:\\\"test\\\" password:\\\"test\\\"} isDoctor: true gender:\\\"male\\\" age: 22){username}}\"}";
+  public String deleteUserQuery =
+      "{\"query\":\"mutation{deleteUser(auth:{username:\\\"test\\\" password:\\\"test\\\"})}\"}";
   public String signInQuery =
       "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
   public String allUsersQuery = "{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}";
@@ -28,12 +34,67 @@ public class UserDataFetch {
     this.dataGetter = dataGetter;
   }
 
+  // Returns username
+  public String createUser() {
+    String responseJson = dataGetter.getData(createUserQuery, null);
+    ObjectMapper mapper = new ObjectMapper();
+    JsonFactory factory = mapper.getFactory();
+    JsonParser parser;
+    String username = "";
+    try {
+      parser = factory.createParser(responseJson);
+      JsonNode root = mapper.readTree(parser);
+      JsonNode thirdJsonObject = root.get("data").get("createUser").get("username");
+      username = mapper.readerFor(new TypeReference<String>() {}).readValue(thirdJsonObject);
+    } catch (JsonParseException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return username;
+  }
+
+  public Boolean deleteUser() {
+    this.dataGetter.getData(deleteUserQuery, null);
+    String responseJson = dataGetter.getData(deleteUserQuery, null);
+    ObjectMapper mapper = new ObjectMapper();
+    JsonFactory factory = mapper.getFactory();
+    JsonParser parser;
+    Boolean success = false;
+    try {
+      parser = factory.createParser(responseJson);
+      JsonNode root = mapper.readTree(parser);
+      JsonNode thirdJsonObject = root.get("data").get("deleteUser");
+      success = mapper.readerFor(new TypeReference<Boolean>() {}).readValue(thirdJsonObject);
+    } catch (JsonParseException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return success;
+  }
+
   public void signIn() {
-    dataGetter.getData(signInQuery);
+    String responseJson = dataGetter.getData(signInQuery, null);
+    ObjectMapper mapper = new ObjectMapper();
+    JsonFactory factory = mapper.getFactory();
+    JsonParser parser;
+    String token = null;
+    try {
+      parser = factory.createParser(responseJson);
+      JsonNode root = mapper.readTree(parser);
+      JsonNode thirdJsonObject = root.get("data").get("signinUser").get("token");
+      token = mapper.readerFor(new TypeReference<String>() {}).readValue(thirdJsonObject);
+    } catch (JsonParseException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    this.currentToken = token;
   }
 
   public List<User> getAllUsers() {
-    String responseJson = dataGetter.getData(allUsersQuery);
+    String responseJson = dataGetter.getData(allUsersQuery, null);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
@@ -52,7 +113,7 @@ public class UserDataFetch {
   }
 
   public User getCurrentUser() {
-    String responseJson = dataGetter.getData(currentUserQuery);
+    String responseJson = dataGetter.getData(currentUserQuery, this.currentToken);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
@@ -75,7 +136,7 @@ public class UserDataFetch {
   }
 
   public List<DataAccessRequest> getAccessRequestsToUser() {
-    String responseJson = dataGetter.getData(accessRequestsToUserQuery);
+    String responseJson = dataGetter.getData(accessRequestsToUserQuery, this.currentToken);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
@@ -97,7 +158,7 @@ public class UserDataFetch {
   }
 
   public List<DataAccessRequest> getAccessRequestsByDoctor() {
-    String responseJson = dataGetter.getData(accessRequestsByDoctorQuery);
+    String responseJson = dataGetter.getData(accessRequestsByDoctorQuery, this.currentToken);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
@@ -122,9 +183,12 @@ public class UserDataFetch {
   public static void main(String[] args) {
     UserDataFetch userDataFetch = new UserDataFetch(new DataGetter());
     System.out.println(userDataFetch.getAllUsers());
+    userDataFetch.createUser();
+    System.out.println(userDataFetch.getAllUsers());
     userDataFetch.signIn();
     System.out.println(userDataFetch.getCurrentUser());
     System.out.println(userDataFetch.getAccessRequestsToUser());
     System.out.println(userDataFetch.getAccessRequestsByDoctor());
+    userDataFetch.deleteUser();
   }
 }

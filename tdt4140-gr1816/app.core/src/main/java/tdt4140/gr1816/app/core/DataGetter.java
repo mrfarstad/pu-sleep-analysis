@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class DataGetter {
 
-  public String getData(String query) {
+  public String getData(String query, String token) {
     String url = "http://localhost:8080/graphql";
     String charset = java.nio.charset.StandardCharsets.UTF_8.name();
 
@@ -21,7 +21,9 @@ public class DataGetter {
       connection.setRequestProperty("Accept-Charset", charset);
       connection.setRequestProperty(
           "Content-Type", "application/x-www-form-urlencoded;charset=" + charset);
-      connection.setRequestProperty("Authorization", "Bearer 5a9e8503c13edf22f93825e7");
+      if (token != null) {
+        connection.setRequestProperty("Authorization", "Bearer " + token);
+      }
 
       try (OutputStream output = connection.getOutputStream()) {
         output.write(query.getBytes(charset));
