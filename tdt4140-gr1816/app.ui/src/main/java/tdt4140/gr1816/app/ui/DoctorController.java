@@ -29,9 +29,9 @@ public class DoctorController implements Initializable {
   @FXML private TabPane tabPane;
 
   @FXML private Tab messageTab;
-  
+
   @FXML private Tab profileTab;
-  
+
   @FXML private Tab patientTab;
 
   @FXML private TextField requestTextField;
