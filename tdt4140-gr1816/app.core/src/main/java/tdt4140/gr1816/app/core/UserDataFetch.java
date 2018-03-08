@@ -13,6 +13,10 @@ public class UserDataFetch {
 
   protected String currentToken = null;
 
+  public String createUserQuery =
+      "{\"query\":\"mutation{createUser(authProvider:{username:\\\"test\\\" password:\\\"test\\\"} isDoctor: true gender:\\\"male\\\" age: 22){username}}\"}";
+  public String deleteUserQuery =
+      "{\"query\":\"mutation{deleteUser(auth:{username:\\\"test\\\" password:\\\"test\\\"})}\"}";
   public String signInQuery =
       "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
   public String allUsersQuery = "{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}";
@@ -28,6 +32,46 @@ public class UserDataFetch {
 
   public UserDataFetch(DataGetter dataGetter) {
     this.dataGetter = dataGetter;
+  }
+
+  // Returns username
+  public String createUser() {
+    String responseJson = dataGetter.getData(createUserQuery, null);
+    ObjectMapper mapper = new ObjectMapper();
+    JsonFactory factory = mapper.getFactory();
+    JsonParser parser;
+    String username = "";
+    try {
+      parser = factory.createParser(responseJson);
+      JsonNode root = mapper.readTree(parser);
+      JsonNode thirdJsonObject = root.get("data").get("createUser").get("username");
+      username = mapper.readerFor(new TypeReference<String>() {}).readValue(thirdJsonObject);
+    } catch (JsonParseException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return username;
+  }
+
+  public Boolean deleteUser() {
+    this.dataGetter.getData(deleteUserQuery, null);
+    String responseJson = dataGetter.getData(deleteUserQuery, null);
+    ObjectMapper mapper = new ObjectMapper();
+    JsonFactory factory = mapper.getFactory();
+    JsonParser parser;
+    Boolean success = false;
+    try {
+      parser = factory.createParser(responseJson);
+      JsonNode root = mapper.readTree(parser);
+      JsonNode thirdJsonObject = root.get("data").get("deleteUser");
+      success = mapper.readerFor(new TypeReference<Boolean>() {}).readValue(thirdJsonObject);
+    } catch (JsonParseException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return success;
   }
 
   public void signIn() {
@@ -139,9 +183,12 @@ public class UserDataFetch {
   public static void main(String[] args) {
     UserDataFetch userDataFetch = new UserDataFetch(new DataGetter());
     System.out.println(userDataFetch.getAllUsers());
+    userDataFetch.createUser();
+    System.out.println(userDataFetch.getAllUsers());
     userDataFetch.signIn();
     System.out.println(userDataFetch.getCurrentUser());
     System.out.println(userDataFetch.getAccessRequestsToUser());
     System.out.println(userDataFetch.getAccessRequestsByDoctor());
+    userDataFetch.deleteUser();
   }
 }
