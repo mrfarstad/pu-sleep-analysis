@@ -1,15 +1,12 @@
 package tdt4140.gr1816.app.ui;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import tdt4140.gr1816.app.core.User;
-import tdt4140.gr1816.app.core.UserDataFetch;
 
 public class UserController implements Initializable {
 
@@ -28,12 +25,12 @@ public class UserController implements Initializable {
     if (dataGatheringOn) {
       dataButton.setText("Turn on");
       dataGatheringOn = false;
-      turnOffDataGathering();
-      List<User> users = UserDataFetch.getAllUsers();
+      // turnOffDataGathering();
+      // List<User> users = UserDataFetch.getAllUsers();
     } else {
       dataButton.setText("Turn off");
       dataGatheringOn = true;
-      turnOnDataGathering();
+      // turnOnDataGathering();
     }
   }
 
