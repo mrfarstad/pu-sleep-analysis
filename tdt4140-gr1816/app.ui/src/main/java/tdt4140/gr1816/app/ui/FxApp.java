@@ -17,21 +17,6 @@ public class FxApp extends Application {
 		stage.show();
 	}
 	
-	public static void showDocterScene() throws IOException {
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(FxApp.class.getResource("DoctorGUI.fxml"));
-	}
-	
-	public static void showPasientScene() throws IOException {
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(FxApp.class.getResource("UserGUI.fxml"));
-	}
-	
-	public static void showCreateNewUserScene() throws IOException {
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(FxApp.class.getResource("CreateNewUserGUI.fxml"));
-	}
-
 	public static void main(String[] args) {
 		launch(args);
 	}
