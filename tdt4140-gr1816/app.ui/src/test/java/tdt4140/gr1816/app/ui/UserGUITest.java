@@ -1,19 +1,19 @@
 package tdt4140.gr1816.app.ui;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
-import org.testfx.matcher.control.ListViewMatchers;
 
 public class UserGUITest extends ApplicationTest {
 
@@ -28,7 +28,7 @@ public class UserGUITest extends ApplicationTest {
       System.setProperty("monocle.platform", "Headless");
       System.setProperty("prism.order", "sw");
       System.setProperty("prism.text", "t2k");
-      System.setProperty("testfx.setup.timeout", "2500");
+      System.setProperty("testfx.setup.timeout", "10000");
     }
   }
 
@@ -40,37 +40,67 @@ public class UserGUITest extends ApplicationTest {
     stage.show();
   }
 
+  private ListView doctorList;
+  private ObservableList<String> doctorItems;
+
   @Test
   public void testDataButton() {
+    clickOn("#profileTab");
     // Check if databutton is on by defult
     Button dataButton = lookup("#dataButton").query();
     assertEquals("Turn off", dataButton.getText());
     // Click button and check of text changes
     clickOn(dataButton);
     assertEquals("Turn on", dataButton.getText());
+    clickOn(dataButton);
+    assertEquals("Turn off", dataButton.getText());
   }
 
   @Test
   public void testDoctorRemoval() {
-    ListView doctorList = lookup("#doctorsListView").query();
+    clickOn("#profileTab");
+    doctorList = lookup("#doctorsListView").query();
+    doctorItems = doctorList.getItems();
     Button removeDoctorButton = lookup("#removeDoctorButton").query();
 
-    // Check if list has "Doctor 5"
-    assertThat(doctorList, ListViewMatchers.hasListCell("Doctor 4"));
-    // Remove "Doctor 5"
-    moveTo(doctorList);
-    press(MouseButton.PRIMARY);
-    release(MouseButton.PRIMARY);
+    String doctor = doctorItems.get(0);
+    // doctorItems.add(doctor);
+    // Check if list has doctor
+    assertTrue(doctorItems.contains(doctor));
+    // Remove doctor
+    doctorList.getSelectionModel().select(doctor);
     clickOn(removeDoctorButton);
-
-    // Check "Doctor 5" is removed
-    // assertThat(doctorList, ListViewMatchers.hasListCell("Doctor 5"));
+    // Check if doctor is removed
+    assertFalse(doctorItems.contains(doctor));
   }
 
   @Test
-  public void testTabs() {
+  public void testDeleteDataButton() {
     clickOn("#sleepTab");
+    Button deleteButton = lookup("#deleteDataButton").query();
+    ListView dataList = lookup("#dataListView").query();
+    ObservableList<String> dataItems = dataList.getItems();
+
+    String data = dataItems.get(0);
+
+    assertTrue(dataItems.contains(data));
+    dataList.getSelectionModel().select(data);
+    clickOn(deleteButton);
+    assertFalse(dataItems.contains(data));
+  }
+
+  @Test
+  public void testAcceptDoctor() {
     clickOn("#doctorTab");
-    clickOn("#profileTab");
+    Button acceptButton = lookup("#acceptDoctorButton").query();
+    ListView doctorRequestList = lookup("#doctorRequestListView").query();
+    ObservableList<String> doctorRequestItems = doctorRequestList.getItems();
+
+    String doctor = doctorRequestItems.get(0);
+
+    assertTrue(doctorRequestItems.contains(doctor));
+    doctorRequestList.getSelectionModel().select(doctor);
+    clickOn(acceptButton);
+    assertFalse(doctorRequestItems.contains(doctor));
   }
 }

@@ -108,7 +108,7 @@ public class UserController implements Initializable {
   }
 
   public void setInitialDataButtonValue() {
-    this.dataGatheringOn = true;
+    dataGatheringOn = true;
 
     if (dataGatheringOn) {
       dataButton.setText("Turn off");
