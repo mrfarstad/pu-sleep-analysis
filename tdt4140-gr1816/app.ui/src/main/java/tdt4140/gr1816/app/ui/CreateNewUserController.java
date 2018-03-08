@@ -1,6 +1,5 @@
 package tdt4140.gr1816.app.ui;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.*;
 import javafx.scene.control.Button;
@@ -19,19 +18,7 @@ public class CreateNewUserController {
   @FXML private RadioButton isDoctorRadioButton;
   @FXML private Button createUserButton;
 
-  public void handleCreateUser(ActionEvent event) {
+  public void handleCreateUser() {
     // code for creating new user
-  }
-
-  public String getGenderSelected(ActionEvent event) {
-    String gender;
-    if (femaleRadioButton.isSelected()) {
-      gender = "female";
-    } else if (maleRadioButton.isSelected()) {
-      gender = "male";
-    } else {
-      gender = "other";
-    }
-    return gender;
   }
 }
