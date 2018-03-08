@@ -1,8 +1,12 @@
 package tdt4140.gr1816.app.ui;
 
+import static org.junit.Assert.assertEquals;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -25,6 +29,22 @@ public class FxAppTest extends ApplicationTest {
     }
   }
 
+  @Test
+  public void testUsernameField() {
+    TextField usernameField = lookup("#usernameField").query();
+    clickOn(usernameField);
+    write("ingeboss");
+    assertEquals("ingeboss", usernameField.getText());
+  }
+
+  @Test
+  public void testPasswordField() {
+    PasswordField passwordField = lookup("#passwordField").query();
+    clickOn(passwordField);
+    write("passord123");
+    assertEquals("passord123", passwordField.getText());
+  }
+
   @Override
   public void start(Stage stage) throws Exception {
     Parent root = FXMLLoader.load(getClass().getResource("FxApp.fxml"));
@@ -32,7 +52,4 @@ public class FxAppTest extends ApplicationTest {
     stage.setScene(scene);
     stage.show();
   }
-
-  @Test
-  public void testFxApp() {}
 }

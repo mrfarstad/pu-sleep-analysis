@@ -1,8 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="tdt4140.gr1816.app.ui.FxAppController"
-            prefHeight="750" prefWidth="1000">
-</Pane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.FxAppController">
+   <top>
+      <VBox alignment="CENTER" prefHeight="81.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="&quot;App Name&quot;" textFill="#1e3eda">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </top>
+   <left>
+      <HBox prefHeight="315.0" prefWidth="198.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="319.0" prefWidth="165.0">
+               <children>
+                  <Label prefHeight="17.0" prefWidth="84.0" text="User name:">
+                     <VBox.margin>
+                        <Insets left="30.0" right="20.0" top="50.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label text="Password:">
+                     <VBox.margin>
+                        <Insets left="30.0" right="20.0" top="20.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </left>
+   <center>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="306.0" prefWidth="402.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="TOP_CENTER" layoutY="2.0" prefHeight="314.0" prefWidth="183.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="112.0" text="Login">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="usernameField" prefHeight="27.0" prefWidth="123.0">
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="10.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <PasswordField fx:id="passwordField">
+                     <opaqueInsets>
+                        <Insets top="40.0" />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="15.0" />
+                     </VBox.margin>
+                  </PasswordField>
+                  <Button fx:id="SigninButton" mnemonicParsing="false" onAction="#handleSigninButton" prefHeight="27.0" prefWidth="142.0" text="Sign in">
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="10.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="CreateNewUserButton" mnemonicParsing="false" onAction="#handleCreateNewUserButton" prefHeight="27.0" prefWidth="159.0" text="Create new user">
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="70.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
