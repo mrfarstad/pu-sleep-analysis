@@ -1,5 +1,8 @@
 package tdt4140.gr1816.app.ui;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -7,10 +10,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -34,11 +33,12 @@ public class CreateNewUserControllerTest extends ApplicationTest {
 
   @Override
   public void start(Stage stage) throws Exception {
-	  	Parent root = FXMLLoader.load(getClass().getResource("CreateNewUserGUI.fxml"));
-	    Scene scene = new Scene(root);
-	    stage.setScene(scene);
-	    stage.show();
+    Parent root = FXMLLoader.load(getClass().getResource("CreateNewUserGUI.fxml"));
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    stage.show();
   }
+
   @Test
   public void testSignupPasswordField() {
     PasswordField signupPasswordField = lookup("#signupPasswordField").query();
@@ -46,6 +46,7 @@ public class CreateNewUserControllerTest extends ApplicationTest {
     write("passord123");
     assertEquals("passord123", signupPasswordField.getText());
   }
+
   @Test
   public void testSignupUsernameField() {
     TextField signupUsernameField = lookup("#signupUsernameField").query();
@@ -54,22 +55,19 @@ public class CreateNewUserControllerTest extends ApplicationTest {
     assertEquals("mathiaswahl", signupUsernameField.getText());
   }
 
-  
   @Test
   public void testFemaleSelected() {
-	  	RadioButton female = lookup("#femaleRadioButton").query();
-	  	clickOn(female);
-	  	assertTrue(female.isSelected());
-	    }
+    RadioButton female = lookup("#femaleRadioButton").query();
+    clickOn(female);
+    assertTrue(female.isSelected());
+  }
+
   @Test
   public void testMaleSelected() {
-	  	RadioButton female = lookup("#femaleRadioButton").query();
-	  	RadioButton male = lookup("#maleRadioButton").query();
-	  	clickOn(female);
-	  	clickOn(male);
-	  	assertTrue(male.isSelected());
-	    }
-  
-  
+    RadioButton female = lookup("#femaleRadioButton").query();
+    RadioButton male = lookup("#maleRadioButton").query();
+    clickOn(female);
+    clickOn(male);
+    assertTrue(male.isSelected());
+  }
 }
-
