@@ -52,4 +52,5 @@ public class FxAppTest extends ApplicationTest {
     stage.setScene(scene);
     stage.show();
   }
+  
 }
