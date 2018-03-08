@@ -30,7 +30,7 @@
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
-          <Tab text="Profile">
+          <Tab fx:id="profileTab" text="Profile">
                <content>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
@@ -82,7 +82,7 @@
                   </HBox>
                </content>
             </Tab>
-          <Tab text="Sleep">
+          <Tab fx:id="sleepTab" text="Sleep">
                <content>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
@@ -91,7 +91,7 @@
                      </children>
                   </HBox>
                </content></Tab>
-            <Tab text="Doctor">
+            <Tab fx:id="doctorTab" text="Doctor">
                <content>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
