@@ -1,0 +1,58 @@
+type Query {
+    allUsers: [User]
+    viewer: User
+
+    # DataAccess requested by you
+    myDataAccessRequests: [DataAccessRequest]
+
+    # DataAccess requested by others, for you
+    dataAccessRequestsForMe: [DataAccessRequest]
+}
+
+
+type Mutation {
+  createUser(authProvider: AuthData!, isDoctor: Boolean!, gender: String!, age: Int!): User
+  signinUser(auth: AuthData): SigninPayload
+  deleteUser(auth: AuthData!): Boolean
+  
+  requestDataAccess(dataOwnerId: ID!): DataAccessRequest
+  answerDataAccessRequest(dataAccessRequestId: ID!, status: DataAccessRequestStatus!): DataAccessRequest
+}
+
+input AuthData {
+	username: String!
+	password: String!
+}
+
+enum DataAccessRequestStatus {
+        PENDING,
+        ACCEPTED,
+        REJECTED
+}
+
+type DataAccessRequest {
+        id: ID!
+        dataOwner: User!
+        requestedBy: User!
+        status: DataAccessRequestStatus!
+}
+
+# A user can be a doctor, but does not have to be
+type User {
+	id: ID!
+	username: String
+	isDoctor: Boolean
+	gender: String
+	age: Int
+}
+
+type SigninPayload {
+  token: String
+  user: User
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+

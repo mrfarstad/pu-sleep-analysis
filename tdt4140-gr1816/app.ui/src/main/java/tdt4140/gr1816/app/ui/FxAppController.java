@@ -34,3 +34,4 @@ public class FxAppController {
 		return passwordField;
 	}
 }
+

@@ -1,59 +1,69 @@
 package tdt4140.gr1816.app.api.resolvers;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
-
+import com.coxautodev.graphql.tools.GraphQLRootResolver;
 import graphql.schema.DataFetchingEnvironment;
-import tdt4140.gr1816.app.api.CharacterRepository;
-import tdt4140.gr1816.app.api.LinkRepository;
-import tdt4140.gr1816.app.api.types.Character;
-import tdt4140.gr1816.app.api.types.Droid;
-import tdt4140.gr1816.app.api.types.Episode;
-import tdt4140.gr1816.app.api.types.Human;
-import tdt4140.gr1816.app.api.types.Link;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import tdt4140.gr1816.app.api.DataAccessRequestRepository;
+import tdt4140.gr1816.app.api.UserRepository;
+import tdt4140.gr1816.app.api.auth.AuthContext;
+import tdt4140.gr1816.app.api.types.DataAccessRequest;
+import tdt4140.gr1816.app.api.types.User;
 
-@Component
-public class Query implements GraphQLQueryResolver {
-	
-    private static final LinkRepository linkRepository;
+public class Query implements GraphQLRootResolver {
 
-    static {
-        MongoDatabase mongo = new MongoClient().getDatabase("gruppe16");
-        linkRepository = new LinkRepository(mongo.getCollection("links"));
+  private final UserRepository userRepository;
+  private final DataAccessRequestRepository dataAccessRequestRepository;
+
+  public Query(
+      UserRepository userRepository, DataAccessRequestRepository dataAccessRequestRepository) {
+    this.userRepository = userRepository;
+    this.dataAccessRequestRepository = dataAccessRequestRepository;
+  }
+
+  public User viewer(DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    if (context == null) {
+      return null;
     }
+    return context.getUser();
+  }
 
-	@Autowired
-	private CharacterRepository characterRepository;
+  public List<User> allUsers() {
+    return userRepository.getAllUsers();
+  }
 
-	public Character hero(Episode episode) {
-		return episode != null ? characterRepository.getHeroes().get(episode)
-				: characterRepository.getCharacters().get("1000");
-	}
+  private List<DataAccessRequest> allDataAccessRequests(DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      return new ArrayList<DataAccessRequest>();
+    }
+    return dataAccessRequestRepository.getAllDataAccessRequests();
+  }
 
-	public Human human(String id, DataFetchingEnvironment env) {
-		return (Human) characterRepository.getCharacters().values().stream()
-				.filter(character -> character instanceof Human && character.getId().equals(id)).findFirst()
-				.orElseGet(null);
-	}
+  public List<DataAccessRequest> myDataAccessRequests(DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      return new ArrayList<DataAccessRequest>();
+    }
+    return allDataAccessRequests(env)
+        .stream()
+        .filter(request -> request.getRequestedById().equals(user.getId()))
+        .collect(Collectors.toList());
+  }
 
-	public Droid droid(String id) {
-		return (Droid) characterRepository.getCharacters().values().stream()
-				.filter(character -> character instanceof Droid && character.getId().equals(id)).findFirst()
-				.orElseGet(null);
-	}
-
-	public Character character(String id) {
-		return characterRepository.getCharacters().get(id);
-	}
-
-	public List<Link> allLinks() {
-		return linkRepository.getAllLinks();
-	}
-
+  public List<DataAccessRequest> dataAccessRequestsForMe(DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      return new ArrayList<DataAccessRequest>();
+    }
+    return allDataAccessRequests(env)
+        .stream()
+        .filter(request -> request.getDataOwnerId().equals(user.getId()))
+        .collect(Collectors.toList());
+  }
 }

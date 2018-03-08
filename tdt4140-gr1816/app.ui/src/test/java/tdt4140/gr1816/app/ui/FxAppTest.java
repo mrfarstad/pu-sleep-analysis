@@ -6,10 +6,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
@@ -32,13 +34,6 @@ public class FxAppTest extends ApplicationTest {
 		}
 	}
 
-	@Override
-    public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FxApp.fxml"));
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
 
     @Test
     public void testUsernameField() {
@@ -55,4 +50,12 @@ public class FxAppTest extends ApplicationTest {
     		assertEquals("passord123", passwordField.getText());
     }
   
+  @Override
+  public void start(Stage stage) throws Exception {
+    Parent root = FXMLLoader.load(getClass().getResource("FxApp.fxml"));
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    stage.show();
+  }
+
 }
