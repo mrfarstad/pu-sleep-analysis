@@ -2,7 +2,6 @@ package tdt4140.gr1816.app.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import javafx.collections.ObservableList;
@@ -11,12 +10,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
-import org.testfx.matcher.control.ListViewMatchers;
 
 public class UserGUITest extends ApplicationTest {
 
@@ -42,13 +39,13 @@ public class UserGUITest extends ApplicationTest {
     stage.setScene(scene);
     stage.show();
   }
-  
+
   private ListView doctorList;
   private ObservableList<String> doctorItems;
-  
+
   @Test
   public void testDataButton() {
-	clickOn("#profileTab");
+    clickOn("#profileTab");
     // Check if databutton is on by defult
     Button dataButton = lookup("#dataButton").query();
     assertEquals("Turn off", dataButton.getText());
@@ -61,7 +58,7 @@ public class UserGUITest extends ApplicationTest {
 
   @Test
   public void testDoctorRemoval() {
-	clickOn("#profileTab");
+    clickOn("#profileTab");
     doctorList = lookup("#doctorsListView").query();
     doctorItems = doctorList.getItems();
     Button removeDoctorButton = lookup("#removeDoctorButton").query();
@@ -76,36 +73,34 @@ public class UserGUITest extends ApplicationTest {
     // Check if doctor is removed
     assertFalse(doctorItems.contains(doctor));
   }
-  
+
   @Test
   public void testDeleteDataButton() {
-	  clickOn("#sleepTab");
-	  Button deleteButton = lookup("#deleteDataButton").query();
-	  ListView dataList = lookup("#dataListView").query();
-	  ObservableList<String> dataItems = dataList.getItems();
-	  
-	  String data = dataItems.get(0);
-	  
-	  assertTrue(dataItems.contains(data));
-	  dataList.getSelectionModel().select(data);
-	  clickOn(deleteButton);
-	  assertFalse(dataItems.contains(data));
-	  
+    clickOn("#sleepTab");
+    Button deleteButton = lookup("#deleteDataButton").query();
+    ListView dataList = lookup("#dataListView").query();
+    ObservableList<String> dataItems = dataList.getItems();
+
+    String data = dataItems.get(0);
+
+    assertTrue(dataItems.contains(data));
+    dataList.getSelectionModel().select(data);
+    clickOn(deleteButton);
+    assertFalse(dataItems.contains(data));
   }
-  
+
   @Test
   public void testAcceptDoctor() {
-	  clickOn("#doctorTab");
-	  Button acceptButton = lookup("#acceptDoctorButton").query();
-	  ListView doctorRequestList = lookup("#doctorRequestListView").query();
-	  ObservableList<String> doctorRequestItems = doctorRequestList.getItems();
-	  
-	  String doctor = doctorRequestItems.get(0);
-	  
-	  assertTrue(doctorRequestItems.contains(doctor));
-	  doctorRequestList.getSelectionModel().select(doctor);
-	  clickOn(acceptButton);
-	  assertFalse(doctorRequestItems.contains(doctor));
-	  
+    clickOn("#doctorTab");
+    Button acceptButton = lookup("#acceptDoctorButton").query();
+    ListView doctorRequestList = lookup("#doctorRequestListView").query();
+    ObservableList<String> doctorRequestItems = doctorRequestList.getItems();
+
+    String doctor = doctorRequestItems.get(0);
+
+    assertTrue(doctorRequestItems.contains(doctor));
+    doctorRequestList.getSelectionModel().select(doctor);
+    clickOn(acceptButton);
+    assertFalse(doctorRequestItems.contains(doctor));
   }
 }
