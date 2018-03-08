@@ -30,6 +30,10 @@ public class DoctorController implements Initializable {
 
   @FXML private Tab messageTab;
 
+  @FXML private Tab profileTab;
+
+  @FXML private Tab patientTab;
+
   @FXML private TextField requestTextField;
 
   @FXML private ListView<String> patientListView;
