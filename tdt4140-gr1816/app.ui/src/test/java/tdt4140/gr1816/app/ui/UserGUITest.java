@@ -56,7 +56,7 @@ public class UserGUITest extends ApplicationTest {
     Button removeDoctorButton = lookup("#removeDoctorButton").query();
 
     // Check if list has "Doctor 5"
-    assertThat(doctorList, ListViewMatchers.hasListCell("Doctor 5"));
+    assertThat(doctorList, ListViewMatchers.hasListCell("Doctor 4"));
     // Remove "Doctor 5"
     moveTo(doctorList);
     press(MouseButton.PRIMARY);

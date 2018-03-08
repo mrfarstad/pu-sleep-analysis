@@ -7,11 +7,11 @@ public class DataAccessRequest {
   @JsonProperty("id")
   private final String id;
 
-  @JsonProperty("dataOwnerId")
-  private final String dataOwnerId;
+  @JsonProperty("dataOwner")
+  private final User dataOwner;
 
-  @JsonProperty("requestedById")
-  private final String requestedById;
+  @JsonProperty("requestedBy")
+  private final User requestedBy;
 
   @JsonProperty("status")
   private final String status;
@@ -19,29 +19,33 @@ public class DataAccessRequest {
   @JsonCreator
   public DataAccessRequest(
       @JsonProperty("id") String id,
-      @JsonProperty("dataOwnerId") String dataOwnerId,
-      @JsonProperty("requestedById") String requestedById,
+      @JsonProperty("dataOwner") User dataOwner,
+      @JsonProperty("requestedBy") User requestedBy,
       @JsonProperty("status") String status) {
     this.id = id;
-    this.dataOwnerId = dataOwnerId;
-    this.requestedById = requestedById;
+    this.dataOwner = dataOwner;
+    this.requestedBy = requestedBy;
     this.status = status;
   }
 
   public DataAccessRequest(String dataOwnerId, String requestedById, String status) {
-    this(null, dataOwnerId, requestedById, status);
+    this(
+        null,
+        UserDataFetch.userDataFetch.getUserById(dataOwnerId),
+        UserDataFetch.userDataFetch.getUserById(requestedById),
+        status);
   }
 
   public String getId() {
     return id;
   }
 
-  public String getDataOwnerId() {
-    return dataOwnerId;
+  public User getDataOwner() {
+    return dataOwner;
   }
 
-  public String getRequestedById() {
-    return requestedById;
+  public User getRequestedBy() {
+    return requestedBy;
   }
 
   public DataAccessRequestStatus getStatus() {
@@ -75,6 +79,16 @@ public class DataAccessRequest {
       default:
         return DataAccessRequestStatus.PENDING;
     }
+  }
+
+  @Override
+  public String toString() {
+    String out = "DataOwner: \n";
+    out += ("Username: " + this.dataOwner + "\n");
+    out += ("Requested By: \n");
+    out += ("Username: " + this.requestedBy + "\n");
+    out += ("Status: " + statusToString(this.getStatus()) + "\n");
+    return out;
   }
 
   public enum DataAccessRequestStatus {

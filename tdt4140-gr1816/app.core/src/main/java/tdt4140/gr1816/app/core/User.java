@@ -71,6 +71,14 @@ public class User {
   }
 
   public String toString() {
-    return username;
+    return "username: "
+        + username
+        + "\nisDoctor: "
+        + isDoctor
+        + "\ngender: "
+        + gender
+        + "\nage: "
+        + age
+        + "\n";
   }
 }

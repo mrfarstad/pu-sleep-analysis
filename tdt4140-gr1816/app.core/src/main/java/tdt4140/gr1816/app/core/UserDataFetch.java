@@ -7,71 +7,33 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
-import java.util.Scanner;
 
 public class UserDataFetch {
 
-  public static String getData(String query) {
-    String url = "http://localhost:8080/graphql";
-    String charset = java.nio.charset.StandardCharsets.UTF_8.name();
+  public String signInQuery =
+      "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
+  public String allUsersQuery = "{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}";
+  public String currentUserQuery = "{\"query\":\"query{viewer{id username isDoctor gender age}}\"}";
+  public String accessRequestsToUserQuery =
+      "{\"query\":\"query{dataAccessRequestsForMe{requestedBy{username isDoctor gender age}status}}\"}";
+  public String accessRequestsByDoctorQuery =
+      "{\"query\":\"query{myDataAccessRequests{dataOwner{username isDoctor gender age}status}}\"}";
 
-    URLConnection connection;
-    String responseJson = null;
-    try {
-      connection = new URL(url).openConnection();
-      connection.setDoOutput(true); // Triggers POST.
-      connection.setRequestProperty("Accept-Charset", charset);
-      connection.setRequestProperty(
-          "Content-Type", "application/x-www-form-urlencoded;charset=" + charset);
-      connection.setRequestProperty("Authorization", "Bearer 5a9e8503c13edf22f93825e7");
+  private DataGetter dataGetter;
 
-      try (OutputStream output = connection.getOutputStream()) {
-        output.write(query.getBytes(charset));
-      }
+  public static UserDataFetch userDataFetch = new UserDataFetch(new DataGetter());
 
-      InputStream response = connection.getInputStream();
-      try (Scanner scanner = new Scanner(response)) {
-        responseJson = scanner.useDelimiter("\\A").next();
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return responseJson;
+  public UserDataFetch(DataGetter dataGetter) {
+    this.dataGetter = dataGetter;
   }
 
-  public static void signIn() {
-    String query =
-        "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
-    UserDataFetch.getData(query);
+  public void signIn() {
+    dataGetter.getData(signInQuery);
   }
 
-  public static <T> T accessRequests(Class<T> cls, String query, String jsonNodeName) {
-    String responseJson = UserDataFetch.getData(query);
-    ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
-    JsonParser parser;
-    T requests = null;
-    try {
-      parser = factory.createParser(responseJson);
-      JsonNode root = mapper.readTree(parser);
-      JsonNode thirdJsonObject = root.get("data").get(jsonNodeName);
-      requests = mapper.readerFor(new TypeReference<T>() {}).readValue(thirdJsonObject);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return requests;
-  }
-
-  public static List<User> getAllUsers() {
-    String responseJson =
-        UserDataFetch.getData("{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}");
+  public List<User> getAllUsers() {
+    String responseJson = dataGetter.getData(allUsersQuery);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
@@ -89,9 +51,8 @@ public class UserDataFetch {
     return requests;
   }
 
-  public static User getCurrentUser() {
-    String responseJson =
-        UserDataFetch.getData("{\"query\":\"query{viewer{id username isDoctor gender age}}\"}");
+  public User getCurrentUser() {
+    String responseJson = dataGetter.getData(currentUserQuery);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
@@ -109,10 +70,12 @@ public class UserDataFetch {
     return requests;
   }
 
-  public static List<DataAccessRequest> getAccessRequestsToUser() {
-    String responseJson =
-        UserDataFetch.getData(
-            "{\"query\":\"query{dataAccessRequestsForMe{requestedBy{username isDoctor gender age}status}}\"}");
+  public User getUserById(String id) {
+    return getAllUsers().stream().filter(user -> user.getId().equals(id)).findFirst().get();
+  }
+
+  public List<DataAccessRequest> getAccessRequestsToUser() {
+    String responseJson = dataGetter.getData(accessRequestsToUserQuery);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
@@ -133,10 +96,8 @@ public class UserDataFetch {
     return requests;
   }
 
-  public static List<DataAccessRequest> getAccessRequestsByDoctor() {
-    String responseJson =
-        UserDataFetch.getData(
-            "{\"query\":\"query{myDataAccessRequests{dataOwner{username isDoctor gender age}status}}\"}");
+  public List<DataAccessRequest> getAccessRequestsByDoctor() {
+    String responseJson = dataGetter.getData(accessRequestsByDoctorQuery);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
@@ -154,14 +115,16 @@ public class UserDataFetch {
     } catch (IOException e) {
       e.printStackTrace();
     }
+
     return requests;
   }
 
   public static void main(String[] args) {
-    System.out.println(UserDataFetch.getAllUsers());
-    UserDataFetch.signIn();
-    System.out.println(UserDataFetch.getCurrentUser());
-    System.out.println(UserDataFetch.getAccessRequestsToUser());
-    System.out.println(UserDataFetch.getAccessRequestsByDoctor());
+    UserDataFetch userDataFetch = new UserDataFetch(new DataGetter());
+    System.out.println(userDataFetch.getAllUsers());
+    userDataFetch.signIn();
+    System.out.println(userDataFetch.getCurrentUser());
+    System.out.println(userDataFetch.getAccessRequestsToUser());
+    System.out.println(userDataFetch.getAccessRequestsByDoctor());
   }
 }
