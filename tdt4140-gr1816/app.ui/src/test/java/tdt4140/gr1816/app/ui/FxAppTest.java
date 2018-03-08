@@ -25,7 +25,6 @@ public class FxAppTest extends ApplicationTest {
       System.setProperty("monocle.platform", "Headless");
       System.setProperty("prism.order", "sw");
       System.setProperty("prism.text", "t2k");
-      System.setProperty("testfx.setup.timeout", "2500");
     }
   }
 

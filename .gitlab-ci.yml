@@ -10,7 +10,7 @@ cache:
 
 variables:
   MAVEN_OPTS: "-Djava.awt.headless=true -Dmaven.repo.local=.m2/repository"
-  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -Dgitlab-ci=true"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end -Dtestfx.setup.timeout=20000 --show-version -Dgitlab-ci=true"
   MONGO_HOST: "mongo"
 
 build-job:
