@@ -34,24 +34,24 @@ public class UserDataFetch {
     this.dataGetter = dataGetter;
   }
 
-  // Returns username
-  public String createUser() {
+  // Returns user
+  public User createUser() {
     String responseJson = dataGetter.getData(createUserQuery, null);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
-    String username = "";
+    User createdUser = null;
     try {
       parser = factory.createParser(responseJson);
       JsonNode root = mapper.readTree(parser);
-      JsonNode thirdJsonObject = root.get("data").get("createUser").get("username");
-      username = mapper.readerFor(new TypeReference<String>() {}).readValue(thirdJsonObject);
+      JsonNode thirdJsonObject = root.get("data").get("createUser");
+      createdUser = mapper.readerFor(new TypeReference<User>() {}).readValue(thirdJsonObject);
     } catch (JsonParseException e) {
       e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
     }
-    return username;
+    return createdUser;
   }
 
   public Boolean deleteUser() {
