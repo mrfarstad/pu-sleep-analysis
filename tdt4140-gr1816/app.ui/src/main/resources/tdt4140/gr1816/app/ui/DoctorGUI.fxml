@@ -17,7 +17,7 @@
    <center>
       <TabPane fx:id="tabPane">
          <tabs>
-            <Tab closable="false" text="Profile">
+            <Tab closable="false" text="Profile" fx:id="profileTab">
                <content>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
@@ -30,7 +30,7 @@
                      </children></HBox>
                </content>
             </Tab>
-            <Tab closable="false" text="Patient">
+            <Tab closable="false" text="Patient" fx:id="patientTab">
                <content>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
