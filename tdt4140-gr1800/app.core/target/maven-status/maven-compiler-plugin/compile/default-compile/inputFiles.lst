@@ -1,9 +1,0 @@
-/Users/ingeborgsollid/Documents/NTNU/4. semester/PU/16/tdt4140-gr1800/app.core/src/main/java/tdt4140/gr1800/app/core/GeoLocations.java
-/Users/ingeborgsollid/Documents/NTNU/4. semester/PU/16/tdt4140-gr1800/app.core/src/main/java/tdt4140/gr1800/app/json/GeoLocationsJsonDeserializer.java
-/Users/ingeborgsollid/Documents/NTNU/4. semester/PU/16/tdt4140-gr1800/app.core/src/main/java/tdt4140/gr1800/app/json/GeoLocationsJsonSerializer.java
-/Users/ingeborgsollid/Documents/NTNU/4. semester/PU/16/tdt4140-gr1800/app.core/src/main/java/tdt4140/gr1800/app/core/DocumentStorageImpl.java
-/Users/ingeborgsollid/Documents/NTNU/4. semester/PU/16/tdt4140-gr1800/app.core/src/main/java/tdt4140/gr1800/app/core/IDocumentStorage.java
-/Users/ingeborgsollid/Documents/NTNU/4. semester/PU/16/tdt4140-gr1800/app.core/src/main/java/tdt4140/gr1800/app/core/LatLong.java
-/Users/ingeborgsollid/Documents/NTNU/4. semester/PU/16/tdt4140-gr1800/app.core/src/main/java/tdt4140/gr1800/app/core/GeoLocationsPersistence.java
-/Users/ingeborgsollid/Documents/NTNU/4. semester/PU/16/tdt4140-gr1800/app.core/src/main/java/tdt4140/gr1800/app/json/GeoLocationsJsonPersistence.java
-/Users/ingeborgsollid/Documents/NTNU/4. semester/PU/16/tdt4140-gr1800/app.core/src/main/java/tdt4140/gr1800/app/core/App.java
