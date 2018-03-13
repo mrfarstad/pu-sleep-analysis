@@ -36,6 +36,12 @@
 
 	<dependencies>
 		<dependency>
+      		<groupId>org.mockito</groupId>
+      		<artifactId>mockito-all</artifactId>
+      		<version>1.10.19</version>
+      		<scope>test</scope>
+    		</dependency>
+		<dependency>
 			<groupId>tdt4140-gr1816</groupId>
 			<artifactId>tdt4140-gr1816.app.core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
