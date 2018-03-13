@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
+import tdt4140.gr1816.app.core.*;
 
 public class UserController implements Initializable {
 
@@ -31,8 +32,8 @@ public class UserController implements Initializable {
 
   @FXML private ListView<String> doctorRequestListView;
 
-  // private User user;
-  // private UserDataFetch userDataFetch;
+  private User user;
+  private UserDataFetch userDataFetch;
 
   private boolean dataGatheringOn;
   ObservableList<String> dataListViewItems;
@@ -77,9 +78,9 @@ public class UserController implements Initializable {
 
   @Override
   public void initialize(URL arg0, ResourceBundle arg1) {
-    // UserDataFetch.signIn();
-    // user = UserDataFetch.getCurrentUser();
-    // accessRequestList = UserDataFetch.getAccessRequestsToUser();
+
+    this.userDataFetch = FxApp.userDataFetch;
+    this.user = userDataFetch.getCurrentUser();
 
     setProfileValues();
 
@@ -94,13 +95,9 @@ public class UserController implements Initializable {
 
   public void setProfileValues() {
 
-    String name = "Sondre Grav Skjåstad";
-    Integer age = 21;
-    String gender = "Male";
-
-    // String name = user.getUsername();
-    // Integer age = user.getAge();
-    // String gender = user.getGender();
+    String name = user.getUsername();
+    Integer age = user.getAge();
+    String gender = user.getGender();
 
     nameText.setText(name);
     ageText.setText(age.toString());

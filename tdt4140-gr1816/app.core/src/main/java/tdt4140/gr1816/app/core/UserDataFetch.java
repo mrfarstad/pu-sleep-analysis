@@ -13,11 +13,9 @@ public class UserDataFetch {
 
   protected String currentToken = null;
 
-  public String createUserQuery =
-      "{\"query\":\"mutation{createUser(authProvider:{username:\\\"test\\\" password:\\\"test\\\"} isDoctor: true gender:\\\"male\\\" age: 22){username}}\"}";
   public String deleteUserQuery =
       "{\"query\":\"mutation{deleteUser(auth:{username:\\\"test\\\" password:\\\"test\\\"})}\"}";
-  public String signInQuery =
+  public String signInTestQuery =
       "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
   public String allUsersQuery = "{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}";
   public String currentUserQuery = "{\"query\":\"query{viewer{id username isDoctor gender age}}\"}";
@@ -35,7 +33,20 @@ public class UserDataFetch {
   }
 
   // Returns user
-  public User createUser() {
+  public User createUser(
+      String username, String password, boolean isDoctor, String gender, int age) {
+    String createUserQuery =
+        "{\"query\":\"mutation{createUser(authProvider:{username:\\\""
+            + username
+            + "\\\" password:\\\""
+            + password
+            + "\\\"} isDoctor: "
+            + isDoctor
+            + " gender:\\\""
+            + gender
+            + "\\\" age: "
+            + age
+            + "){username}}\"}";
     String responseJson = dataGetter.getData(createUserQuery, null);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
@@ -74,23 +85,33 @@ public class UserDataFetch {
     return success;
   }
 
-  public void signIn() {
+  public User signIn(String username, String password) {
+    String signInQuery =
+        "{\"query\":\"mutation{signinUser(auth:{username:\\\""
+            + username
+            + "\\\" password:\\\""
+            + password
+            + "\\\"}){token user{id username isDoctor gender age}}}\"}";
     String responseJson = dataGetter.getData(signInQuery, null);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
     JsonParser parser;
     String token = null;
+    User user = null;
     try {
       parser = factory.createParser(responseJson);
       JsonNode root = mapper.readTree(parser);
       JsonNode thirdJsonObject = root.get("data").get("signinUser").get("token");
+      JsonNode fouthJsonObject = root.get("data").get("signinUser").get("user");
       token = mapper.readerFor(new TypeReference<String>() {}).readValue(thirdJsonObject);
+      user = mapper.readerFor(new TypeReference<User>() {}).readValue(fouthJsonObject);
     } catch (JsonParseException e) {
       e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
     }
     this.currentToken = token;
+    return user;
   }
 
   public List<User> getAllUsers() {

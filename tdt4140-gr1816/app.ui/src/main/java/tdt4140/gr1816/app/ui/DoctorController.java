@@ -11,6 +11,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import tdt4140.gr1816.app.core.*;
 
 public class DoctorController implements Initializable {
 
@@ -43,6 +44,9 @@ public class DoctorController implements Initializable {
   ObservableList<String> patientListViewItems;
   ObservableList<String> searchListViewItems;
 
+  private UserDataFetch userDataFetch;
+  private User user;
+
   public void handleRequestButton() {
     String selected = searchListView.getSelectionModel().getSelectedItem();
     if (selected != null) {
@@ -68,13 +72,16 @@ public class DoctorController implements Initializable {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
 
+    this.userDataFetch = FxApp.userDataFetch;
+    this.user = userDataFetch.getCurrentUser();
+
     setProfileValues();
 
     setPatientListViewItems();
   }
 
   public void setProfileValues() {
-    String name = "Lege Legesen";
+    String name = user.getUsername();
     nameText.setText(name);
   }
 

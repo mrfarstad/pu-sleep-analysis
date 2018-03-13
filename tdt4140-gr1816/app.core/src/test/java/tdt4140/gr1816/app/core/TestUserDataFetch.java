@@ -13,6 +13,21 @@ import tdt4140.gr1816.app.core.DataAccessRequest.DataAccessRequestStatus;
 
 public class TestUserDataFetch {
 
+  private static String createUserTestQuery =
+      "{\"query\":\"mutation{createUser(authProvider:{username:\\\"test\\\" password:\\\"test\\\"} isDoctor: true gender:\\\"male\\\" age: 22){username}}\"}";
+  /*private static String deleteUserQuery =
+   "{\"query\":\"mutation{deleteUser(auth:{username:\\\"test\\\" password:\\\"test\\\"})}\"}";
+  */
+  private static String signInTestQuery =
+      "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
+  /*
+    private static String allUsersQuery = "{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}";
+    private static String currentUserQuery = "{\"query\":\"query{viewer{id username isDoctor gender age}}\"}";
+    private static String accessRequestsToUserQuery =
+  	  "{\"query\":\"query{dataAccessRequestsForMe{requestedBy{username isDoctor gender age}status}}\"}";
+    private static String accessRequestsByDoctorQuery =
+  	  "{\"query\":\"query{myDataAccessRequests{dataOwner{username isDoctor gender age}status}}\"}";
+  */
   private static String createUserResponse =
       "{\"data\":{\"createUser\":{\"id\":\"5aa117f0c40c0b0451c261c2\",\"username\":\"test\",\"isDoctor\":true,\"gender\":\"male\",\"age\":33}}}";
   private static String deleteUserResponse = "{\"data\":{\"deleteUser\":true}}";
@@ -34,12 +49,12 @@ public class TestUserDataFetch {
 
   @Test
   public void testCreateUserQuery() {
-    when(test.getData(userDataFetch.createUserQuery, null)).thenReturn(createUserResponse);
+    when(test.getData(createUserTestQuery, null)).thenReturn(createUserResponse);
 
-    assertEquals(test.getData(userDataFetch.createUserQuery, null), createUserResponse);
+    assertEquals(test.getData(createUserTestQuery, null), createUserResponse);
 
     // CreateUser should return a user:
-    User user = userDataFetch.createUser();
+    User user = userDataFetch.createUser("test", "test", true, "male", 22);
     assertTrue(user instanceof User);
     assertNotNull(user);
     assertTrue(user.getUsername().equals("test"));
@@ -135,11 +150,13 @@ public class TestUserDataFetch {
     assertTrue(user.getAge() == 22);
   }
 
+  /*
   @Test
   public void testSignIn() {
-    when(test.getData(userDataFetch.signInQuery, null)).thenReturn(signInResponse);
-    userDataFetch.signIn();
-  }
+    when(test.getData("{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token user{id username isDoctor gender age}}}\"}", null)).thenReturn(signInResponse);
+    userDataFetch.signIn("test", "test");
+    assertTrue(true);
+  }*/
 
   @Test
   public void testDataAccessRequest() {
