@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -13,24 +18,47 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.DoctorController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.DoctorController">
    <center>
       <TabPane fx:id="tabPane">
          <tabs>
-            <Tab closable="false" text="Profile" fx:id="profileTab">
+            <Tab fx:id="profileTab" closable="false" text="Profile">
                <content>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
+                        <VBox prefHeight="367.0" prefWidth="159.0">
                            <children>
-                              <Label text="Name:" />
-                              <Text fx:id="nameText" strokeType="OUTSIDE" strokeWidth="0.0" />
+                              <HBox prefHeight="30.0" prefWidth="159.0">
+                                 <children>
+                                    <Label prefHeight="17.0" prefWidth="70.0" text="Name:" />
+                                    <Text fx:id="nameText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="88.0" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox prefHeight="30.0" prefWidth="159.0">
+                                 <children>
+                                    <Label fx:id="ageLabel" prefHeight="17.0" prefWidth="70.0" text="Age:" />
+                                    <Text fx:id="ageText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="91.21875" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="30.0" prefWidth="159.0">
+                                 <children>
+                                    <Label prefHeight="17.0" prefWidth="70.0" text="Gender:" />
+                                    <Text fx:id="genderText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="81.21875" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="35.0" prefWidth="159.0" />
                            </children>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
                         </VBox>
                      </children></HBox>
                </content>
             </Tab>
-            <Tab closable="false" text="Patient" fx:id="patientTab">
+            <Tab fx:id="patientTab" closable="false" text="Patient">
                <content>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
@@ -41,8 +69,14 @@
                         </VBox>
                         <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Button fx:id="showDataButton" mnemonicParsing="false" onAction="#handleShowDataButton" text="Show patient data" />
-                              <Button fx:id="showMessageButton" mnemonicParsing="false" onAction="#handleShowMessageButton" text="Show patient messages" />
+                              <Button fx:id="showDataButton" mnemonicParsing="false" onAction="#handleShowDataButton" text="Show patient data">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin></Button>
+                              <Button fx:id="showMessageButton" mnemonicParsing="false" onAction="#handleShowMessageButton" text="Show patient messages">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin></Button>
                            </children>
                         </VBox>
                         <VBox prefHeight="361.0" prefWidth="62.0" spacing="8.0" HBox.hgrow="ALWAYS">
@@ -52,10 +86,9 @@
                                     <Insets />
                                  </VBox.margin>
                               </Text>
-                              <TextField fx:id="requestTextField" promptText="Person ID" />
-                              <Button fx:id="searchButton" mnemonicParsing="false" onAction="#handleSearchButton" text="Search" />
-                              <ListView fx:id="searchListView" prefHeight="200.0" prefWidth="200.0" />
+                              <TextField fx:id="requestUserTextField" promptText="Username" />
                               <Button fx:id="requestButton" mnemonicParsing="false" onAction="#handleRequestButton" text="Request Access" />
+                              <Text fx:id="requestFeedbackText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="104.21875" />
                            </children>
                            <padding>
                               <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

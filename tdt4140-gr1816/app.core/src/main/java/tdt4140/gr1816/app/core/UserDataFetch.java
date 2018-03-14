@@ -178,6 +178,14 @@ public class UserDataFetch {
     }
   }
 
+  public User getUserByUsername(String username) {
+    return getAllUsers()
+        .stream()
+        .filter(user -> user.getUsername().equals(username))
+        .findFirst()
+        .get();
+  }
+
   public List<DataAccessRequest> getAccessRequestsToUser() {
     String responseJson = dataGetter.getData(accessRequestsToUserQuery, this.currentToken);
     ObjectMapper mapper = new ObjectMapper();
