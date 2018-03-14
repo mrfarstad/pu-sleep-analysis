@@ -1,6 +1,7 @@
 package tdt4140.gr1816.app.ui;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -30,7 +31,7 @@ public class UserController implements Initializable {
 
   @FXML private ListView<String> dataListView;
 
-  @FXML private ListView<String> doctorRequestListView;
+  @FXML private ListView<DataAccessRequest> doctorRequestListView;
 
   private User user;
   private UserDataFetch userDataFetch;
@@ -38,7 +39,7 @@ public class UserController implements Initializable {
   private boolean dataGatheringOn;
   ObservableList<String> dataListViewItems;
   ObservableList<String> doctorsListViewItems;
-  ObservableList<String> doctorRequestListViewItems;
+  ObservableList<DataAccessRequest> doctorRequestListViewItems;
 
   public void handleDataButton() {
     if (dataGatheringOn) {
@@ -61,9 +62,9 @@ public class UserController implements Initializable {
   }
 
   public void handleAcceptDoctorButton() {
-    String selected = doctorRequestListView.getSelectionModel().getSelectedItem();
+    DataAccessRequest selected = doctorRequestListView.getSelectionModel().getSelectedItem();
     if (selected != null) {
-      doctorsListViewItems.add(selected);
+      FxApp.userDataFetch.answerDataAccessRequest(selected, "ACCEPTED");
       doctorRequestListViewItems.remove(selected);
     }
   }
@@ -131,8 +132,13 @@ public class UserController implements Initializable {
 
   public void setDoctorRequestListViewItems() {
     doctorRequestListViewItems = doctorRequestListView.getItems();
-    doctorRequestListViewItems.add("Doctor 5");
-    doctorRequestListViewItems.add("Doctor 6");
-    doctorRequestListViewItems.add("Doctor 7");
+    List<DataAccessRequest> requests = FxApp.userDataFetch.getAccessRequestsToUser();
+    requests
+    .stream()
+    .forEach(
+        request ->
+            doctorRequestListViewItems.add(
+                request));
+
   }
 }
