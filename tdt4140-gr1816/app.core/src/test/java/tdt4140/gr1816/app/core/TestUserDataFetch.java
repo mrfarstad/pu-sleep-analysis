@@ -71,7 +71,7 @@ public class TestUserDataFetch {
     assertEquals(test.getData(userDataFetch.deleteUserQuery, null), deleteUserResponse);
 
     // UserDataFetch should return a boolean (success)
-    boolean success = userDataFetch.deleteUser();
+    boolean success = userDataFetch.deleteUser("test", "test");
     assertNotNull(success);
     assertTrue(success);
   }
