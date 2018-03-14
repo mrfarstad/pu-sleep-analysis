@@ -15,8 +15,7 @@ public class UserDataFetch {
 
   public String deleteUserQuery =
       "{\"query\":\"mutation{deleteUser(auth:{username:\\\"test\\\" password:\\\"test\\\"})}\"}";
-  public String signInTestQuery =
-      "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
+
   public String allUsersQuery = "{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}";
   public String currentUserQuery = "{\"query\":\"query{viewer{id username isDoctor gender age}}\"}";
   public String accessRequestsToUserQuery =

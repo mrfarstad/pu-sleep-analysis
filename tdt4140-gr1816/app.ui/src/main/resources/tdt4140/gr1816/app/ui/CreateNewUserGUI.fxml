@@ -90,7 +90,7 @@
                   </TextField>
                   <HBox prefHeight="31.0" prefWidth="243.0">
                      <children>
-                        <RadioButton fx:id="femaleRadioButton" mnemonicParsing="false" text="Female">
+                        <RadioButton fx:id="femaleRadioButton" mnemonicParsing="false" text="Female" >
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
