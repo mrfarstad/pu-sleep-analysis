@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class UserDataFetch {
 
@@ -158,7 +159,23 @@ public class UserDataFetch {
   }
 
   public User getUserById(String id) {
-    return getAllUsers().stream().filter(user -> user.getId().equals(id)).findFirst().get();
+    try {
+      return getAllUsers().stream().filter(user -> user.getId().equals(id)).findFirst().get();
+    } catch (NoSuchElementException e) {
+      return null;
+    }
+  }
+
+  public User getUserByUsername(String name) {
+    try {
+      return getAllUsers()
+          .stream()
+          .filter(user -> user.getUsername().equals(name))
+          .findFirst()
+          .get();
+    } catch (NoSuchElementException e) {
+      return null;
+    }
   }
 
   public List<DataAccessRequest> getAccessRequestsToUser() {
