@@ -15,8 +15,7 @@ public class UserDataFetch {
 
   public String deleteUserQuery =
       "{\"query\":\"mutation{deleteUser(auth:{username:\\\"test\\\" password:\\\"test\\\"})}\"}";
-  public String signInTestQuery =
-      "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
+
   public String allUsersQuery = "{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}";
   public String currentUserQuery = "{\"query\":\"query{viewer{id username isDoctor gender age}}\"}";
   public String accessRequestsToUserQuery =
@@ -65,8 +64,14 @@ public class UserDataFetch {
     return createdUser;
   }
 
-  public Boolean deleteUser() {
-    this.dataGetter.getData(deleteUserQuery, null);
+  public Boolean deleteUser(String username, String password) {
+    String query =
+        "{\"query\":\"mutation{deleteUser(auth:{username:\\\""
+            + username
+            + "\\\" password:\\\""
+            + password
+            + "\\\"})}\"}";
+    this.dataGetter.getData(query, null);
     String responseJson = dataGetter.getData(deleteUserQuery, null);
     ObjectMapper mapper = new ObjectMapper();
     JsonFactory factory = mapper.getFactory();
@@ -176,6 +181,36 @@ public class UserDataFetch {
       e.printStackTrace();
     }
     return requests;
+  }
+
+  public boolean requestDataAccess(User patient) {
+    String mutation =
+        "{\"query\":\"mutation{requestDataAccess(dataOwnerId: \\\""
+            + patient.getId()
+            + "\\\"){id dataOwner { id username isDoctor gender age }requestedBy { id username isDoctor gender age }status }}\"}";
+    String responseJson = dataGetter.getData(mutation, this.currentToken);
+
+    ObjectMapper mapper = new ObjectMapper();
+    JsonFactory factory = mapper.getFactory();
+    JsonParser parser;
+    DataAccessRequest accessRequest = null;
+    try {
+      parser = factory.createParser(responseJson);
+      JsonNode root = mapper.readTree(parser);
+      JsonNode thirdJsonObject = root.get("data").get("requestDataAccess");
+      accessRequest =
+          mapper.readerFor(new TypeReference<DataAccessRequest>() {}).readValue(thirdJsonObject);
+    } catch (JsonParseException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    if (accessRequest.getRequestedBy().getId().equals(this.currentToken)
+        && (accessRequest.getDataOwner().getId().equals(patient.getId()))) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public List<DataAccessRequest> getAccessRequestsByDoctor() {
