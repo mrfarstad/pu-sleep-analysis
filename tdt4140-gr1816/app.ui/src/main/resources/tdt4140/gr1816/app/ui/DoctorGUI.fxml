@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -13,11 +20,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.DoctorController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.DoctorController">
    <center>
       <TabPane fx:id="tabPane">
          <tabs>
-            <Tab closable="false" text="Profile" fx:id="profileTab">
+            <Tab fx:id="profileTab" closable="false" text="Profile">
                <content>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
@@ -30,7 +37,7 @@
                      </children></HBox>
                </content>
             </Tab>
-            <Tab closable="false" text="Patient" fx:id="patientTab">
+            <Tab fx:id="patientTab" closable="false" text="Patient">
                <content>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
@@ -66,9 +73,47 @@
                </content>
             </Tab>
             <Tab fx:id="dataTab" closable="false" text="Patient Data">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-              </content>
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <HBox prefHeight="368.0" prefWidth="600.0">
+                           <children>
+                              <VBox alignment="TOP_CENTER" prefHeight="368.0" prefWidth="180.0">
+                                 <children>
+                                    <ChoiceBox fx:id="dataChoiceBox" prefWidth="150.0">
+                                       <VBox.margin>
+                                          <Insets top="40.0" />
+                                       </VBox.margin>
+                                    </ChoiceBox>
+                                    <Button fx:id="viewGraphButton" mnemonicParsing="false" onAction="#handleViewGraphButton" text="View Graph">
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" prefHeight="368.0" prefWidth="401.0">
+                                 <children>
+                                    <StackPane prefHeight="259.0" prefWidth="401.0">
+                                       <children>
+                                          <PieChart fx:id="sleepPieChart" disable="true" legendVisible="false" prefHeight="200.0" prefWidth="392.0" title="Sleep Chart" />
+                                          <LineChart fx:id="pulseLineChart" disable="true" legendVisible="false" prefHeight="196.0" prefWidth="401.0" title="Pulse Chart">
+                                            <xAxis>
+                                              <CategoryAxis fx:id="pulseChartXAxis" side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                              <NumberAxis side="LEFT" upperBound="220.0" />
+                                            </yAxis>
+                                          </LineChart>
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </content>
             </Tab>
             <Tab fx:id="messageTab" closable="false" text="Patient Message">
               <content>
