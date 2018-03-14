@@ -98,8 +98,12 @@ public class DoctorController implements Initializable {
 
   public void setPatientListViewItems() {
     patientListViewItems = patientListView.getItems();
-    patientListViewItems.add("Patient 1");
-    patientListViewItems.add("Patient 2");
-    patientListViewItems.add("Patient 3");
+    List<DataAccessRequest> requests = this.userDataFetch.getAccessRequestsByDoctor();
+    requests
+        .stream()
+        .forEach(
+            request ->
+                patientListViewItems.add(
+                    request.getDataOwner().getUsername() + " " + request.getStatusAsString()));
   }
 }
