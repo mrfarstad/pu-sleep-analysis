@@ -1,6 +1,7 @@
 package tdt4140.gr1816.app.ui;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -123,16 +124,19 @@ public class UserController implements Initializable {
 
   public void setDoctorsListViewItems() {
     doctorsListViewItems = doctorsListView.getItems();
-    doctorsListViewItems.add("Doctor 1");
-    doctorsListViewItems.add("Doctor 2");
-    doctorsListViewItems.add("Doctor 3");
-    doctorsListViewItems.add("Doctor 4");
+    List<DataAccessRequest> requests = this.userDataFetch.getAccessRequestsToUser();
+    requests
+        .stream()
+        .filter(request -> request.getStatusAsString().equals("ACCEPTED"))
+        .forEach(request -> doctorsListViewItems.add(request.getRequestedBy().getUsername()));
   }
 
   public void setDoctorRequestListViewItems() {
     doctorRequestListViewItems = doctorRequestListView.getItems();
-    doctorRequestListViewItems.add("Doctor 5");
-    doctorRequestListViewItems.add("Doctor 6");
-    doctorRequestListViewItems.add("Doctor 7");
+    List<DataAccessRequest> requests = this.userDataFetch.getAccessRequestsToUser();
+    requests
+        .stream()
+        .filter(request -> request.getStatusAsString().equals("PENDING"))
+        .forEach(request -> doctorsListViewItems.add(request.getRequestedBy().getUsername()));
   }
 }
