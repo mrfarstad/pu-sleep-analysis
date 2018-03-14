@@ -2,7 +2,6 @@ package tdt4140.gr1816.app.ui;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -80,7 +79,7 @@ public class DoctorGUITest extends ApplicationTest {
     Button requestButton = lookup("#requestButton").query();
     ListView patientListView = lookup("#patientListView").query();
     ObservableList<String> patientListViewItems = patientListView.getItems();
-    
+
     clickOn(requestUserTextField);
     write("thisIsNoUser");
     clickOn(requestButton);

@@ -1,6 +1,7 @@
 package tdt4140.gr1816.app.ui;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,11 +23,11 @@ public class DoctorController implements Initializable {
   @FXML private Button showMessageButton;
 
   @FXML private Text nameText;
-  
+
   @FXML private Text genderText;
-  
+
   @FXML private Text ageText;
-  
+
   @FXML private Text requestFeedbackText;
 
   @FXML private Tab dataTab;
@@ -43,27 +44,28 @@ public class DoctorController implements Initializable {
 
   @FXML private ListView<String> patientListView;
 
-  @FXML private ListView<String> searchListView;
-
   ObservableList<String> patientListViewItems;
-  ObservableList<String> searchListViewItems;
 
   private UserDataFetch userDataFetch;
   private User user;
 
   public void handleRequestButton() {
-   String username = requestUserTextField.getText();
-   User newPatient = FxApp.userDataFetch.getUserByUsername(username);
-   if (newPatient == null) {
-	   requestFeedbackText.setText("User not found");
-   } else {
-	   boolean isSendt = FxApp.userDataFetch.requestDataAccess(newPatient);
-	   if (isSendt) {
-		   requestFeedbackText.setText("Request sent");}
-	   else {
-		   requestFeedbackText.setText("Request failed");
-	   }
-   }
+    String username = requestUserTextField.getText();
+    User newPatient = FxApp.userDataFetch.getUserByUsername(username);
+    if (newPatient == null) {
+      requestFeedbackText.setText("User not found");
+    } else if (FxApp.userDataFetch.requestDataAccess(newPatient)) {
+      List<DataAccessRequest> requests = FxApp.userDataFetch.getAccessRequestsByDoctor();
+      requests
+          .stream()
+          .forEach(
+              request ->
+                  patientListViewItems.add(
+                      request.getDataOwner().getUsername() + " " + request.getStatusAsString()));
+      requestFeedbackText.setText("Request sent");
+    } else {
+      requestFeedbackText.setText("Request failed");
+    }
   }
 
   public void handleShowDataButton() {
