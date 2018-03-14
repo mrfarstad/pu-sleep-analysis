@@ -16,6 +16,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -75,22 +76,16 @@ public class DoctorGUITest extends ApplicationTest {
   public void testRequestButton() {
 
     clickOn("#patientTab");
-    clickOn("#searchButton");
-
+    TextField requestUserTextField = lookup("#requestUserTextField").query();
     Button requestButton = lookup("#requestButton").query();
-    ListView searchListView = lookup("#searchListView").query();
-    ObservableList<String> searchListViewItems = searchListView.getItems();
     ListView patientListView = lookup("#patientListView").query();
     ObservableList<String> patientListViewItems = patientListView.getItems();
-
-    String data = searchListViewItems.get(0);
-
-    assertTrue(searchListViewItems.contains(data));
-    assertFalse(patientListViewItems.contains(data + " is pending"));
-    searchListView.getSelectionModel().select(data);
-    clickOn("#requestButton");
-    assertFalse(searchListViewItems.contains(data));
-    assertTrue(patientListViewItems.contains(data + " is pending"));
+    
+    clickOn(requestUserTextField);
+    write("thisIsNoUser");
+    clickOn(requestButton);
+    Text requestFeedbackText = lookup("#requestFeedbackText").query();
+    assertEquals("User not found", requestFeedbackText.getText());
   }
 
   public void testShowDataButton() {

@@ -21,9 +21,13 @@ public class DoctorController implements Initializable {
 
   @FXML private Button showMessageButton;
 
-  @FXML private Button searchButton;
-
   @FXML private Text nameText;
+  
+  @FXML private Text genderText;
+  
+  @FXML private Text ageText;
+  
+  @FXML private Text requestFeedbackText;
 
   @FXML private Tab dataTab;
 
@@ -35,7 +39,7 @@ public class DoctorController implements Initializable {
 
   @FXML private Tab patientTab;
 
-  @FXML private TextField requestTextField;
+  @FXML private TextField requestUserTextField;
 
   @FXML private ListView<String> patientListView;
 
@@ -48,11 +52,18 @@ public class DoctorController implements Initializable {
   private User user;
 
   public void handleRequestButton() {
-    String selected = searchListView.getSelectionModel().getSelectedItem();
-    if (selected != null) {
-      patientListViewItems.add(selected + " is pending");
-      searchListViewItems.remove(selected);
-    }
+   String username = requestUserTextField.getText();
+   User newPatient = FxApp.userDataFetch.getUserByUsername(username);
+   if (newPatient == null) {
+	   requestFeedbackText.setText("User not found");
+   } else {
+	   boolean isSendt = FxApp.userDataFetch.requestDataAccess(newPatient);
+	   if (isSendt) {
+		   requestFeedbackText.setText("Request sent");}
+	   else {
+		   requestFeedbackText.setText("Request failed");
+	   }
+   }
   }
 
   public void handleShowDataButton() {
@@ -61,12 +72,6 @@ public class DoctorController implements Initializable {
 
   public void handleShowMessageButton() {
     tabPane.getSelectionModel().select(messageTab);
-  }
-
-  public void handleSearchButton() {
-    searchListViewItems = searchListView.getItems();
-    searchListViewItems.add("Patient 4");
-    searchListViewItems.add("Patient 5");
   }
 
   @Override
@@ -83,6 +88,10 @@ public class DoctorController implements Initializable {
   public void setProfileValues() {
     String name = user.getUsername();
     nameText.setText(name);
+    String gender = user.getGender();
+    genderText.setText(gender);
+    String age = Integer.toString(user.getAge());
+    ageText.setText(age);
   }
 
   public void setPatientListViewItems() {
