@@ -229,6 +229,34 @@ public class UserDataFetch {
       return false;
     }
   }
+  
+  public boolean answerDataAccessRequest(DataAccessRequest request, String answer) {
+	  String mutation =
+		        "{\"query\":\"mutation{answerDataAccessRequest(dataAccessRequestId: \"" + request.getId() + "\", status: " + answer + "){id dataOwner { id username isDoctor gender age }requestedBy { id username isDoctor gender age }status }}\"}";
+		    String responseJson = dataGetter.getData(mutation, this.currentToken);
+
+		    ObjectMapper mapper = new ObjectMapper();
+		    JsonFactory factory = mapper.getFactory();
+		    JsonParser parser;
+		    DataAccessRequest accessRequest = null;
+		    try {
+		      parser = factory.createParser(responseJson);
+		      JsonNode root = mapper.readTree(parser);
+		      JsonNode thirdJsonObject = root.get("data").get("requestDataAccess");
+		      accessRequest =
+		          mapper.readerFor(new TypeReference<DataAccessRequest>() {}).readValue(thirdJsonObject);
+		    } catch (JsonParseException e) {
+		      e.printStackTrace();
+		    } catch (IOException e) {
+		      e.printStackTrace();
+		    }
+		    if (accessRequest.getRequestedBy().getId().equals(this.currentToken)
+		        && (accessRequest.getStatusAsString().equals(answer))) {
+		      return true;
+		    } else {
+		      return false;
+		    }
+  }
 
   public List<DataAccessRequest> getAccessRequestsByDoctor() {
     String responseJson = dataGetter.getData(accessRequestsByDoctorQuery, this.currentToken);
