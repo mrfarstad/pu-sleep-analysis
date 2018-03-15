@@ -133,12 +133,6 @@ public class UserController implements Initializable {
   public void setDoctorRequestListViewItems() {
     doctorRequestListViewItems = doctorRequestListView.getItems();
     List<DataAccessRequest> requests = FxApp.userDataFetch.getAccessRequestsToUser();
-    requests
-    .stream()
-    .forEach(
-        request ->
-            doctorRequestListViewItems.add(
-                request));
-
+    requests.stream().forEach(request -> doctorRequestListViewItems.add(request));
   }
 }

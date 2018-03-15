@@ -9,11 +9,11 @@ public class Demo {
     System.out.println(userDataFetch.getAllUsers());
     User test = userDataFetch.signIn("test", "test");
     User doctor = userDataFetch.signIn("doctor", "test");
-    /*DataAccessRequest request = userDataFetch.requestDataAccess(test);
-    System.out.println(request.getDataOwner().getUsername());
+    /* DataAccessRequest request = userDataFetch.requestDataAccess(test);
+    System.out.println(request.getDataOwner());
     System.out.println(request.getId());
     userDataFetch.signIn("test", "test");
-    boolean success = userDataFetch.answerDataAccessRequest(request, "ACCEPTED"); 
+    boolean success = userDataFetch.answerDataAccessRequest(request, "ACCEPTED");
     System.out.println(success); */
     System.out.println(userDataFetch.getCurrentUser());
     System.out.println(userDataFetch.getAccessRequestsToUser());
