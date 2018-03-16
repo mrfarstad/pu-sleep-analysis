@@ -42,9 +42,9 @@ public class DoctorController implements Initializable {
 
   @FXML private TextField requestUserTextField;
 
-  @FXML private ListView<String> patientListView;
+  @FXML private ListView<DataAccessRequest> patientListView;
 
-  ObservableList<String> patientListViewItems;
+  ObservableList<DataAccessRequest> patientListViewItems;
 
   private UserDataFetch userDataFetch;
   private User user;
@@ -55,13 +55,7 @@ public class DoctorController implements Initializable {
     if (newPatient == null) {
       requestFeedbackText.setText("User not found");
     } else if (FxApp.userDataFetch.requestDataAccess(newPatient)) {
-      List<DataAccessRequest> requests = FxApp.userDataFetch.getAccessRequestsByDoctor();
-      requests
-          .stream()
-          .forEach(
-              request ->
-                  patientListViewItems.add(
-                      request.getDataOwner().getUsername() + " " + request.getStatusAsString()));
+      updatePatientListViewItems();
       requestFeedbackText.setText("Request sent");
     } else {
       requestFeedbackText.setText("Request failed");
@@ -84,7 +78,7 @@ public class DoctorController implements Initializable {
 
     setProfileValues();
 
-    setPatientListViewItems();
+    updatePatientListViewItems();
   }
 
   public void setProfileValues() {
@@ -96,10 +90,13 @@ public class DoctorController implements Initializable {
     ageText.setText(age);
   }
 
-  public void setPatientListViewItems() {
-    patientListViewItems = patientListView.getItems();
-    patientListViewItems.add("Patient 1");
-    patientListViewItems.add("Patient 2");
-    patientListViewItems.add("Patient 3");
+  public void updatePatientListViewItems() {
+	patientListViewItems = patientListView.getItems();
+    patientListViewItems.clear();
+    List<DataAccessRequest> requests = FxApp.userDataFetch.getAccessRequestsByDoctor();
+    requests
+        .stream()
+        .filter(request -> !patientListViewItems.contains(request))
+        .forEach(request -> patientListViewItems.add(request));
   }
 }
