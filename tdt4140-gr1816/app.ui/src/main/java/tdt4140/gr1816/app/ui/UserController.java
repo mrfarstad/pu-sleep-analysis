@@ -70,6 +70,15 @@ public class UserController implements Initializable {
     }
   }
 
+  public void handleRejectDoctorButton() {
+    DataAccessRequest selected = doctorRequestListView.getSelectionModel().getSelectedItem();
+    if (selected != null) {
+      FxApp.userDataFetch.answerDataAccessRequest(selected, "REJECTED");
+      doctorRequestListViewItems.remove(selected);
+      updateDoctorsListViewItems();
+    }
+  }
+
   public void turnOffDataGathering() {
     // CODE TO TURN OFF DATA GATHERING
   }
