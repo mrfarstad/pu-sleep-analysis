@@ -27,7 +27,7 @@ public class UserController implements Initializable {
 
   @FXML private Text genderText;
 
-  @FXML private ListView<String> doctorsListView;
+  @FXML private ListView<DataAccessRequest> doctorsListView;
 
   @FXML private ListView<String> dataListView;
 
@@ -38,7 +38,7 @@ public class UserController implements Initializable {
 
   private boolean dataGatheringOn;
   ObservableList<String> dataListViewItems;
-  ObservableList<String> doctorsListViewItems;
+  ObservableList<DataAccessRequest> doctorsListViewItems;
   ObservableList<DataAccessRequest> doctorRequestListViewItems;
 
   public void handleDataButton() {
@@ -66,6 +66,7 @@ public class UserController implements Initializable {
     if (selected != null) {
       FxApp.userDataFetch.answerDataAccessRequest(selected, "ACCEPTED");
       doctorRequestListViewItems.remove(selected);
+      updateDoctorsListViewItems();
     }
   }
 
@@ -89,9 +90,9 @@ public class UserController implements Initializable {
 
     setDataListViewItems();
 
-    setDoctorsListViewItems();
+    updateDoctorsListViewItems();
 
-    setDoctorRequestListViewItems();
+    updateDoctorRequestListViewItems();
   }
 
   public void setProfileValues() {
@@ -122,17 +123,23 @@ public class UserController implements Initializable {
     dataListViewItems.add("Data 3");
   }
 
-  public void setDoctorsListViewItems() {
+  public void updateDoctorsListViewItems() {
     doctorsListViewItems = doctorsListView.getItems();
-    doctorsListViewItems.add("Doctor 1");
-    doctorsListViewItems.add("Doctor 2");
-    doctorsListViewItems.add("Doctor 3");
-    doctorsListViewItems.add("Doctor 4");
+    doctorsListViewItems.clear();
+    List<DataAccessRequest> requests = userDataFetch.getAccessRequestsToUser();
+    requests
+        .stream()
+        .filter(request -> request.getStatusAsString().equals("ACCEPTED"))
+        .forEach(request -> doctorsListViewItems.add(request));
   }
 
-  public void setDoctorRequestListViewItems() {
+  public void updateDoctorRequestListViewItems() {
     doctorRequestListViewItems = doctorRequestListView.getItems();
-    List<DataAccessRequest> requests = FxApp.userDataFetch.getAccessRequestsToUser();
-    requests.stream().forEach(request -> doctorRequestListViewItems.add(request));
+    doctorRequestListViewItems.clear();
+    List<DataAccessRequest> requests = this.userDataFetch.getAccessRequestsToUser();
+    requests
+        .stream()
+        .filter(request -> request.getStatusAsString().equals("PENDING"))
+        .forEach(request -> doctorRequestListViewItems.add(request));
   }
 }

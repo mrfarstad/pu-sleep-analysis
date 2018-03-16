@@ -91,7 +91,7 @@ public class DoctorController implements Initializable {
   }
 
   public void updatePatientListViewItems() {
-	patientListViewItems = patientListView.getItems();
+    patientListViewItems = patientListView.getItems();
     patientListViewItems.clear();
     List<DataAccessRequest> requests = FxApp.userDataFetch.getAccessRequestsByDoctor();
     requests
