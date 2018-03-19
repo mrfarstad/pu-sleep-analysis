@@ -33,9 +33,18 @@ integrationtest-job:
   script:
     - "mvn verify -f tdt4140-gr1816/pom.xml $MAVEN_CLI_OPTS"
 
-build-go:
+build-exporter:
   image: golang:1.10
   stage: build
   script:
     - cd fitbit-exporter
+    - go get "github.com/odinuge/go-graphql"
     - go build
+
+test-exporter:
+  image: golang:1.10
+  stage: test
+  script:
+    - cd fitbit-exporter
+    - go get "github.com/odinuge/go-graphql"
+    - go test
