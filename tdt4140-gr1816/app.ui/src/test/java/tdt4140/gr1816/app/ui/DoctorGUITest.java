@@ -41,15 +41,16 @@ public class DoctorGUITest extends ApplicationTest {
   @Override
   public void start(Stage stage) throws Exception {
     FxApp.userDataFetch = mock(UserDataFetch.class);
-    Parent root = FXMLLoader.load(getClass().getResource("FxApp.fxml"));
+    loginDoctor();
+    Parent root = FXMLLoader.load(getClass().getResource("DoctorGUI.fxml"));
     Scene scene = new Scene(root);
     stage.setScene(scene);
     stage.show();
   }
 
-  @Test
-  public void testLoginDoctor() {
-    String username = "legesen";
+  
+  public void loginDoctor() {
+    String username = "testDoctor";
     String password = "test";
     User doctorSample = new User("ID", username, password, true, "male", 43);
 
@@ -58,35 +59,39 @@ public class DoctorGUITest extends ApplicationTest {
 
     User testUser = FxApp.userDataFetch.signIn(username, password);
     assertTrue(testUser instanceof User);
-
-    TextField usernameField = lookup("#usernameField").query();
-    clickOn(usernameField);
-    write(username);
-    PasswordField passwordField = lookup("#passwordField").query();
-    clickOn(passwordField);
-    write(password);
-    clickOn("#signinButton");
-
-    testRequestButton();
-    testShowDataButton();
-    testShowMessageButton();
   }
 
+  @Test
   public void testRequestButton() {
-
     clickOn("#patientTab");
     TextField requestUserTextField = lookup("#requestUserTextField").query();
     Button requestButton = lookup("#requestButton").query();
-    ListView patientListView = lookup("#patientListView").query();
-    ObservableList<String> patientListViewItems = patientListView.getItems();
-
+    ListView patientList = lookup("#patientListView").query();
+    ObservableList<String> patientItems = patientList.getItems();
+    Text requestFeedbackText = lookup("#requestFeedbackText").query();
+    
     clickOn(requestUserTextField);
     write("thisIsNoUser");
     clickOn(requestButton);
-    Text requestFeedbackText = lookup("#requestFeedbackText").query();
     assertEquals("User not found", requestFeedbackText.getText());
+    requestUserTextField.clear();
+    
+    String username = "testUser";
+    User userSample = new User("testUserID", username, "test", false, "female", 50);
+    DataAccessRequest request = new DataAccessRequest("requestID", userSample, FxApp.userDataFetch.getCurrentUser(), "PENDING");
+    when(FxApp.userDataFetch.getUserByUsername(username)).thenReturn(userSample);
+    
+    
+    
+    patientList.getSelectionModel().select(request);
+    DataAccessRequest selected = (DataAccessRequest) patientList.getSelectionModel().getSelectedItem();
+    assertEquals(selected.getStatusAsString(), "PENDING");
+    
+    FxApp.userDataFetch.answerDataAccessRequest(request, "ACCEPTED");
+    assertEquals(selected.getStatusAsString(), "ACCEPTED");
   }
 
+  @Test
   public void testShowDataButton() {
     clickOn("#patientTab");
     TabPane tabPane = lookup("#tabPane").query();
@@ -95,6 +100,7 @@ public class DoctorGUITest extends ApplicationTest {
     assertEquals(2, tabPane.getSelectionModel().getSelectedIndex());
   }
 
+  @Test
   public void testShowMessageButton() {
     clickOn("#patientTab");
     TabPane tabPane = lookup("#tabPane").query();
