@@ -70,9 +70,9 @@ public class UserGUITest extends ApplicationTest {
     clickOn("#signinButton");
 
     testDataButton();
-    testDoctorRemoval();
-    testDeleteDataButton();
-    // testAcceptDoctor();
+    //    testDoctorRemoval();
+    //    testDeleteDataButton();
+    //    testAcceptDoctor();
   }
 
   public void testDataButton() {

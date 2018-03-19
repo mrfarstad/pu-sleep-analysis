@@ -124,10 +124,11 @@ public class UserController implements Initializable {
 
   public void setDoctorsListViewItems() {
     doctorsListViewItems = doctorsListView.getItems();
-    doctorsListViewItems.add("Doctor 1");
-    doctorsListViewItems.add("Doctor 2");
-    doctorsListViewItems.add("Doctor 3");
-    doctorsListViewItems.add("Doctor 4");
+    List<DataAccessRequest> requests = this.userDataFetch.getAccessRequestsToUser();
+    requests
+        .stream()
+        .filter(request -> request.getStatusAsString().equals("ACCEPTED"))
+        .forEach(request -> doctorsListViewItems.add(request.getRequestedBy().getUsername()));
   }
 
   public void setDoctorRequestListViewItems() {
