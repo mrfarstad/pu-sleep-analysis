@@ -58,7 +58,11 @@ public class UserController implements Initializable {
   }
 
   public void handleRemoveDoctorButton() {
-    doctorsListViewItems.remove(doctorsListView.getSelectionModel().getSelectedItem());
+    DataAccessRequest selected = doctorsListView.getSelectionModel().getSelectedItem();
+    if (selected != null) {
+      FxApp.userDataFetch.answerDataAccessRequest(selected, "REJECTED");
+      doctorsListViewItems.remove(selected);
+    }
   }
 
   public void handleAcceptDoctorButton() {
