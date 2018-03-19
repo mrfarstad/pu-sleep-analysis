@@ -6,10 +6,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
@@ -50,12 +53,17 @@ public class DoctorController implements Initializable {
   @FXML private ChoiceBox<String> dataChoiceBox;
 
   @FXML private Button viewGraphButton;
-
+  
   @FXML private PieChart sleepPieChart;
 
   @FXML private LineChart<String, Number> pulseLineChart;
-
   @FXML private CategoryAxis pulseChartXAxis;
+  @FXML private NumberAxis pulseChartYAxis;
+  
+  @FXML private BarChart<String, Number> stepBarChart;
+  @FXML private CategoryAxis stepChartXAxis;
+  @FXML private NumberAxis stepChartYAxis;
+  
 
   ObservableList<String> patientListViewItems;
   ObservableList<String> searchListViewItems;
@@ -89,6 +97,9 @@ public class DoctorController implements Initializable {
     } else if (dataChoiceBox.getValue().equals("Pulse")) {
       hideCharts();
       showPulseChart();
+    } else if (dataChoiceBox.getValue().equals("Steps")) {
+    	  hideCharts();
+    	  showStepChart();
     }
   }
 
@@ -101,30 +112,47 @@ public class DoctorController implements Initializable {
             new PieChart.Data("Plums", 10),
             new PieChart.Data("Pears", 22),
             new PieChart.Data("Apples", 30));
+    sleepPieChart.getData().clear();
     sleepPieChart.setData(pieChartData);
     sleepPieChart.setVisible(true);
   }
 
   private void showPulseChart() {
-    XYChart.Series series = new XYChart.Series();
-    series.setName("My Test Data");
-    series.getData().add(new XYChart.Data("1", 90));
-    series.getData().add(new XYChart.Data("2", 95));
-    series.getData().add(new XYChart.Data("3", 92));
-    series.getData().add(new XYChart.Data("4", 101));
-    series.getData().add(new XYChart.Data("5", 130));
-    series.getData().add(new XYChart.Data("6", 90));
-    series.getData().add(new XYChart.Data("7", 90));
-    series.getData().add(new XYChart.Data("8", 120));
-    series.getData().add(new XYChart.Data("9", 180));
-
-    pulseLineChart.getData().add(series);
+	ObservableList<XYChart.Data<String, Number>> lineChartData = FXCollections.observableArrayList( 
+		new XYChart.Data("1", 90),
+		new XYChart.Data("2", 95),
+		new XYChart.Data("3", 92),
+		new XYChart.Data("4", 101),
+		new XYChart.Data("5", 130),
+		new XYChart.Data("6", 90),
+		new XYChart.Data("7", 90),
+		new XYChart.Data("8", 120),
+		new XYChart.Data("9", 180));
+   
+	XYChart.Series<String, Number> series = new XYChart.Series<>(lineChartData);
+	pulseLineChart.getData().clear();
+	pulseLineChart.getData().add(series);
     pulseLineChart.setVisible(true);
   }
 
+  private void showStepChart() {
+	 ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList(
+			 new XYChart.Data("20.09", 3059),
+			 new XYChart.Data<>("21.09", 10084),
+			 new XYChart.Data<>("22.09", 6738),
+			 new XYChart.Data("23.09", 7559),
+			 new XYChart.Data<>("24.09", 12084),
+			 new XYChart.Data<>("25.09", 8738)
+			 );
+	 XYChart.Series<String, Number> series = new XYChart.Series<>(barChartData);
+	 stepBarChart.getData().clear();
+	 stepBarChart.getData().add(series);
+	 stepBarChart.setVisible(true);
+  }
   private void hideCharts() {
     sleepPieChart.setVisible(false);
     pulseLineChart.setVisible(false);
+    stepBarChart.setVisible(false);
   }
 
   @Override
