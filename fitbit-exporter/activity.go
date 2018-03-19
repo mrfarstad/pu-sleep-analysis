@@ -1,8 +1,8 @@
 package main
 
 import (
-	"time"
 	"fmt"
+	"time"
 )
 
 type ActivitySummaryData struct {
@@ -18,14 +18,14 @@ type ActivitySummaryData struct {
 		ActivityCalories int `json:"activityCalories"`
 		CaloriesBMR      int `json:"caloriesBMR"`
 		CaloriesOut      int `json:"caloriesOut"`
-		Distances []struct {
+		Distances        []struct {
 			Activity string  `json:"activity"`
 			Distance float64 `json:"distance"`
 		} `json:"distances"`
 		Elevation           float64 `json:"elevation"`
 		FairlyActiveMinutes int     `json:"fairlyActiveMinutes"`
 		Floors              int     `json:"floors"`
-		HeartRateZones []struct {
+		HeartRateZones      []struct {
 			CaloriesOut float64 `json:"caloriesOut"`
 			Max         int     `json:"max"`
 			Min         int     `json:"min"`

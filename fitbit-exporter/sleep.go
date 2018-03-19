@@ -1,8 +1,8 @@
 package main
 
 import (
-	"time"
 	"fmt"
+	"time"
 )
 
 type SleepData struct {
@@ -13,7 +13,7 @@ type SleepData struct {
 		EndTime     string `json:"endTime"`
 		InfoCode    int    `json:"infoCode"`
 		IsMainSleep bool   `json:"isMainSleep"`
-		Levels struct {
+		Levels      struct {
 			Data []struct {
 				DateTime string `json:"dateTime"`
 				Level    string `json:"level"`
@@ -72,8 +72,8 @@ func aggregateSleepLevelData(sleepData SleepData) []SleepLevel {
 
 	for level, sum := range m {
 		v = append(v, SleepLevel{
-			Level: level,
-			Seconds:sum,
+			Level:   level,
+			Seconds: sum,
 		})
 	}
 	return v

@@ -1,15 +1,15 @@
 package main
 
 import (
-	"time"
 	"fmt"
+	"time"
 )
 
 func syncSleepData(givenDate time.Time) {
 	var sleepData SleepData
 	err := fetchSleepData(givenDate, &sleepData)
 	if err != nil {
-		fmt.Errorf("error downloading sleep data %e", err)
+		fmt.Printf("error downloading sleep data %e\n", err)
 	}
 	levelData := aggregateSleepLevelData(sleepData)
 
@@ -27,7 +27,7 @@ func syncActivityData(givenDate time.Time) {
 	var activitySummaryData ActivitySummaryData
 	err := fetchActivityData(givenDate, &activitySummaryData)
 	if err != nil {
-		fmt.Errorf("error downloading activityData data %e", err)
+		fmt.Printf("error downloading activityData data %e\n", err)
 	}
 
 	if verbose {

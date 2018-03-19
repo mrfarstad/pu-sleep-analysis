@@ -7,5 +7,3 @@ type SubscriptionPaylod []struct {
 	OwnerType      string `json:"ownerType"`
 	SubscriptionID string `json:"subscriptionId"`
 }
-
-
