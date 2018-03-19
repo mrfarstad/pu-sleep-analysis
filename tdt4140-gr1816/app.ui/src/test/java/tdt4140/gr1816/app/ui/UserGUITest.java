@@ -87,6 +87,7 @@ public class UserGUITest extends ApplicationTest {
     assertEquals("Turn off", dataButton.getText());
   }
 
+  /* THIS TEST REQUIRES DUMMY DATA:
   public void testDoctorRemoval() {
     clickOn("#profileTab");
     doctorList = lookup("#doctorsListView").query();
@@ -103,6 +104,7 @@ public class UserGUITest extends ApplicationTest {
     // Check if doctor is removed
     assertFalse(doctorItems.contains(doctor));
   }
+  */
 
   public void testDeleteDataButton() {
     clickOn("#sleepTab");
