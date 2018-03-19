@@ -12,14 +12,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
-import tdt4140.gr1816.app.core.User;
-import tdt4140.gr1816.app.core.UserDataFetch;
+import tdt4140.gr1816.app.core.*;
 
 public class UserGUITest extends ApplicationTest {
 
@@ -40,41 +37,26 @@ public class UserGUITest extends ApplicationTest {
   @Override
   public void start(Stage stage) throws Exception {
     FxApp.userDataFetch = mock(UserDataFetch.class);
-    Parent root = FXMLLoader.load(getClass().getResource("FxApp.fxml"));
+    loginUser();
+    Parent root = FXMLLoader.load(getClass().getResource("UserGUI.fxml"));
     Scene scene = new Scene(root);
     stage.setScene(scene);
     stage.show();
   }
 
-  private ListView doctorList;
-  private ObservableList<String> doctorItems;
-
-  @Test
-  public void testLoginUser() {
-    String username = "Hallvard";
+  public void loginUser() {
+    String username = "User";
     String password = "test";
-    User userSample = new User("ID", username, password, false, "male", 2);
+    User userSample = new User("userID", username, password, false, "male", 22);
 
     when(FxApp.userDataFetch.signIn(username, password)).thenReturn(userSample);
     when(FxApp.userDataFetch.getCurrentUser()).thenReturn(userSample);
 
     User testUser = FxApp.userDataFetch.signIn(username, password);
     assertTrue(testUser instanceof User);
-
-    TextField usernameField = lookup("#usernameField").query();
-    clickOn(usernameField);
-    write(username);
-    PasswordField passwordField = lookup("#passwordField").query();
-    clickOn(passwordField);
-    write(password);
-    clickOn("#signinButton");
-
-    testDataButton();
-    //    testDoctorRemoval();
-    //    testDeleteDataButton();
-    //    testAcceptDoctor();
   }
 
+  @Test
   public void testDataButton() {
     clickOn("#profileTab");
     // Check if databutton is on by defult
@@ -87,49 +69,44 @@ public class UserGUITest extends ApplicationTest {
     assertEquals("Turn off", dataButton.getText());
   }
 
-  public void testDoctorRemoval() {
-    clickOn("#profileTab");
-    doctorList = lookup("#doctorsListView").query();
-    doctorItems = doctorList.getItems();
-    Button removeDoctorButton = lookup("#removeDoctorButton").query();
+  @Test
+  public void testAcceptAndRemoveDoctor() {
+    clickOn("#doctorTab");
 
-    String doctor = doctorItems.get(0);
-    // doctorItems.add(doctor);
-    // Check if list has doctor
-    assertTrue(doctorItems.contains(doctor));
-    // Remove doctor
-    doctorList.getSelectionModel().select(doctor);
-    clickOn(removeDoctorButton);
-    // Check if doctor is removed
-    assertFalse(doctorItems.contains(doctor));
+    ListView doctorRequestList = lookup("#doctorRequestListView").query();
+    ObservableList<DataAccessRequest> doctorRequestItems = doctorRequestList.getItems();
+
+    User doctorSample = new User("doctorID", "Doctor", "test", true, "female", 34);
+    DataAccessRequest request =
+        new DataAccessRequest(
+            "requestID", FxApp.userDataFetch.getCurrentUser(), doctorSample, "PENDING");
+
+    doctorRequestItems.add(request);
+
+    assertTrue(doctorRequestItems.contains(request));
+    doctorRequestList.getSelectionModel().select(request);
+    assertEquals(request.getStatusAsString(), "PENDING");
+    clickOn("#acceptDoctorButton");
+    assertFalse(doctorRequestItems.contains(request));
+
+    clickOn("#profileTab");
+    ListView doctorList = lookup("#doctorsListView").query();
+    ObservableList<String> doctorItems = doctorList.getItems();
+
+    assertTrue(doctorItems.contains(request));
+    doctorList.getSelectionModel().select(request);
+    assertEquals(request.getStatusAsString(), "ACCEPTED");
+
+    clickOn("#removeDoctorButton");
+    assertFalse(doctorItems.contains(request));
+    assertEquals(request.getStatusAsString(), "REJECTED");
   }
 
+  // TODO
   public void testDeleteDataButton() {
     clickOn("#sleepTab");
     Button deleteButton = lookup("#deleteDataButton").query();
     ListView dataList = lookup("#dataListView").query();
     ObservableList<String> dataItems = dataList.getItems();
-
-    String data = dataItems.get(0);
-
-    assertTrue(dataItems.contains(data));
-    dataList.getSelectionModel().select(data);
-    clickOn(deleteButton);
-    assertFalse(dataItems.contains(data));
   }
-
-  /* THIS TEST REQUIRES DUMMY DATA:
-  public void testAcceptDoctor() {
-    clickOn("#doctorTab");
-    Button acceptButton = lookup("#acceptDoctorButton").query();
-    ListView doctorRequestList = lookup("#doctorRequestListView").query();
-    ObservableList<String> doctorRequestItems = doctorRequestList.getItems();
-
-    String doctor = doctorRequestItems.get(0);
-
-    assertTrue(doctorRequestItems.contains(doctor));
-    doctorRequestList.getSelectionModel().select(doctor);
-    clickOn(acceptButton);
-    assertFalse(doctorRequestItems.contains(doctor));
-  }*/
 }
