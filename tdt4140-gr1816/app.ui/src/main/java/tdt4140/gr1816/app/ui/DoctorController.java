@@ -19,6 +19,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import tdt4140.gr1816.app.core.*;
 
 public class DoctorController implements Initializable {
 
@@ -49,6 +50,8 @@ public class DoctorController implements Initializable {
   @FXML private ListView<String> searchListView;
 
   // Patient tab
+  @FXML private ChoiceBox<String> patientChoiceBox;
+  private ObservableList<User> accessToPatientList;
   @FXML private ChoiceBox<String> dataChoiceBox;
 
   @FXML private Button viewGraphButton;
@@ -161,6 +164,7 @@ public class DoctorController implements Initializable {
     setProfileValues();
     setPatientListViewItems();
     setDataChoiceBox();
+    setPatientChoiceBox();
     hideCharts();
   }
 
@@ -175,6 +179,8 @@ public class DoctorController implements Initializable {
     patientListViewItems.add("Patient 2");
     patientListViewItems.add("Patient 3");
   }
+
+  public void setPatientChoiceBox() {}
 
   public void setDataChoiceBox() {
     dataChoiceBox.getItems().add("Pulse");
