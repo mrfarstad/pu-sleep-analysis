@@ -105,6 +105,14 @@
                                               <NumberAxis side="LEFT" upperBound="220.0" />
                                             </yAxis>
                                           </LineChart>
+                                          <BarChart fx:id="stepBarChart" prefHeight="244.0" prefWidth="383.0" title="Step Chart">
+                                            <xAxis>
+                                              <CategoryAxis side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                              <NumberAxis side="LEFT" />
+                                            </yAxis>
+                                          </BarChart>
                                        </children>
                                     </StackPane>
                                  </children>
