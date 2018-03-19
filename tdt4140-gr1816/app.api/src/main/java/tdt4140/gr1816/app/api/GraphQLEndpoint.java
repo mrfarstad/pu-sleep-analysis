@@ -19,12 +19,14 @@ import tdt4140.gr1816.app.api.resolvers.DataAccessRequestResolver;
 import tdt4140.gr1816.app.api.resolvers.Mutation;
 import tdt4140.gr1816.app.api.resolvers.Query;
 import tdt4140.gr1816.app.api.resolvers.SigninResolver;
+import tdt4140.gr1816.app.api.resolvers.SleepResolver;
 import tdt4140.gr1816.app.api.types.User;
 
 @WebServlet(urlPatterns = "/graphql")
 public class GraphQLEndpoint extends SimpleGraphQLServlet {
 
   public static final UserRepository userRepository;
+  public static final SleepRepository sleepRepository;
   private static final DataAccessRequestRepository dataAccessRequestRepository;
 
   public static MongoDatabase mongo;
@@ -36,6 +38,7 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
         new MongoClient(host == null ? "localhost" : host)
             .getDatabase(dbname == null ? "gruppe16" : dbname);
     userRepository = new UserRepository(mongo.getCollection("users"));
+    sleepRepository = new SleepRepository(mongo.getCollection("sleeps"));
     dataAccessRequestRepository =
         new DataAccessRequestRepository(mongo.getCollection("dataAccessRequests"));
   }
@@ -48,10 +51,11 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
     return SchemaParser.newParser()
         .file("schema.graphqls")
         .resolvers(
-            new Query(userRepository, dataAccessRequestRepository),
-            new Mutation(userRepository, dataAccessRequestRepository),
+            new Query(userRepository, sleepRepository, dataAccessRequestRepository),
+            new Mutation(userRepository, sleepRepository, dataAccessRequestRepository),
             new SigninResolver(),
-            new DataAccessRequestResolver(userRepository))
+            new DataAccessRequestResolver(userRepository),
+            new SleepResolver(userRepository))
         .build()
         .makeExecutableSchema();
   }

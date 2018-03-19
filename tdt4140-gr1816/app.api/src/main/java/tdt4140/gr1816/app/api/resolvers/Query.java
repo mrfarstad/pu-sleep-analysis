@@ -6,19 +6,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import tdt4140.gr1816.app.api.DataAccessRequestRepository;
+import tdt4140.gr1816.app.api.SleepRepository;
 import tdt4140.gr1816.app.api.UserRepository;
 import tdt4140.gr1816.app.api.auth.AuthContext;
 import tdt4140.gr1816.app.api.types.DataAccessRequest;
+import tdt4140.gr1816.app.api.types.Sleep;
 import tdt4140.gr1816.app.api.types.User;
 
 public class Query implements GraphQLRootResolver {
 
   private final UserRepository userRepository;
+  private final SleepRepository sleepRepository;
   private final DataAccessRequestRepository dataAccessRequestRepository;
 
   public Query(
-      UserRepository userRepository, DataAccessRequestRepository dataAccessRequestRepository) {
+      UserRepository userRepository,
+      SleepRepository sleepRepository,
+      DataAccessRequestRepository dataAccessRequestRepository) {
     this.userRepository = userRepository;
+    this.sleepRepository = sleepRepository;
     this.dataAccessRequestRepository = dataAccessRequestRepository;
   }
 
@@ -32,6 +38,27 @@ public class Query implements GraphQLRootResolver {
 
   public List<User> allUsers() {
     return userRepository.getAllUsers();
+  }
+
+  public List<Sleep> allSleeps(DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      return new ArrayList<Sleep>();
+    }
+    return sleepRepository.getAllSleeps();
+  }
+
+  public List<Sleep> sleepsByViewer(DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      return new ArrayList<Sleep>();
+    }
+    return allSleeps(env)
+        .stream()
+        .filter(sleep -> sleep.getUserId().equals(user.getId()))
+        .collect(Collectors.toList());
   }
 
   private List<DataAccessRequest> allDataAccessRequests(DataFetchingEnvironment env) {

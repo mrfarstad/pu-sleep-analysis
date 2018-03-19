@@ -4,22 +4,28 @@ import com.coxautodev.graphql.tools.GraphQLRootResolver;
 import graphql.GraphQLException;
 import graphql.schema.DataFetchingEnvironment;
 import tdt4140.gr1816.app.api.DataAccessRequestRepository;
+import tdt4140.gr1816.app.api.SleepRepository;
 import tdt4140.gr1816.app.api.UserRepository;
 import tdt4140.gr1816.app.api.auth.AuthContext;
 import tdt4140.gr1816.app.api.auth.AuthData;
 import tdt4140.gr1816.app.api.types.DataAccessRequest;
 import tdt4140.gr1816.app.api.types.DataAccessRequestStatus;
 import tdt4140.gr1816.app.api.types.SigninPayload;
+import tdt4140.gr1816.app.api.types.Sleep;
 import tdt4140.gr1816.app.api.types.User;
 
 public class Mutation implements GraphQLRootResolver {
 
   private final UserRepository userRepository;
+  private final SleepRepository sleepRepository;
   private final DataAccessRequestRepository dataAccessRequestRepository;
 
   public Mutation(
-      UserRepository userRepository, DataAccessRequestRepository dataAccessRequestRepository) {
+      UserRepository userRepository,
+      SleepRepository sleepRepository,
+      DataAccessRequestRepository dataAccessRequestRepository) {
     this.userRepository = userRepository;
+    this.sleepRepository = sleepRepository;
     this.dataAccessRequestRepository = dataAccessRequestRepository;
   }
 
@@ -51,6 +57,19 @@ public class Mutation implements GraphQLRootResolver {
       return new SigninPayload(user.getId(), user);
     }
     throw new GraphQLException("Invalid credentials");
+  }
+
+  public Sleep createSleep(String userId, String date, int duration, int efficiency) {
+    Sleep newSleep = new Sleep(userId, date, duration, efficiency);
+    return sleepRepository.saveSleep(newSleep);
+  }
+
+  public Boolean deleteSleep(String sleepId) {
+    Sleep sleep = sleepRepository.findById(sleepId);
+    if (sleep == null) {
+      throw new GraphQLException("Invalid sleep id");
+    }
+    return sleepRepository.deleteSleep(sleep);
   }
 
   public DataAccessRequest requestDataAccess(String dataOwnerId, DataFetchingEnvironment env) {

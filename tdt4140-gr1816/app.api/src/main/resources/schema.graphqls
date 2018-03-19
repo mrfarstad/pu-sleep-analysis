@@ -1,5 +1,8 @@
 type Query {
+	# Returns all the users
     allUsers: [User]
+    
+    # Returns the currently logged in user
     viewer: User
 
     # DataAccess requested by you
@@ -7,6 +10,12 @@ type Query {
 
     # DataAccess requested by others, for you
     dataAccessRequestsForMe: [DataAccessRequest]
+    
+    # Returns all sleeps by all users
+    allSleeps: [Sleep]
+    
+    # Returns all sleeps by the viewer
+    sleepsByViewer: [Sleep]
 }
 
 
@@ -14,6 +23,9 @@ type Mutation {
   createUser(authProvider: AuthData!, isDoctor: Boolean!, gender: String!, age: Int!): User
   signinUser(auth: AuthData): SigninPayload
   deleteUser(auth: AuthData!): Boolean
+ 
+ # date is of the form 'YYYY-MM-DD'
+  createSleep(userId: ID!, date: String, duration: Int!, efficiency: Int!): Sleep
   
   requestDataAccess(dataOwnerId: ID!): DataAccessRequest
   answerDataAccessRequest(dataAccessRequestId: ID!, status: DataAccessRequestStatus!): DataAccessRequest
@@ -44,6 +56,15 @@ type User {
 	isDoctor: Boolean
 	gender: String
 	age: Int
+}
+
+type Sleep {
+	id: ID!
+	user: User
+	# date is of the form 'YYYY-MM-DD'
+	date: String
+	duration: Int
+	efficiency: Int
 }
 
 type SigninPayload {
