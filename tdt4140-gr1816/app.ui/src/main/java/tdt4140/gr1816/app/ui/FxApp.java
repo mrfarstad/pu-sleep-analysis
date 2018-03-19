@@ -5,8 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import tdt4140.gr1816.app.core.*;
 
 public class FxApp extends Application {
+
+  protected static UserDataFetch userDataFetch;
 
   @Override
   public void start(Stage stage) throws Exception {
@@ -17,6 +20,7 @@ public class FxApp extends Application {
   }
 
   public static void main(String[] args) {
+    userDataFetch = new UserDataFetch(new DataGetter());
     launch(args);
   }
 }

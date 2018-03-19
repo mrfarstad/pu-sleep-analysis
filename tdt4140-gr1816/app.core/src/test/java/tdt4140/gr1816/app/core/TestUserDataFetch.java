@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -13,6 +15,20 @@ import tdt4140.gr1816.app.core.DataAccessRequest.DataAccessRequestStatus;
 
 public class TestUserDataFetch {
 
+  private static String createUserTestQuery =
+      "{\"query\":\"mutation{createUser(authProvider:{username:\\\"test\\\" password:\\\"test\\\"} isDoctor: true gender:\\\"male\\\" age: 22){username}}\"}";
+  /*private static String deleteUserQuery =
+   "{\"query\":\"mutation{deleteUser(auth:{username:\\\"test\\\" password:\\\"test\\\"})}\"}";
+  */
+  private static String signInTestQuery =
+      "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
+  /*
+    private static String currentUserQuery = "{\"query\":\"query{viewer{id username isDoctor gender age}}\"}";
+    private static String accessRequestsToUserQuery =
+  	  "{\"query\":\"query{dataAccessRequestsForMe{requestedBy{username isDoctor gender age}status}}\"}";
+    private static String accessRequestsByDoctorQuery =
+  	  "{\"query\":\"query{myDataAccessRequests{dataOwner{username isDoctor gender age}status}}\"}";
+  */
   private static String createUserResponse =
       "{\"data\":{\"createUser\":{\"id\":\"5aa117f0c40c0b0451c261c2\",\"username\":\"test\",\"isDoctor\":true,\"gender\":\"male\",\"age\":33}}}";
   private static String deleteUserResponse = "{\"data\":{\"deleteUser\":true}}";
@@ -25,7 +41,7 @@ public class TestUserDataFetch {
   private static String getAccessRequestsByDoctorResponse =
       "{\"data\":{\"myDataAccessRequests\":[{\"dataOwner\":{\"username\":\"mathiawa\",\"isDoctor\":false,\"gender\":\"male\",\"age\":21},\"status\":\"PENDING\"},{\"dataOwner\":{\"username\":\"doctor\",\"isDoctor\":true,\"gender\":\"male\",\"age\":40},\"status\":\"PENDING\"}]}}";
   private static String signInResponse =
-      "{\"data\":{\"signinUser\":{\"token\":\"5aa111f3c13edf582b796abe\"}}}";
+      "{\"data\":{\"signinUser\":{\"token\":\"5aa82961c40c0b35eb3e8663\",\"user\":{\"id\":\"5aa82961c40c0b35eb3e8663\",\"username\":\"test\",\"isDoctor\":true,\"gender\":\"male\",\"age\":22}}}}";
 
   //  create mock
   private DataGetter test = mock(DataGetter.class);
@@ -34,12 +50,12 @@ public class TestUserDataFetch {
 
   @Test
   public void testCreateUserQuery() {
-    when(test.getData(userDataFetch.createUserQuery, null)).thenReturn(createUserResponse);
+    when(test.getData(createUserTestQuery, null)).thenReturn(createUserResponse);
 
-    assertEquals(test.getData(userDataFetch.createUserQuery, null), createUserResponse);
+    assertEquals(test.getData(createUserTestQuery, null), createUserResponse);
 
     // CreateUser should return a user:
-    User user = userDataFetch.createUser();
+    User user = userDataFetch.createUser("test", "test", true, "male", 22);
     assertTrue(user instanceof User);
     assertNotNull(user);
     assertTrue(user.getUsername().equals("test"));
@@ -55,7 +71,7 @@ public class TestUserDataFetch {
     assertEquals(test.getData(userDataFetch.deleteUserQuery, null), deleteUserResponse);
 
     // UserDataFetch should return a boolean (success)
-    boolean success = userDataFetch.deleteUser();
+    boolean success = userDataFetch.deleteUser("test", "test");
     assertNotNull(success);
     assertTrue(success);
   }
@@ -137,8 +153,9 @@ public class TestUserDataFetch {
 
   @Test
   public void testSignIn() {
-    when(test.getData(userDataFetch.signInQuery, null)).thenReturn(signInResponse);
-    userDataFetch.signIn();
+    when(test.getData(anyString(), isNull())).thenReturn(signInResponse);
+    User testUser = userDataFetch.signIn("test", "test");
+    assertTrue(testUser instanceof User);
   }
 
   @Test

@@ -1,6 +1,7 @@
 package tdt4140.gr1816.app.ui;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -8,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
+import tdt4140.gr1816.app.core.*;
 
 public class UserController implements Initializable {
 
@@ -25,19 +27,19 @@ public class UserController implements Initializable {
 
   @FXML private Text genderText;
 
-  @FXML private ListView<String> doctorsListView;
+  @FXML private ListView<DataAccessRequest> doctorsListView;
 
   @FXML private ListView<String> dataListView;
 
-  @FXML private ListView<String> doctorRequestListView;
+  @FXML private ListView<DataAccessRequest> doctorRequestListView;
 
-  // private User user;
-  // private UserDataFetch userDataFetch;
+  private User user;
+  private UserDataFetch userDataFetch;
 
   private boolean dataGatheringOn;
   ObservableList<String> dataListViewItems;
-  ObservableList<String> doctorsListViewItems;
-  ObservableList<String> doctorRequestListViewItems;
+  ObservableList<DataAccessRequest> doctorsListViewItems;
+  ObservableList<DataAccessRequest> doctorRequestListViewItems;
 
   public void handleDataButton() {
     if (dataGatheringOn) {
@@ -56,14 +58,28 @@ public class UserController implements Initializable {
   }
 
   public void handleRemoveDoctorButton() {
-    doctorsListViewItems.remove(doctorsListView.getSelectionModel().getSelectedItem());
+    DataAccessRequest selected = doctorsListView.getSelectionModel().getSelectedItem();
+    if (selected != null) {
+      FxApp.userDataFetch.answerDataAccessRequest(selected, "REJECTED");
+      doctorsListViewItems.remove(selected);
+    }
   }
 
   public void handleAcceptDoctorButton() {
-    String selected = doctorRequestListView.getSelectionModel().getSelectedItem();
+    DataAccessRequest selected = doctorRequestListView.getSelectionModel().getSelectedItem();
     if (selected != null) {
-      doctorsListViewItems.add(selected);
+      FxApp.userDataFetch.answerDataAccessRequest(selected, "ACCEPTED");
       doctorRequestListViewItems.remove(selected);
+      updateDoctorsListViewItems();
+    }
+  }
+
+  public void handleRejectDoctorButton() {
+    DataAccessRequest selected = doctorRequestListView.getSelectionModel().getSelectedItem();
+    if (selected != null) {
+      FxApp.userDataFetch.answerDataAccessRequest(selected, "REJECTED");
+      doctorRequestListViewItems.remove(selected);
+      updateDoctorsListViewItems();
     }
   }
 
@@ -77,9 +93,9 @@ public class UserController implements Initializable {
 
   @Override
   public void initialize(URL arg0, ResourceBundle arg1) {
-    // UserDataFetch.signIn();
-    // user = UserDataFetch.getCurrentUser();
-    // accessRequestList = UserDataFetch.getAccessRequestsToUser();
+
+    this.userDataFetch = FxApp.userDataFetch;
+    this.user = userDataFetch.getCurrentUser();
 
     setProfileValues();
 
@@ -87,20 +103,16 @@ public class UserController implements Initializable {
 
     setDataListViewItems();
 
-    setDoctorsListViewItems();
+    updateDoctorsListViewItems();
 
-    setDoctorRequestListViewItems();
+    updateDoctorRequestListViewItems();
   }
 
   public void setProfileValues() {
 
-    String name = "Sondre Grav Skjåstad";
-    Integer age = 21;
-    String gender = "Male";
-
-    // String name = user.getUsername();
-    // Integer age = user.getAge();
-    // String gender = user.getGender();
+    String name = user.getUsername();
+    Integer age = user.getAge();
+    String gender = user.getGender();
 
     nameText.setText(name);
     ageText.setText(age.toString());
@@ -124,18 +136,23 @@ public class UserController implements Initializable {
     dataListViewItems.add("Data 3");
   }
 
-  public void setDoctorsListViewItems() {
+  public void updateDoctorsListViewItems() {
     doctorsListViewItems = doctorsListView.getItems();
-    doctorsListViewItems.add("Doctor 1");
-    doctorsListViewItems.add("Doctor 2");
-    doctorsListViewItems.add("Doctor 3");
-    doctorsListViewItems.add("Doctor 4");
+    doctorsListViewItems.clear();
+    List<DataAccessRequest> requests = userDataFetch.getAccessRequestsToUser();
+    requests
+        .stream()
+        .filter(request -> request.getStatusAsString().equals("ACCEPTED"))
+        .forEach(request -> doctorsListViewItems.add(request));
   }
 
-  public void setDoctorRequestListViewItems() {
+  public void updateDoctorRequestListViewItems() {
     doctorRequestListViewItems = doctorRequestListView.getItems();
-    doctorRequestListViewItems.add("Doctor 5");
-    doctorRequestListViewItems.add("Doctor 6");
-    doctorRequestListViewItems.add("Doctor 7");
+    doctorRequestListViewItems.clear();
+    List<DataAccessRequest> requests = this.userDataFetch.getAccessRequestsToUser();
+    requests
+        .stream()
+        .filter(request -> request.getStatusAsString().equals("PENDING"))
+        .forEach(request -> doctorRequestListViewItems.add(request));
   }
 }

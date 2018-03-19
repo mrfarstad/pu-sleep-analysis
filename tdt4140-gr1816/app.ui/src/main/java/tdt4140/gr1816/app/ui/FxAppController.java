@@ -9,6 +9,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import tdt4140.gr1816.app.core.*;
 
 public class FxAppController {
 
@@ -18,13 +19,18 @@ public class FxAppController {
   @FXML private Button createNewUserButton;
 
   public void handleSigninButton() throws IOException {
-    String file;
-    System.out.println(usernameField.getText());
-    if (usernameField.getText().equals("user")) {
+    String file, username, password;
+    username = usernameField.getText();
+    password = passwordField.getText();
+    User loginUser = FxApp.userDataFetch.signIn(username, password);
+    if (loginUser.isDoctor()) {
+      file = "DoctorGUI.fxml";
+    } else if (!loginUser.isDoctor()) {
       file = "UserGUI.fxml";
     } else {
-      file = "DoctorGUI.fxml";
+      throw new IllegalArgumentException();
     }
+    ;
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file));
     Parent root1 = (Parent) fxmlLoader.load();
     Stage stage = new Stage();

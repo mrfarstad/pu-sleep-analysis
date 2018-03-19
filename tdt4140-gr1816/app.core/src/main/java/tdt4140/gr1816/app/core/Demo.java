@@ -4,12 +4,21 @@ public class Demo {
   public static void main(String[] args) {
     UserDataFetch userDataFetch = new UserDataFetch(new DataGetter());
     System.out.println(userDataFetch.getAllUsers());
-    userDataFetch.createUser();
+    System.out.println(userDataFetch.createUser("test", "test", true, "male", 22));
+    System.out.println(userDataFetch.createUser("doctor", "test", true, "male", 22));
     System.out.println(userDataFetch.getAllUsers());
-    userDataFetch.signIn();
+    User test = userDataFetch.signIn("test", "test");
+    User doctor = userDataFetch.signIn("doctor", "test");
+    /* DataAccessRequest request = userDataFetch.requestDataAccess(test);
+    System.out.println(request.getDataOwner());
+    System.out.println(request.getId());
+    userDataFetch.signIn("test", "test");
+    boolean success = userDataFetch.answerDataAccessRequest(request, "ACCEPTED");
+    System.out.println(success); */
     System.out.println(userDataFetch.getCurrentUser());
     System.out.println(userDataFetch.getAccessRequestsToUser());
     System.out.println(userDataFetch.getAccessRequestsByDoctor());
-    userDataFetch.deleteUser();
+    userDataFetch.deleteUser("test", "test");
+    userDataFetch.deleteUser("doctor", "test");
   }
 }

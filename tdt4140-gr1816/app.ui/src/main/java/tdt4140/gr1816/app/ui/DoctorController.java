@@ -1,6 +1,7 @@
 package tdt4140.gr1816.app.ui;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,9 +30,13 @@ public class DoctorController implements Initializable {
 
   @FXML private Button showMessageButton;
 
-  @FXML private Button searchButton;
-
   @FXML private Text nameText;
+
+  @FXML private Text genderText;
+
+  @FXML private Text ageText;
+
+  @FXML private Text requestFeedbackText;
 
   @FXML private Tab dataTab;
 
@@ -43,11 +48,12 @@ public class DoctorController implements Initializable {
 
   @FXML private Tab patientTab;
 
-  @FXML private TextField requestTextField;
+  @FXML private TextField requestUserTextField;
 
-  @FXML private ListView<String> patientListView;
+  @FXML private ListView<DataAccessRequest> patientListView;
 
-  @FXML private ListView<String> searchListView;
+  ObservableList<DataAccessRequest> patientListViewItems;
+
 
   // Patient tab
   @FXML private ChoiceBox<String> patientChoiceBox;
@@ -66,14 +72,20 @@ public class DoctorController implements Initializable {
   @FXML private CategoryAxis stepChartXAxis;
   @FXML private NumberAxis stepChartYAxis;
 
-  ObservableList<String> patientListViewItems;
-  ObservableList<String> searchListViewItems;
+
+  private UserDataFetch userDataFetch;
+  private User user;
 
   public void handleRequestButton() {
-    String selected = searchListView.getSelectionModel().getSelectedItem();
-    if (selected != null) {
-      patientListViewItems.add(selected + " is pending");
-      searchListViewItems.remove(selected);
+    String username = requestUserTextField.getText();
+    User newPatient = FxApp.userDataFetch.getUserByUsername(username);
+    if (newPatient == null) {
+      requestFeedbackText.setText("User not found");
+    } else if (FxApp.userDataFetch.requestDataAccess(newPatient)) {
+      updatePatientListViewItems();
+      requestFeedbackText.setText("Request sent");
+    } else {
+      requestFeedbackText.setText("Request failed");
     }
   }
 
@@ -85,11 +97,6 @@ public class DoctorController implements Initializable {
     tabPane.getSelectionModel().select(messageTab);
   }
 
-  public void handleSearchButton() {
-    searchListViewItems = searchListView.getItems();
-    searchListViewItems.add("Patient 4");
-    searchListViewItems.add("Patient 5");
-  }
 
   public void handleViewGraphButton() {
     if (dataChoiceBox.getValue().equals("Sleep")) {
@@ -161,23 +168,35 @@ public class DoctorController implements Initializable {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
 
+    this.userDataFetch = FxApp.userDataFetch;
+    this.user = userDataFetch.getCurrentUser();
+
     setProfileValues();
-    setPatientListViewItems();
+
     setDataChoiceBox();
     setPatientChoiceBox();
     hideCharts();
+
+    updatePatientListViewItems();
   }
 
   public void setProfileValues() {
-    String name = "Lege Legesen";
+    String name = user.getUsername();
     nameText.setText(name);
+    String gender = user.getGender();
+    genderText.setText(gender);
+    String age = Integer.toString(user.getAge());
+    ageText.setText(age);
   }
 
-  public void setPatientListViewItems() {
+  public void updatePatientListViewItems() {
     patientListViewItems = patientListView.getItems();
-    patientListViewItems.add("Patient 1");
-    patientListViewItems.add("Patient 2");
-    patientListViewItems.add("Patient 3");
+    patientListViewItems.clear();
+    List<DataAccessRequest> requests = FxApp.userDataFetch.getAccessRequestsByDoctor();
+    requests
+        .stream()
+        .filter(request -> !patientListViewItems.contains(request))
+        .forEach(request -> patientListViewItems.add(request));
   }
 
   public void setPatientChoiceBox() {}

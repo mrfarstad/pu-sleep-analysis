@@ -83,11 +83,14 @@ public class DataAccessRequest {
 
   @Override
   public String toString() {
-    String out = "DataOwner: \n";
-    out += ("Username: " + this.dataOwner + "\n");
-    out += ("Requested By: \n");
-    out += ("Username: " + this.requestedBy + "\n");
-    out += ("Status: " + statusToString(this.getStatus()) + "\n");
+    String out =
+        "Data owner: "
+            + this.dataOwner.getUsername()
+            + "\nRequested by: "
+            + this.requestedBy.getUsername()
+            + "\nStatus: "
+            + statusToString(this.getStatus())
+            + "\n-------------------";
     return out;
   }
 
