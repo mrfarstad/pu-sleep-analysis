@@ -3,7 +3,10 @@
 
 ### About
 
-TBA 🎓
+Sleep Analysis is an application for gathering data concerning health,
+with a focus on sleep, but also including information on walking and heart rate.
+We want to examine the correlation between these health aspects, and how sleep
+can be improved.
 
 ### Database
 
