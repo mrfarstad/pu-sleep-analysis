@@ -11,11 +11,13 @@ type Query {
     # DataAccess requested by others, for you
     dataAccessRequestsForMe: [DataAccessRequest]
     
-    # Returns all sleeps by all users
+    # Returns all user sleep/steps data
     allSleeps: [Sleep]
+    allSteps: [Steps]
     
-    # Returns all sleeps by the viewer
+    # Returns all viewer sleep/steps data
     sleepsByViewer: [Sleep]
+    stepsByViewer: [Steps]
 }
 
 
@@ -26,6 +28,7 @@ type Mutation {
  
  # date is of the form 'YYYY-MM-DD'
   createSleep(userId: ID!, date: String, duration: Int!, efficiency: Int!): Sleep
+  createSteps(userId: ID!, date: String, steps: Int!): Steps
   
   requestDataAccess(dataOwnerId: ID!): DataAccessRequest
   answerDataAccessRequest(dataAccessRequestId: ID!, status: DataAccessRequestStatus!): DataAccessRequest
@@ -65,6 +68,14 @@ type Sleep {
 	date: String
 	duration: Int
 	efficiency: Int
+}
+
+type Steps {
+	id: ID!
+	user: User
+	# date is of the form 'YYYY-MM-DD'
+	date: String
+	steps: Int
 }
 
 type SigninPayload {
