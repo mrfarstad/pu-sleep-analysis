@@ -6,30 +6,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import tdt4140.gr1816.app.api.DataAccessRequestRepository;
-import tdt4140.gr1816.app.api.SleepRepository;
-import tdt4140.gr1816.app.api.StepsRepository;
+import tdt4140.gr1816.app.api.PulseDataRepository;
+import tdt4140.gr1816.app.api.SleepDataRepository;
+import tdt4140.gr1816.app.api.StepsDataRepository;
 import tdt4140.gr1816.app.api.UserRepository;
 import tdt4140.gr1816.app.api.auth.AuthContext;
 import tdt4140.gr1816.app.api.types.DataAccessRequest;
-import tdt4140.gr1816.app.api.types.Sleep;
-import tdt4140.gr1816.app.api.types.Steps;
+import tdt4140.gr1816.app.api.types.PulseData;
+import tdt4140.gr1816.app.api.types.SleepData;
+import tdt4140.gr1816.app.api.types.StepsData;
 import tdt4140.gr1816.app.api.types.User;
 
 public class Query implements GraphQLRootResolver {
 
   private final UserRepository userRepository;
-  private final SleepRepository sleepRepository;
-  private final StepsRepository stepsRepository;
+  private final SleepDataRepository sleepDataRepository;
+  private final StepsDataRepository stepsDataRepository;
+  private final PulseDataRepository pulseDataRepository;
   private final DataAccessRequestRepository dataAccessRequestRepository;
 
   public Query(
       UserRepository userRepository,
-      SleepRepository sleepRepository,
-      StepsRepository stepsRepository,
+      SleepDataRepository sleepDataRepository,
+      StepsDataRepository stepsDataRepository,
+      PulseDataRepository pulseDataRepository,
       DataAccessRequestRepository dataAccessRequestRepository) {
     this.userRepository = userRepository;
-    this.sleepRepository = sleepRepository;
-    this.stepsRepository = stepsRepository;
+    this.sleepDataRepository = sleepDataRepository;
+    this.stepsDataRepository = stepsDataRepository;
+    this.pulseDataRepository = pulseDataRepository;
     this.dataAccessRequestRepository = dataAccessRequestRepository;
   }
 
@@ -45,45 +50,66 @@ public class Query implements GraphQLRootResolver {
     return userRepository.getAllUsers();
   }
 
-  public List<Sleep> allSleeps(DataFetchingEnvironment env) {
+  public List<SleepData> allSleepData(DataFetchingEnvironment env) {
     AuthContext context = env.getContext();
     User user = context.getUser();
     if (user == null) {
-      return new ArrayList<Sleep>();
+      return new ArrayList<SleepData>();
     }
-    return sleepRepository.getAllSleeps();
+    return sleepDataRepository.getAllSleepData();
   }
 
-  public List<Sleep> sleepsByViewer(DataFetchingEnvironment env) {
+  public List<SleepData> sleepDataByViewer(DataFetchingEnvironment env) {
     AuthContext context = env.getContext();
     User user = context.getUser();
     if (user == null) {
-      return new ArrayList<Sleep>();
+      return new ArrayList<SleepData>();
     }
-    return allSleeps(env)
+    return allSleepData(env)
         .stream()
         .filter(sleep -> sleep.getUserId().equals(user.getId()))
         .collect(Collectors.toList());
   }
 
-  public List<Steps> allSteps(DataFetchingEnvironment env) {
+  public List<StepsData> allStepsData(DataFetchingEnvironment env) {
     AuthContext context = env.getContext();
     User user = context.getUser();
     if (user == null) {
-      return new ArrayList<Steps>();
+      return new ArrayList<StepsData>();
     }
-    return stepsRepository.getAllSteps();
+    return stepsDataRepository.getAllStepsData();
   }
 
-  public List<Steps> stepsByViewer(DataFetchingEnvironment env) {
+  public List<StepsData> stepsDataByViewer(DataFetchingEnvironment env) {
     AuthContext context = env.getContext();
     User user = context.getUser();
     if (user == null) {
-      return new ArrayList<Steps>();
+      return new ArrayList<StepsData>();
     }
-    return allSteps(env)
+    return allStepsData(env)
         .stream()
         .filter(steps -> steps.getUserId().equals(user.getId()))
+        .collect(Collectors.toList());
+  }
+
+  public List<PulseData> allPulseData(DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      return new ArrayList<PulseData>();
+    }
+    return pulseDataRepository.getAllPulseData();
+  }
+
+  public List<PulseData> pulseDataByViewer(DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      return new ArrayList<PulseData>();
+    }
+    return allPulseData(env)
+        .stream()
+        .filter(pulseData -> pulseData.getUserId().equals(user.getId()))
         .collect(Collectors.toList());
   }
 

@@ -12,12 +12,14 @@ type Query {
     dataAccessRequestsForMe: [DataAccessRequest]
     
     # Returns all user sleep/steps data
-    allSleeps: [Sleep]
-    allSteps: [Steps]
+    allSleepData: [SleepData]
+    allStepsData: [StepsData]
+    allPulseData: [PulseData]
     
     # Returns all viewer sleep/steps data
-    sleepsByViewer: [Sleep]
-    stepsByViewer: [Steps]
+    sleepDataByViewer: [SleepData]
+    stepsDataByViewer: [StepsData]
+    pulseDataByViewer: [PulseData]
 }
 
 
@@ -27,12 +29,13 @@ type Mutation {
   deleteUser(auth: AuthData!): Boolean
  
  # date is of the form 'YYYY-MM-DD'
-  createSleep(userId: ID!, date: String, duration: Int!, efficiency: Int!): Sleep
-  createSteps(userId: ID!, date: String, steps: Int!): Steps
+  createSleepData(userId: ID!, date: String!, duration: Int!, efficiency: Int!): SleepData
+  createStepsData(userId: ID!, date: String!, steps: Int!): StepsData
+  createPulseData(userId: ID!, date: String!, maxHr: Int!, minHr: Int!): PulseData
   
   requestDataAccess(dataOwnerId: ID!): DataAccessRequest
   answerDataAccessRequest(dataAccessRequestId: ID!, status: DataAccessRequestStatus!): DataAccessRequest
-}
+} 
 
 input AuthData {
 	username: String!
@@ -61,7 +64,7 @@ type User {
 	age: Int
 }
 
-type Sleep {
+type SleepData {
 	id: ID!
 	user: User
 	# date is of the form 'YYYY-MM-DD'
@@ -70,12 +73,20 @@ type Sleep {
 	efficiency: Int
 }
 
-type Steps {
+type StepsData {
 	id: ID!
 	user: User
 	# date is of the form 'YYYY-MM-DD'
 	date: String
 	steps: Int
+}
+
+type PulseData {
+	id: ID!
+	user: User
+	date: String
+	maxHr: Int
+	minHr: Int
 }
 
 type SigninPayload {

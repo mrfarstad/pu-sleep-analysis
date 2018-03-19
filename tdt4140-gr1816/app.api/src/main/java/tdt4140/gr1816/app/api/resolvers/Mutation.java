@@ -4,33 +4,38 @@ import com.coxautodev.graphql.tools.GraphQLRootResolver;
 import graphql.GraphQLException;
 import graphql.schema.DataFetchingEnvironment;
 import tdt4140.gr1816.app.api.DataAccessRequestRepository;
-import tdt4140.gr1816.app.api.SleepRepository;
-import tdt4140.gr1816.app.api.StepsRepository;
+import tdt4140.gr1816.app.api.PulseDataRepository;
+import tdt4140.gr1816.app.api.SleepDataRepository;
+import tdt4140.gr1816.app.api.StepsDataRepository;
 import tdt4140.gr1816.app.api.UserRepository;
 import tdt4140.gr1816.app.api.auth.AuthContext;
 import tdt4140.gr1816.app.api.auth.AuthData;
 import tdt4140.gr1816.app.api.types.DataAccessRequest;
 import tdt4140.gr1816.app.api.types.DataAccessRequestStatus;
+import tdt4140.gr1816.app.api.types.PulseData;
 import tdt4140.gr1816.app.api.types.SigninPayload;
-import tdt4140.gr1816.app.api.types.Sleep;
-import tdt4140.gr1816.app.api.types.Steps;
+import tdt4140.gr1816.app.api.types.SleepData;
+import tdt4140.gr1816.app.api.types.StepsData;
 import tdt4140.gr1816.app.api.types.User;
 
 public class Mutation implements GraphQLRootResolver {
 
   private final UserRepository userRepository;
-  private final SleepRepository sleepRepository;
-  private final StepsRepository stepsRepository;
+  private final SleepDataRepository sleepDataRepository;
+  private final StepsDataRepository stepsDataRepository;
   private final DataAccessRequestRepository dataAccessRequestRepository;
+  private final PulseDataRepository pulseDataRepository;
 
   public Mutation(
       UserRepository userRepository,
-      SleepRepository sleepRepository,
-      StepsRepository stepsRepository,
+      SleepDataRepository sleepDataRepository,
+      StepsDataRepository stepsDataRepository,
+      PulseDataRepository pulseDataRepository,
       DataAccessRequestRepository dataAccessRequestRepository) {
     this.userRepository = userRepository;
-    this.sleepRepository = sleepRepository;
-    this.stepsRepository = stepsRepository;
+    this.sleepDataRepository = sleepDataRepository;
+    this.stepsDataRepository = stepsDataRepository;
+    this.pulseDataRepository = pulseDataRepository;
     this.dataAccessRequestRepository = dataAccessRequestRepository;
   }
 
@@ -64,30 +69,43 @@ public class Mutation implements GraphQLRootResolver {
     throw new GraphQLException("Invalid credentials");
   }
 
-  public Sleep createSleep(String userId, String date, int duration, int efficiency) {
-    Sleep newSleep = new Sleep(userId, date, duration, efficiency);
-    return sleepRepository.saveSleep(newSleep);
+  public SleepData createSleepData(String userId, String date, int duration, int efficiency) {
+    SleepData newSleepData = new SleepData(userId, date, duration, efficiency);
+    return sleepDataRepository.saveSleepData(newSleepData);
   }
 
-  public Boolean deleteSleep(String sleepId) {
-    Sleep sleep = sleepRepository.findById(sleepId);
-    if (sleep == null) {
+  public Boolean deleteSleepData(String sleepId) {
+    SleepData sleepData = sleepDataRepository.findById(sleepId);
+    if (sleepData == null) {
       throw new GraphQLException("Invalid sleep id");
     }
-    return sleepRepository.deleteSleep(sleep);
+    return sleepDataRepository.deleteSleepData(sleepData);
   }
 
-  public Steps createSteps(String userId, String date, int steps) {
-    Steps newSteps = new Steps(userId, date, steps);
-    return stepsRepository.saveSteps(newSteps);
+  public StepsData createStepsData(String userId, String date, int steps) {
+    StepsData newStepsData = new StepsData(userId, date, steps);
+    return stepsDataRepository.saveStepsData(newStepsData);
   }
 
-  public Boolean deleteSteps(String stepsId) {
-    Steps steps = stepsRepository.findById(stepsId);
-    if (steps == null) {
+  public Boolean deleteStepsData(String stepsId) {
+    StepsData stepsData = stepsDataRepository.findById(stepsId);
+    if (stepsData == null) {
       throw new GraphQLException("Invalid steps id");
     }
-    return stepsRepository.deleteSteps(steps);
+    return stepsDataRepository.deleteStepsData(stepsData);
+  }
+
+  public PulseData createPulseData(String userId, String date, int maxHr, int minHr) {
+    PulseData newPulseData = new PulseData(userId, date, maxHr, minHr);
+    return pulseDataRepository.savePulseData(newPulseData);
+  }
+
+  public Boolean deletePulseData(String pulseDataId) {
+    PulseData pulseData = pulseDataRepository.findById(pulseDataId);
+    if (pulseData == null) {
+      throw new GraphQLException("Invalid pulse data id");
+    }
+    return pulseDataRepository.deletePulseData(pulseData);
   }
 
   public DataAccessRequest requestDataAccess(String dataOwnerId, DataFetchingEnvironment env) {
