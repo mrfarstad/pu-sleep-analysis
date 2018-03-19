@@ -94,9 +94,9 @@ public class UserGUITest extends ApplicationTest {
     ObservableList<String> doctorItems = doctorList.getItems();
 
     assertTrue(doctorItems.contains(request));
-    assertEquals(request.getStatusAsString(), "ACCEPTED");
-    
     doctorList.getSelectionModel().select(request);
+    assertEquals(request.getStatusAsString(), "ACCEPTED");
+
     clickOn("#removeDoctorButton");
     assertFalse(doctorItems.contains(request));
     assertEquals(request.getStatusAsString(), "REJECTED");
