@@ -8,9 +8,13 @@ public class Demo {
     System.out.println(userDataFetch.createUser("doctor", "test", true, "male", 22));
     System.out.println(userDataFetch.getAllUsers());
     User test = userDataFetch.signIn("test", "test");
-    userDataFetch.signIn("doctor", "test");
-    boolean succ = userDataFetch.requestDataAccess(test);
-    System.out.println(succ);
+    User doctor = userDataFetch.signIn("doctor", "test");
+    /* DataAccessRequest request = userDataFetch.requestDataAccess(test);
+    System.out.println(request.getDataOwner());
+    System.out.println(request.getId());
+    userDataFetch.signIn("test", "test");
+    boolean success = userDataFetch.answerDataAccessRequest(request, "ACCEPTED");
+    System.out.println(success); */
     System.out.println(userDataFetch.getCurrentUser());
     System.out.println(userDataFetch.getAccessRequestsToUser());
     System.out.println(userDataFetch.getAccessRequestsByDoctor());

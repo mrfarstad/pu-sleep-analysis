@@ -20,9 +20,9 @@ public class UserDataFetch {
   public String allUsersQuery = "{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}";
   public String currentUserQuery = "{\"query\":\"query{viewer{id username isDoctor gender age}}\"}";
   public String accessRequestsToUserQuery =
-      "{\"query\":\"query{dataAccessRequestsForMe{requestedBy{username isDoctor gender age}status}}\"}";
+      "{\"query\":\"query{dataAccessRequestsForMe{id dataOwner{id username isDoctor gender age} requestedBy{id username isDoctor gender age}status}}\"}";
   public String accessRequestsByDoctorQuery =
-      "{\"query\":\"query{myDataAccessRequests{dataOwner{username isDoctor gender age}status}}\"}";
+      "{\"query\":\"query{myDataAccessRequests{id dataOwner{id username isDoctor gender age} requestedBy{id username isDoctor gender age}status}}\"}";
 
   private DataGetter dataGetter;
 
@@ -204,7 +204,7 @@ public class UserDataFetch {
     String mutation =
         "{\"query\":\"mutation{requestDataAccess(dataOwnerId: \\\""
             + patient.getId()
-            + "\\\"){id dataOwner { id username isDoctor gender age }requestedBy { id username isDoctor gender age }status }}\"}";
+            + "\\\"){id dataOwner { id username isDoctor gender age }requestedBy { id username isDoctor gender age } status }}\"}";
     String responseJson = dataGetter.getData(mutation, this.currentToken);
 
     ObjectMapper mapper = new ObjectMapper();
@@ -222,8 +222,41 @@ public class UserDataFetch {
     } catch (IOException e) {
       e.printStackTrace();
     }
+
     if (accessRequest.getRequestedBy().getId().equals(this.currentToken)
         && (accessRequest.getDataOwner().getId().equals(patient.getId()))) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean answerDataAccessRequest(DataAccessRequest request, String answer) {
+    String mutation =
+        "{\"query\":\"mutation{answerDataAccessRequest(dataAccessRequestId: \\\""
+            + request.getId()
+            + "\\\", status: "
+            + answer
+            + "){id dataOwner { id username isDoctor gender age }requestedBy { id username isDoctor gender age }status }}\"}";
+
+    String responseJson = dataGetter.getData(mutation, this.currentToken);
+
+    ObjectMapper mapper = new ObjectMapper();
+    JsonFactory factory = mapper.getFactory();
+    JsonParser parser;
+    DataAccessRequest accessRequest = null;
+    try {
+      parser = factory.createParser(responseJson);
+      JsonNode root = mapper.readTree(parser);
+      JsonNode thirdJsonObject = root.get("data").get("answerDataAccessRequest");
+      accessRequest =
+          mapper.readerFor(new TypeReference<DataAccessRequest>() {}).readValue(thirdJsonObject);
+    } catch (JsonParseException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    if (accessRequest.getStatusAsString().equals(answer)) {
       return true;
     } else {
       return false;
