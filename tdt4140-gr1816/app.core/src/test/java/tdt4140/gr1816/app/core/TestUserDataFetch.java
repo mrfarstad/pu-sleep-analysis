@@ -4,11 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import org.junit.Test;
 import tdt4140.gr1816.app.core.DataAccessRequest.DataAccessRequestStatus;
@@ -47,6 +51,7 @@ public class TestUserDataFetch {
   private DataGetter test = mock(DataGetter.class);
 
   private UserDataFetch userDataFetch = new UserDataFetch(test);
+  String resourceResponsePath = "src/test/resources/tdt4140/gr1816/app/core/";
 
   @Test
   public void testCreateUserQuery() {
@@ -178,5 +183,147 @@ public class TestUserDataFetch {
     assertTrue(DataAccessRequest.statusToString(DataAccessRequestStatus.PENDING) instanceof String);
     assertTrue(
         DataAccessRequest.statusToString(DataAccessRequestStatus.REJECTED) instanceof String);
+  }
+
+  @Test
+  public void testGetAllSleepData() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "allSleepDataResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    List<SleepData> sleepData = userDataFetch.getAllSleepData();
+    assertTrue(sleepData.size() > 0);
+    for (SleepData sleep : sleepData) {
+      assertTrue(sleep.getId() instanceof String);
+      assertTrue(sleep.getUser() instanceof User);
+      assertTrue(sleep.getDate() instanceof String);
+      assertTrue(sleep.getDuration() > -1);
+      assertTrue(sleep.getEfficiency() > -1);
+    }
+  }
+
+  @Test
+  public void testGetSleepDataByViewer() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "sleepDataByViewerResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    List<SleepData> sleepData = userDataFetch.getSleepDataByViewer();
+    assertTrue(sleepData.size() > 0);
+    for (SleepData sleep : sleepData) {
+      assertTrue(sleep.getId() instanceof String);
+      assertTrue(sleep.getUser() instanceof User);
+      assertTrue(sleep.getDate() instanceof String);
+      assertTrue(sleep.getDuration() > -1);
+      assertTrue(sleep.getEfficiency() > -1);
+    }
+  }
+
+  @Test
+  public void createSleepData() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "createSleepDataResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    SleepData sleep = userDataFetch.createSleepData("2018-03-20", 20, 95);
+    assertTrue(sleep.getId() instanceof String);
+    assertTrue(sleep.getUser() instanceof User);
+    assertTrue(sleep.getDate() instanceof String);
+    assertTrue(sleep.getDuration() > -1);
+    assertTrue(sleep.getEfficiency() > -1);
+  }
+
+  @Test
+  public void deleteSleepData() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "deleteSleepDataResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    Boolean deleteSleep = userDataFetch.deleteSleepData("");
+    assertTrue(deleteSleep);
+  }
+
+  @Test
+  public void getAllStepsData() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "allStepsDataResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    List<StepsData> stepsData = userDataFetch.getAllStepsData();
+    assertTrue(stepsData.size() > 0);
+    for (StepsData steps : stepsData) {
+      assertTrue(steps.getId() instanceof String);
+      assertTrue(steps.getUser() instanceof User);
+      assertTrue(steps.getDate() instanceof String);
+      assertTrue(steps.getSteps() > -1);
+    }
+  }
+
+  @Test
+  public void createStepsData() {}
+
+  @Test
+  public void deleteStepsData() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "deleteStepsDataResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    Boolean deleteSteps = userDataFetch.deleteStepsData("");
+    assertTrue(deleteSteps);
+  }
+
+  @Test
+  public void getAllPulseData() {}
+
+  @Test
+  public void getPulseDataByViewer() {}
+
+  @Test
+  public void createPulseData() {}
+
+  @Test
+  public void deletePulseData() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "deletePulseDataResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    Boolean deletePulse = userDataFetch.deletePulseData("");
+    assertTrue(deletePulse);
   }
 }

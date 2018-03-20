@@ -1,0 +1,1 @@
+{"data":{"allSleepData":[{"id":"5ab16a3ec13edf0e675b66e3","date":"2017-04-02","user":{"id":"5ab167ecc13edf0681a935b4","username":"test"},"duration":567,"efficiency":96}]}}

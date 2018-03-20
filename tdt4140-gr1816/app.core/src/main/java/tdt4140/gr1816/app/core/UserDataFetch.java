@@ -308,17 +308,15 @@ public class UserDataFetch {
         JsonNode variableJson = mapper.valueToTree(variables);
         obj.put("variables", variableJson.toString());
       }
-
       String responseJson = dataGetter.getData(obj.toString(), this.currentToken);
       JsonFactory factory = mapper.getFactory();
       JsonParser parser = factory.createParser(responseJson);
       JsonNode root = mapper.readTree(parser);
-      JsonNode thirdJsonObject = root.get("data");
-      System.out.println(root);
+      JsonNode jsonObject = root.get("data");
       for (String node : levelNodes) {
-        thirdJsonObject = thirdJsonObject.get(node);
+        jsonObject = jsonObject.get(node);
       }
-      sleepData = mapper.readerFor(typeReference).readValue(thirdJsonObject);
+      sleepData = mapper.readerFor(typeReference).readValue(jsonObject);
     } catch (JsonParseException e) {
       e.printStackTrace();
     } catch (IOException e) {
@@ -355,25 +353,13 @@ public class UserDataFetch {
         variables);
   }
 
-  public StepsData createStepsData(String date, Integer steps) {
+  public Boolean deleteSleepData(String sleepId) {
     Map<String, String> variables = new HashMap<>();
-    variables.put("date", date);
-    variables.put("steps", steps.toString());
+    variables.put("sleep", sleepId);
     return getGenericData(
-        "createStepsDataQuery.txt",
-        Arrays.asList("createStepsData"),
-        new TypeReference<StepsData>() {},
-        variables);
-  }
-
-  public PulseData createPulseData(String date, Integer restHr) {
-    Map<String, String> variables = new HashMap<>();
-    variables.put("date", date);
-    variables.put("restHr", restHr.toString());
-    return getGenericData(
-        "createPulseDataQuery.txt",
-        Arrays.asList("createPulseData"),
-        new TypeReference<PulseData>() {},
+        "deleteSleepDataQuery.txt",
+        Arrays.asList("deleteSleepData"),
+        new TypeReference<Boolean>() {},
         variables);
   }
 
@@ -393,6 +379,27 @@ public class UserDataFetch {
         null);
   }
 
+  public StepsData createStepsData(String date, Integer steps) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("date", date);
+    variables.put("steps", steps.toString());
+    return getGenericData(
+        "createStepsDataQuery.txt",
+        Arrays.asList("createStepsData"),
+        new TypeReference<StepsData>() {},
+        variables);
+  }
+
+  public Boolean deleteStepsData(String stepsId) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("steps", stepsId);
+    return getGenericData(
+        "deleteStepsDataQuery.txt",
+        Arrays.asList("deleteStepsData"),
+        new TypeReference<Boolean>() {},
+        variables);
+  }
+
   public List<PulseData> getAllPulseData() {
     return getGenericData(
         "allPulseDataQuery.txt",
@@ -407,6 +414,27 @@ public class UserDataFetch {
         Arrays.asList("pulseDataByViewer"),
         new TypeReference<List<PulseData>>() {},
         null);
+  }
+
+  public PulseData createPulseData(String date, Integer restHr) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("date", date);
+    variables.put("restHr", restHr.toString());
+    return getGenericData(
+        "createPulseDataQuery.txt",
+        Arrays.asList("createPulseData"),
+        new TypeReference<PulseData>() {},
+        variables);
+  }
+
+  public Boolean deletePulseData(String pulseId) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("pulse", pulseId);
+    return getGenericData(
+        "deletePulseDataQuery.txt",
+        Arrays.asList("deletePulseData"),
+        new TypeReference<Boolean>() {},
+        variables);
   }
 
   public static void main(String[] args) {
@@ -426,9 +454,15 @@ public class UserDataFetch {
     System.out.println(pulseViewer);
     SleepData sleepCreate = data.createSleepData("2018-03-20", 10, 10);
     StepsData stepsCreate = data.createStepsData("2018-03-20", 10);
-    PulseData pulseCreate = data.createPulseData("2018-03-20", 60);
+    PulseData pulseCreate = data.createPulseData("2018-03-20", 10);
     System.out.println(sleepCreate);
     System.out.println(stepsCreate);
     System.out.println(pulseCreate);
+    Boolean sleepDelete = data.deleteSleepData(sleepCreate.getId());
+    Boolean stepsDelete = data.deleteStepsData(stepsCreate.getId());
+    Boolean pulseDelete = data.deletePulseData(pulseCreate.getId());
+    System.out.println(sleepDelete);
+    System.out.println(stepsDelete);
+    System.out.println(pulseDelete);
   }
 }

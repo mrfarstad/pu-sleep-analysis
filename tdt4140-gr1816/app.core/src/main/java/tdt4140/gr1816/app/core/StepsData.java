@@ -21,7 +21,7 @@ public class StepsData {
       @JsonProperty("id") String id,
       @JsonProperty("user") User user,
       @JsonProperty("date") String date,
-      @JsonProperty("duration") int steps) {
+      @JsonProperty("steps") int steps) {
     this.id = id;
     this.user = user;
     this.date = LocalDate.parse(date);

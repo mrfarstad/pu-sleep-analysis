@@ -1,0 +1,1 @@
+{"data":{"createSleepData":{"id":"5ab17c44c13edf12f7ba1243","date":"test","user":{"id":"5ab173c1c13edf146111e7bb","username":"test","isDoctor":true,"gender":"male","age":22},"duration":10,"efficiency":10}}}
