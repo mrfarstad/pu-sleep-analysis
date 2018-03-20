@@ -35,15 +35,13 @@ public class PulseDataRepository {
     Document doc = new Document();
     doc.append("user", pulseData.getUserId());
     doc.append("date", pulseData.getDate());
-    doc.append("maxHr", pulseData.getMaxHr());
-    doc.append("minHr", pulseData.getMinHr());
+    doc.append("restHr", pulseData.getRestHr());
     pulseDataDoc.insertOne(doc);
     return new PulseData(
         doc.get("_id").toString(),
         pulseData.getUserId(),
         pulseData.getDate(),
-        pulseData.getMaxHr(),
-        pulseData.getMinHr());
+        pulseData.getRestHr());
   }
 
   public boolean deletePulseData(PulseData pulseData) {
@@ -60,7 +58,6 @@ public class PulseDataRepository {
         doc.get("_id").toString(),
         doc.getString("user"),
         doc.getString("date"),
-        doc.getInteger("maxHr"),
-        doc.getInteger("minHr"));
+        doc.getInteger("restHr"));
   }
 }

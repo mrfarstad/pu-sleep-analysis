@@ -1,5 +1,3 @@
-image: odinuge/maven-javafx:3-jdk-8
-
 services:
   - mongo:latest
 
@@ -14,11 +12,13 @@ variables:
   MONGO_HOST: "mongo"
 
 build-job:
+  image: odinuge/maven-javafx:3-jdk-8
   stage: build
   script:
     - "mvn clean compile -f tdt4140-gr1816/pom.xml $MAVEN_CLI_OPTS"
 
 unittest-job:
+  image: odinuge/maven-javafx:3-jdk-8
   stage: test
   dependencies:
     - build-job
@@ -26,8 +26,27 @@ unittest-job:
     - "mvn package -f tdt4140-gr1816/pom.xml $MAVEN_CLI_OPTS"
 
 integrationtest-job:
+  image: odinuge/maven-javafx:3-jdk-8
   stage: test
   dependencies:
     - build-job
   script:
     - "mvn verify -f tdt4140-gr1816/pom.xml $MAVEN_CLI_OPTS"
+
+build-exporter:
+  image: golang:1.10
+  stage: build
+  script:
+    - cd fitbit-exporter
+    - go get "github.com/odinuge/go-graphql"
+    - go build
+
+test-exporter:
+  image: golang:1.10
+  stage: test
+  script:
+    - cd fitbit-exporter
+    - go get "github.com/odinuge/go-graphql"
+    - diff -u <(echo -n) <(gofmt -d ./)
+    - go vet
+    - go test

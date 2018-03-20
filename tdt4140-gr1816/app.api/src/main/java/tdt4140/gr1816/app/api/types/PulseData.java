@@ -4,18 +4,17 @@ public class PulseData {
   private String id;
   private String userId;
   private String date;
-  private int maxHr;
+  private int restHr;
 
-  public PulseData(String userId, String date, int maxHr, int minHr) {
-    this(null, userId, date, maxHr, minHr);
+  public PulseData(String userId, String date, int restHr) {
+    this(null, userId, date, restHr);
   }
 
-  public PulseData(String id, String userId, String date, int maxHr, int minHr) {
+  public PulseData(String id, String userId, String date, int restHr) {
     this.id = id;
     this.userId = userId;
     this.date = date;
-    this.maxHr = maxHr;
-    this.minHr = minHr;
+    this.restHr = restHr;
   }
 
   public String getId() {
@@ -30,13 +29,7 @@ public class PulseData {
     return date;
   }
 
-  public int getMaxHr() {
-    return maxHr;
+  public int getRestHr() {
+    return restHr;
   }
-
-  public int getMinHr() {
-    return minHr;
-  }
-
-  private int minHr;
 }
