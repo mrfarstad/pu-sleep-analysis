@@ -60,21 +60,12 @@ func fetchSleepData(givenDate time.Time, data *SleepData) error {
 	return fetchData(givenDate, data, path)
 }
 
-func aggregateSleepLevelData(sleepData SleepData) []SleepLevel {
+func aggregateSleepLevelData(sleepData SleepData) map[string]int {
 	m := make(map[string]int)
 	for _, sleep := range sleepData.Sleep {
 		for _, level := range sleep.Levels.Data {
 			m[level.Level] = level.Seconds + m[level.Level]
 		}
 	}
-
-	v := make([]SleepLevel, 0, len(m))
-
-	for level, sum := range m {
-		v = append(v, SleepLevel{
-			Level:   level,
-			Seconds: sum,
-		})
-	}
-	return v
+	return m
 }

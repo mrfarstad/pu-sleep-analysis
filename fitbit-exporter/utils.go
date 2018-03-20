@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/odinuge/go-graphql"
 	"io/ioutil"
 	"net/http"
@@ -20,7 +21,10 @@ func sendToGraphqlApi(query string, vars map[string]string) {
 
 	ctx := context.Background()
 
-	if err := client.Run(ctx, req, nil); err != nil {
+	resp := struct{}{}
+
+	if err := client.Run(ctx, req, resp); err != nil {
+		fmt.Println("Error calling API")
 		panic(err)
 	}
 }
@@ -34,12 +38,21 @@ func fetchAPI(endpoint string) ([]byte, error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error fetching FitbitAPI")
+		panic(err)
+	}
+	if resp.StatusCode != 200 {
+		fmt.Printf("Response: %s\n", body)
+		panic(fmt.Sprintf("Error fetching API. statusCode: %d\n", resp.StatusCode))
+
+	}
 	return body, err
 
 }
