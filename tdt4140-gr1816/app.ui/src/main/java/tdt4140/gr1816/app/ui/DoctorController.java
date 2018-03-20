@@ -55,13 +55,12 @@ public class DoctorController implements Initializable {
   ObservableList<DataAccessRequest> patientListViewItems;
 
 
-  // Patient tab
-  @FXML private ChoiceBox<String> patientChoiceBox;
-  private ObservableList<User> accessToPatientList;
+  // Patient data tab
+  @FXML private ChoiceBox<User> patientChoiceBox;
+  private ObservableList<User> acceptedPatientList = FXCollections.observableArrayList();
   @FXML private ChoiceBox<String> dataChoiceBox;
-
+  @FXML private Text patientTF;
   @FXML private Button viewGraphButton;
-
   @FXML private PieChart sleepPieChart;
 
   @FXML private LineChart<String, Number> pulseLineChart;
@@ -112,6 +111,7 @@ public class DoctorController implements Initializable {
   }
 
   private void showSleepChart() {
+	User user = getSelectedPatientCB();
     System.out.println("showSleepPieChart");
     ObservableList<PieChart.Data> pieChartData =
         FXCollections.observableArrayList(
@@ -126,6 +126,7 @@ public class DoctorController implements Initializable {
   }
 
   private void showPulseChart() {
+	  User user = getSelectedPatientCB();
     ObservableList<XYChart.Data<String, Number>> lineChartData =
         FXCollections.observableArrayList(
             new XYChart.Data("1", 90),
@@ -145,6 +146,7 @@ public class DoctorController implements Initializable {
   }
 
   private void showStepChart() {
+	  User user = getSelectedPatientCB();
     ObservableList<XYChart.Data<String, Number>> barChartData =
         FXCollections.observableArrayList(
             new XYChart.Data("20.09", 3059),
@@ -199,11 +201,25 @@ public class DoctorController implements Initializable {
         .forEach(request -> patientListViewItems.add(request));
   }
 
-  public void setPatientChoiceBox() {}
+  public void setPatientChoiceBox() {
+	  acceptedPatientList.clear();
+	  List<DataAccessRequest> requests = FxApp.userDataFetch.getAccessRequestsByDoctor();
+	  requests.stream().filter(request -> !acceptedPatientList.contains(request.getDataOwner())).
+	  filter(request -> request.getStatusAsString().equals("ACCEPTED")).
+	  forEach(request -> acceptedPatientList.add(request.getDataOwner()));
+	  patientChoiceBox.setItems(acceptedPatientList);
+  }
+ 
+  public User getSelectedPatientCB() {
+	  User user = patientChoiceBox.getValue();
+	  patientTF.setText(user.getUsername() + ".");
+	  return user;
+  }
+  
 
   public void setDataChoiceBox() {
     dataChoiceBox.getItems().add("Pulse");
     dataChoiceBox.getItems().add("Steps");
     dataChoiceBox.getItems().add("Sleep");
-  }
+  } 
 }
