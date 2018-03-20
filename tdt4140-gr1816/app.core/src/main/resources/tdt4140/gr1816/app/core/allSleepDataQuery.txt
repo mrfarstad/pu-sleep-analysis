@@ -1,0 +1,12 @@
+query {
+  allSleepData {
+    id
+    date
+    user {
+      id
+      username
+    }
+    duration
+    efficiency
+  }
+}

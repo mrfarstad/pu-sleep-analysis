@@ -1,0 +1,3 @@
+mutation($steps: ID!) {
+  deleteStepsData(sleepId: $sleep)
+}

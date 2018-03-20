@@ -29,9 +29,13 @@ type Mutation {
   deleteUser(auth: AuthData!): Boolean
  
  # date is of the form 'YYYY-MM-DD'
-  createSleepData(userId: ID!, date: String!, duration: Int!, efficiency: Int!): SleepData
-  createStepsData(userId: ID!, date: String!, steps: Int!): StepsData
-  createPulseData(userId: ID!, date: String!, maxHr: Int!, minHr: Int!): PulseData
+  createSleepData(date: String!, duration: Int!, efficiency: Int!): SleepData
+  createStepsData(date: String!, steps: Int!): StepsData
+  createPulseData(date: String!, maxHr: Int!, minHr: Int!): PulseData
+  
+  deleteSleepData(sleepId: ID!): Boolean
+  deleteStepsData(stepsId: ID!): Boolean
+  deletePulseData(pulseId: ID!): Boolean
   
   requestDataAccess(dataOwnerId: ID!): DataAccessRequest
   answerDataAccessRequest(dataAccessRequestId: ID!, status: DataAccessRequestStatus!): DataAccessRequest

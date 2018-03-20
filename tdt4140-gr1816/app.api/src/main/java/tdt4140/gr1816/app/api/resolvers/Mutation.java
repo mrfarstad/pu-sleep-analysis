@@ -69,8 +69,14 @@ public class Mutation implements GraphQLRootResolver {
     throw new GraphQLException("Invalid credentials");
   }
 
-  public SleepData createSleepData(String userId, String date, int duration, int efficiency) {
-    SleepData newSleepData = new SleepData(userId, date, duration, efficiency);
+  public SleepData createSleepData(
+      String date, int duration, int efficiency, DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      throw new GraphQLException("Please log in");
+    }
+    SleepData newSleepData = new SleepData(user.getId(), date, duration, efficiency);
     return sleepDataRepository.saveSleepData(newSleepData);
   }
 
@@ -82,8 +88,13 @@ public class Mutation implements GraphQLRootResolver {
     return sleepDataRepository.deleteSleepData(sleepData);
   }
 
-  public StepsData createStepsData(String userId, String date, int steps) {
-    StepsData newStepsData = new StepsData(userId, date, steps);
+  public StepsData createStepsData(String date, int steps, DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      throw new GraphQLException("Please log in");
+    }
+    StepsData newStepsData = new StepsData(user.getId(), date, steps);
     return stepsDataRepository.saveStepsData(newStepsData);
   }
 
@@ -95,8 +106,13 @@ public class Mutation implements GraphQLRootResolver {
     return stepsDataRepository.deleteStepsData(stepsData);
   }
 
-  public PulseData createPulseData(String userId, String date, int maxHr, int minHr) {
-    PulseData newPulseData = new PulseData(userId, date, maxHr, minHr);
+  public PulseData createPulseData(String date, int maxHr, int minHr, DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      throw new GraphQLException("Please log in");
+    }
+    PulseData newPulseData = new PulseData(user.getId(), date, maxHr, minHr);
     return pulseDataRepository.savePulseData(newPulseData);
   }
 
