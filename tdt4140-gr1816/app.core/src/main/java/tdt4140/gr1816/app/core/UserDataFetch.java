@@ -366,11 +366,10 @@ public class UserDataFetch {
         variables);
   }
 
-  public PulseData createPulseData(String date, Integer maxHr, Integer minHr) {
+  public PulseData createPulseData(String date, Integer restHr) {
     Map<String, String> variables = new HashMap<>();
     variables.put("date", date);
-    variables.put("maxHr", maxHr.toString());
-    variables.put("minHr", minHr.toString());
+    variables.put("restHr", restHr.toString());
     return getGenericData(
         "createPulseDataQuery.txt",
         Arrays.asList("createPulseData"),
@@ -427,7 +426,7 @@ public class UserDataFetch {
     System.out.println(pulseViewer);
     SleepData sleepCreate = data.createSleepData("2018-03-20", 10, 10);
     StepsData stepsCreate = data.createStepsData("2018-03-20", 10);
-    PulseData pulseCreate = data.createPulseData("2018-03-20", 10, 10);
+    PulseData pulseCreate = data.createPulseData("2018-03-20", 60);
     System.out.println(sleepCreate);
     System.out.println(stepsCreate);
     System.out.println(pulseCreate);

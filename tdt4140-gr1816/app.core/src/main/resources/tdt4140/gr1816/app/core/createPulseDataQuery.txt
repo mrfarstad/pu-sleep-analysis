@@ -1,12 +1,11 @@
-mutation($date: String!, $maxHr: Int!, $minHr: Int!) {
-  createPulseData(date: $date maxHr: $maxHr minHr: $minHr) {
+mutation($date: String!, $restHr: Int!) {
+  createPulseData(date: $date restHr: $restHr) {
     id
     user {
       id
       username
     }
     date
-    maxHr
-    minHr
+    restHr
   }
 }

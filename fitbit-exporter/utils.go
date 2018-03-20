@@ -17,7 +17,7 @@ func sendToGraphqlApi(query string, vars map[string]string) {
 	for key, value := range vars {
 		req.Var(key, value)
 	}
-	req.Header.Set("Authentication", "Bearer "+apiToken)
+	req.Header.Set("Authorization", "Bearer "+apiToken)
 
 	ctx := context.Background()
 

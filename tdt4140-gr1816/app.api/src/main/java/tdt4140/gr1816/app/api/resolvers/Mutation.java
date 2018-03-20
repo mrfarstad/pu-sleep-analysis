@@ -106,13 +106,13 @@ public class Mutation implements GraphQLRootResolver {
     return stepsDataRepository.deleteStepsData(stepsData);
   }
 
-  public PulseData createPulseData(String date, int maxHr, int minHr, DataFetchingEnvironment env) {
+  public PulseData createPulseData(String date, int restHr, DataFetchingEnvironment env) {
     AuthContext context = env.getContext();
     User user = context.getUser();
     if (user == null) {
       throw new GraphQLException("Please log in");
     }
-    PulseData newPulseData = new PulseData(user.getId(), date, maxHr, minHr);
+    PulseData newPulseData = new PulseData(user.getId(), date, restHr);
     return pulseDataRepository.savePulseData(newPulseData);
   }
 

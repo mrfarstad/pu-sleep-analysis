@@ -13,23 +13,18 @@ public class PulseData {
   @JsonProperty("date")
   private String date;
 
-  @JsonProperty("maxHr")
-  private int maxHr;
-
-  @JsonProperty("minHr")
-  private int minHr;
+  @JsonProperty("restHr")
+  private int restHr;
 
   public PulseData(
       @JsonProperty("id") String id,
       @JsonProperty("user") User user,
       @JsonProperty("date") String date,
-      @JsonProperty("maxHr") int maxHr,
-      @JsonProperty("minHr") int minHr) {
+      @JsonProperty("restHr") int restHr) {
     this.id = id;
     this.user = user;
     this.date = date;
-    this.maxHr = maxHr;
-    this.minHr = minHr;
+    this.restHr = restHr;
   }
 
   @JsonGetter
@@ -48,12 +43,7 @@ public class PulseData {
   }
 
   @JsonGetter
-  public int getMaxHr() {
-    return maxHr;
-  }
-
-  @JsonGetter
-  public int getMinHr() {
-    return minHr;
+  public int getRestHr() {
+    return restHr;
   }
 }

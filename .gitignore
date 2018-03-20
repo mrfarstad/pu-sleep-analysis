@@ -173,3 +173,4 @@ fitbit-exporter/.idea/
 # End of https://www.gitignore.io/api/go
 #
 fitbit-exporter/fitbit-exporter
+*.iml

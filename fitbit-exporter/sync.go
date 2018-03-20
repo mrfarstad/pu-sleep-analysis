@@ -15,8 +15,8 @@ func syncSleepData(givenDate time.Time) {
 	levelData := aggregateSleepLevelData(sleepData)
 
 	query := `
-mutation ($date: String!, $duration: Int!, $efficiency: Int!, $userId: ID!) {
-	createSleepData(date: $date, duration: $duration, efficiency: $efficiency, userId: $userId) {
+mutation ($date: String!, $duration: Int!, $efficiency: Int!) {
+	createSleepData(date: $date, duration: $duration, efficiency: $efficiency) {
 		id
 	}
 }`
@@ -25,7 +25,6 @@ mutation ($date: String!, $duration: Int!, $efficiency: Int!, $userId: ID!) {
 	variables["efficiency"] = "0"
 	variables["duration"] = "0"
 	variables["date"] = timeToFitbitDate(givenDate)
-	variables["userId"] = apiToken
 
 	for _, sleep := range sleepData.Sleep {
 		if sleep.IsMainSleep {
@@ -58,15 +57,14 @@ func syncActivityData(givenDate time.Time) {
 		fmt.Printf(" - Steps: %d \n", activitySummaryData.Summary.Steps)
 	}
 	const query = `
-mutation ($date: String!, $steps: Int!, $userId: ID!){
-	createStepsData(date: $date, steps: $steps, userId: $userId) {
+mutation ($date: String!, $steps: Int!){
+	createStepsData(date: $date, steps: $steps) {
 		id
 	}
 }`
 	variables := make(map[string]string)
 	variables["steps"] = strconv.Itoa(activitySummaryData.Summary.Steps)
 	variables["date"] = timeToFitbitDate(givenDate)
-	variables["userId"] = apiToken
 	sendToGraphqlApi(query, variables)
 }
 
@@ -82,7 +80,6 @@ func syncHRData(givenDate time.Time) {
 	// We only fetch one date, and therefore we just use the first day
 	if len(data.ActivitiesHeart) == 0 {
 		fmt.Println(" - Unable to find restingHr")
-
 		return
 	}
 
@@ -94,17 +91,15 @@ func syncHRData(givenDate time.Time) {
 
 	variables := make(map[string]string)
 	variables["date"] = timeToFitbitDate(givenDate)
-	variables["userId"] = apiToken
 	variables["restHr"] = strconv.Itoa(restingHr)
 
 	const query = `
-mutation ($date: String!, $restHr: Int!, $userId: ID!){
-	createPulseData(date: $date, restHr: $restHr, userId: $userId) {
+mutation ($date: String!, $restHr: Int!){
+	createPulseData(date: $date, restHr: $restHr) {
 		id
 	}
 }`
-	// Not yet implemented
-	// sendToGraphqlApi(query, variables)
+	sendToGraphqlApi(query, variables)
 
 }
 
