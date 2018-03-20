@@ -56,6 +56,8 @@
         <finalName>gruppe16</finalName>
 
         <plugins>
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -69,6 +71,17 @@
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.1.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>2.20.1</version>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <environmentVariables>
+                        <DB_NAME>testing-db</DB_NAME>
+                        <TESTING>true</TESTING>
+                    </environmentVariables>
+                </configuration>
             </plugin>
 
             <plugin>
