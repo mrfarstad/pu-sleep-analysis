@@ -6,8 +6,14 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 public class UserDataFetch {
@@ -284,5 +290,146 @@ public class UserDataFetch {
     }
 
     return requests;
+  }
+
+  public <T> T getGenericData(
+      String fileName,
+      List<String> levelNodes,
+      TypeReference<T> typeReference,
+      Map<String, String> variables) {
+    T sleepData = null;
+    String resourcePath = "src/main/resources/tdt4140/gr1816/app/core/";
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      ObjectNode obj = mapper.createObjectNode();
+      String allSleepDataQuery = new String(Files.readAllBytes(Paths.get(resourcePath + fileName)));
+      obj.put("query", allSleepDataQuery);
+      if (variables != null) {
+        JsonNode variableJson = mapper.valueToTree(variables);
+        obj.put("variables", variableJson.toString());
+      }
+
+      String responseJson = dataGetter.getData(obj.toString(), this.currentToken);
+      JsonFactory factory = mapper.getFactory();
+      JsonParser parser = factory.createParser(responseJson);
+      JsonNode root = mapper.readTree(parser);
+      JsonNode thirdJsonObject = root.get("data");
+      System.out.println(root);
+      for (String node : levelNodes) {
+        thirdJsonObject = thirdJsonObject.get(node);
+      }
+      sleepData = mapper.readerFor(typeReference).readValue(thirdJsonObject);
+    } catch (JsonParseException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return sleepData;
+  }
+
+  public List<SleepData> getAllSleepData() {
+    return getGenericData(
+        "allSleepDataQuery.txt",
+        Arrays.asList("allSleepData"),
+        new TypeReference<List<SleepData>>() {},
+        null);
+  }
+
+  public List<SleepData> getSleepDataByViewer() {
+    return getGenericData(
+        "sleepDataByViewerQuery.txt",
+        Arrays.asList("sleepDataByViewer"),
+        new TypeReference<List<SleepData>>() {},
+        null);
+  }
+
+  public SleepData createSleepData(String date, Integer duration, Integer efficiency) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("date", date);
+    variables.put("duration", duration.toString());
+    variables.put("efficiency", efficiency.toString());
+    return getGenericData(
+        "createSleepDataQuery.txt",
+        Arrays.asList("createSleepData"),
+        new TypeReference<SleepData>() {},
+        variables);
+  }
+
+  public StepsData createStepsData(String date, Integer steps) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("date", date);
+    variables.put("steps", steps.toString());
+    return getGenericData(
+        "createStepsDataQuery.txt",
+        Arrays.asList("createStepsData"),
+        new TypeReference<StepsData>() {},
+        variables);
+  }
+
+  public PulseData createPulseData(String date, Integer maxHr, Integer minHr) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("date", date);
+    variables.put("maxHr", maxHr.toString());
+    variables.put("minHr", minHr.toString());
+    return getGenericData(
+        "createPulseDataQuery.txt",
+        Arrays.asList("createPulseData"),
+        new TypeReference<PulseData>() {},
+        variables);
+  }
+
+  public List<StepsData> getAllStepsData() {
+    return getGenericData(
+        "allStepsDataQuery.txt",
+        Arrays.asList("allStepsData"),
+        new TypeReference<List<StepsData>>() {},
+        null);
+  }
+
+  public List<StepsData> getStepsDataByViewer() {
+    return getGenericData(
+        "stepsDataByViewerQuery.txt",
+        Arrays.asList("stepsDataByViewer"),
+        new TypeReference<List<StepsData>>() {},
+        null);
+  }
+
+  public List<PulseData> getAllPulseData() {
+    return getGenericData(
+        "allPulseDataQuery.txt",
+        Arrays.asList("allPulseData"),
+        new TypeReference<List<PulseData>>() {},
+        null);
+  }
+
+  public List<PulseData> getPulseDataByViewer() {
+    return getGenericData(
+        "pulseDataByViewerQuery.txt",
+        Arrays.asList("pulseDataByViewer"),
+        new TypeReference<List<PulseData>>() {},
+        null);
+  }
+
+  public static void main(String[] args) {
+    UserDataFetch data = new UserDataFetch(new DataGetter());
+    data.signIn("test", "test");
+    List<SleepData> sleep = data.getAllSleepData();
+    List<StepsData> steps = data.getAllStepsData();
+    List<PulseData> pulse = data.getAllPulseData();
+    System.out.println(sleep);
+    System.out.println(steps);
+    System.out.println(pulse);
+    List<SleepData> sleepViewer = data.getSleepDataByViewer();
+    List<StepsData> stepsViewer = data.getStepsDataByViewer();
+    List<PulseData> pulseViewer = data.getPulseDataByViewer();
+    System.out.println(sleepViewer);
+    System.out.println(stepsViewer);
+    System.out.println(pulseViewer);
+    SleepData sleepCreate = data.createSleepData("2018-03-20", 10, 10);
+    StepsData stepsCreate = data.createStepsData("2018-03-20", 10);
+    PulseData pulseCreate = data.createPulseData("2018-03-20", 10, 10);
+    System.out.println(sleepCreate);
+    System.out.println(stepsCreate);
+    System.out.println(pulseCreate);
   }
 }

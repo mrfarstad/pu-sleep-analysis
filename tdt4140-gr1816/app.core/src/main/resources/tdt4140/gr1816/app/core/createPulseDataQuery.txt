@@ -1,0 +1,12 @@
+mutation($date: String!, $maxHr: Int!, $minHr: Int!) {
+  createPulseData(date: $date maxHr: $maxHr minHr: $minHr) {
+    id
+    user {
+      id
+      username
+    }
+    date
+    maxHr
+    minHr
+  }
+}

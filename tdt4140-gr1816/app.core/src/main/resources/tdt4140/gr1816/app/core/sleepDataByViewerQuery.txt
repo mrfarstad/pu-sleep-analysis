@@ -1,0 +1,12 @@
+query {
+  sleepDataByViewer {
+    id
+    date
+    user {
+      id
+      username
+    }
+    duration
+    efficiency
+  }
+}
