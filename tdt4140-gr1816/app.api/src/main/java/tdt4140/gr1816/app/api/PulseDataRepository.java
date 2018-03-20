@@ -3,10 +3,12 @@ package tdt4140.gr1816.app.api;
 import static com.mongodb.client.model.Filters.eq;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import tdt4140.gr1816.app.api.types.PulseData;
 
@@ -36,7 +38,19 @@ public class PulseDataRepository {
     doc.append("user", pulseData.getUserId());
     doc.append("date", pulseData.getDate());
     doc.append("restHr", pulseData.getRestHr());
-    pulseDataDoc.insertOne(doc);
+
+    Bson filter =
+        Filters.and(
+            Filters.eq("date", pulseData.getDate()), Filters.eq("user", pulseData.getUserId()));
+    Document old = pulseDataDoc.find(filter).first();
+    if (old != null) {
+      pulseDataDoc.updateOne(
+          eq("_id", new ObjectId(old.get("_id").toString())), new Document("$set", doc));
+      doc.append("_id", old.get("_id").toString());
+    } else {
+      pulseDataDoc.insertOne(doc);
+    }
+
     return new PulseData(
         doc.get("_id").toString(),
         pulseData.getUserId(),
