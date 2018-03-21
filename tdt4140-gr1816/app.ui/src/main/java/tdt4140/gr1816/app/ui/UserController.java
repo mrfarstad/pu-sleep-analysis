@@ -56,6 +56,10 @@ public class UserController implements Initializable {
   @FXML private CategoryAxis pulseChartXAxis;
   @FXML private NumberAxis pulseChartYAxis;
   
+  @FXML private BarChart<String, Number> sleepBarChart;
+  @FXML private CategoryAxis sleepChartXAxis;
+  @FXML private NumberAxis sleepChartYAxis;
+  
   private User user;
   private UserDataFetch userDataFetch;
 
@@ -129,15 +133,41 @@ public class UserController implements Initializable {
   
   public void showStepChart() {
 	  hideCharts();
+	  stepBarChart.getData().clear();
+	  stepBarChart.setBarGap(0);
+	 
 	  ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
+	  List<StepsData> stepsDataList = FxApp.userDataFetch.getStepsDataByViewer();
+	  stepsDataList.stream()
+	  .forEach(stepData -> barChartData.add(new XYChart.Data<>(stepData.getDate().toString(), stepData.getSteps())));
+	  XYChart.Series<String, Number> series = new XYChart.Series<>(barChartData);
 	  
+	  stepBarChart.getData().add(series);
 	  stepBarChart.setVisible(true);
   }
   public void showPulseChart() {
+	  hideCharts();
+	  pulseLineChart.getData().clear();
+	  ObservableList<XYChart.Data<String, Number>> lineChartData = FXCollections.observableArrayList();
+	  List<PulseData> pulseDataList = FxApp.userDataFetch.getPulseDataByViewer();
+	  pulseDataList.stream()
+	  .forEach(pulseData -> lineChartData.add(new XYChart.Data<>(pulseData.getDate().toString(), pulseData.getRestHr())));
+	  XYChart.Series<String, Number> series = new XYChart.Series<>(lineChartData);
+
+	  pulseLineChart.getData().add(series);
 	  pulseLineChart.setVisible(true);
   }
   public void showSleepDChart() {
+	  hideCharts();
+	  sleepBarChart.getData().clear();
+	  ObservableList<XYChart.Data<String, Number>> sleepBarChartData = FXCollections.observableArrayList();
+	  List<SleepData> sleepDataList = FxApp.userDataFetch.getSleepDataByViewer();
+	  sleepDataList.stream()
+	  .forEach(sleepData -> sleepBarChartData.add(new XYChart.Data<>(sleepData.getDate().toString(), sleepData.getDuration())));
+	  XYChart.Series<String, Number> series = new XYChart.Series<>(sleepBarChartData);
 	  
+	  sleepBarChart.getData().add(series);
+	  sleepBarChart.setVisible(true);
   }
 
   @Override
@@ -212,6 +242,7 @@ public class UserController implements Initializable {
   private void hideCharts() {
 	  stepBarChart.setVisible(false);
 	  pulseLineChart.setVisible(false);
+	  sleepBarChart.setVisible(false);
 	 
   }
   public void setDataChoiceBox() {

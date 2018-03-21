@@ -160,6 +160,14 @@
                                         <NumberAxis side="LEFT" />
                                       </yAxis>
                                     </LineChart>
+                                    <BarChart fx:id="sleepBarChart">
+                                      <xAxis>
+                                        <CategoryAxis fx:id="sleepChartXAxis" side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis fx:id="sleepChartYAxis" side="LEFT" />
+                                      </yAxis>
+                                    </BarChart>
                                  </children>
                               </StackPane>
                               <ChoiceBox fx:id="dataChoiceBox" layoutX="30.0" layoutY="33.0" prefHeight="26.0" prefWidth="150.0" />

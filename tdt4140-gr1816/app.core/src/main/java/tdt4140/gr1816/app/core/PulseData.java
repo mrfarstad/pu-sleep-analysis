@@ -2,6 +2,7 @@ package tdt4140.gr1816.app.core;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDate;
 
 public class PulseData {
   @JsonProperty("id")
@@ -11,7 +12,7 @@ public class PulseData {
   private User user;
 
   @JsonProperty("date")
-  private String date;
+  private LocalDate date;
 
   @JsonProperty("restHr")
   private int restHr;
@@ -23,7 +24,7 @@ public class PulseData {
       @JsonProperty("restHr") int restHr) {
     this.id = id;
     this.user = user;
-    this.date = date;
+    this.date = LocalDate.parse(date);
     this.restHr = restHr;
   }
 
@@ -38,7 +39,7 @@ public class PulseData {
   }
 
   @JsonGetter
-  public String getDate() {
+  public LocalDate getDate() {
     return date;
   }
 

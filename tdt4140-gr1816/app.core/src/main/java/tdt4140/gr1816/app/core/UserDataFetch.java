@@ -298,7 +298,7 @@ public class UserDataFetch {
       TypeReference<T> typeReference,
       Map<String, String> variables) {
     T sleepData = null;
-    String resourcePath = "src/main/resources/tdt4140/gr1816/app/core/";
+    String resourcePath = "../app.core/src/main/resources/tdt4140/gr1816/app/core/";
     try {
       ObjectMapper mapper = new ObjectMapper();
       ObjectNode obj = mapper.createObjectNode();
