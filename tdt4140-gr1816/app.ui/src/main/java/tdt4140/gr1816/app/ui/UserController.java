@@ -3,7 +3,6 @@ package tdt4140.gr1816.app.ui;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -47,19 +46,19 @@ public class UserController implements Initializable {
   @FXML private DatePicker fromDate;
   @FXML private DatePicker toDate;
   @FXML private Button viewGraphButton;
-  
+
   @FXML private BarChart<String, Number> stepBarChart;
   @FXML private CategoryAxis stepChartXAxis;
   @FXML private NumberAxis stepChartYAxis;
-  
+
   @FXML private LineChart<String, Number> pulseLineChart;
   @FXML private CategoryAxis pulseChartXAxis;
   @FXML private NumberAxis pulseChartYAxis;
-  
+
   @FXML private BarChart<String, Number> sleepBarChart;
   @FXML private CategoryAxis sleepChartXAxis;
   @FXML private NumberAxis sleepChartYAxis;
-  
+
   private User user;
   private UserDataFetch userDataFetch;
 
@@ -119,55 +118,71 @@ public class UserController implements Initializable {
   }
 
   public void handleViewGraphButton() {
-	  if (dataChoiceBox.getValue().equals("Steps")) {
-		hideCharts();
-		showStepChart(); 
-	  } else if (dataChoiceBox.getValue().equals("Pulse")){
-		  hideCharts();
-		  showPulseChart();
-	  }else if (dataChoiceBox.getValue().equals("Sleep - duration")) {
-		  hideCharts();
-		  showSleepDChart();
-	  }
+    if (dataChoiceBox.getValue().equals("Steps")) {
+      hideCharts();
+      showStepChart();
+    } else if (dataChoiceBox.getValue().equals("Pulse")) {
+      hideCharts();
+      showPulseChart();
+    } else if (dataChoiceBox.getValue().equals("Sleep - duration")) {
+      hideCharts();
+      showSleepDChart();
+    }
   }
-  
-  public void showStepChart() {
-	  hideCharts();
-	  stepBarChart.getData().clear();
-	  stepBarChart.setBarGap(0);
-	 
-	  ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
-	  List<StepsData> stepsDataList = FxApp.userDataFetch.getStepsDataByViewer();
-	  stepsDataList.stream()
-	  .forEach(stepData -> barChartData.add(new XYChart.Data<>(stepData.getDate().toString(), stepData.getSteps())));
-	  XYChart.Series<String, Number> series = new XYChart.Series<>(barChartData);
-	  
-	  stepBarChart.getData().add(series);
-	  stepBarChart.setVisible(true);
-  }
-  public void showPulseChart() {
-	  hideCharts();
-	  pulseLineChart.getData().clear();
-	  ObservableList<XYChart.Data<String, Number>> lineChartData = FXCollections.observableArrayList();
-	  List<PulseData> pulseDataList = FxApp.userDataFetch.getPulseDataByViewer();
-	  pulseDataList.stream()
-	  .forEach(pulseData -> lineChartData.add(new XYChart.Data<>(pulseData.getDate().toString(), pulseData.getRestHr())));
-	  XYChart.Series<String, Number> series = new XYChart.Series<>(lineChartData);
 
-	  pulseLineChart.getData().add(series);
-	  pulseLineChart.setVisible(true);
+  public void showStepChart() {
+    hideCharts();
+    stepBarChart.getData().clear();
+    stepBarChart.setBarGap(0);
+
+    ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
+    List<StepsData> stepsDataList = FxApp.userDataFetch.getStepsDataByViewer();
+    stepsDataList
+        .stream()
+        .forEach(
+            stepData ->
+                barChartData.add(
+                    new XYChart.Data<>(stepData.getDate().toString(), stepData.getSteps())));
+    XYChart.Series<String, Number> series = new XYChart.Series<>(barChartData);
+
+    stepBarChart.getData().add(series);
+    stepBarChart.setVisible(true);
   }
+
+  public void showPulseChart() {
+    hideCharts();
+    pulseLineChart.getData().clear();
+    ObservableList<XYChart.Data<String, Number>> lineChartData =
+        FXCollections.observableArrayList();
+    List<PulseData> pulseDataList = FxApp.userDataFetch.getPulseDataByViewer();
+    pulseDataList
+        .stream()
+        .forEach(
+            pulseData ->
+                lineChartData.add(
+                    new XYChart.Data<>(pulseData.getDate().toString(), pulseData.getRestHr())));
+    XYChart.Series<String, Number> series = new XYChart.Series<>(lineChartData);
+
+    pulseLineChart.getData().add(series);
+    pulseLineChart.setVisible(true);
+  }
+
   public void showSleepDChart() {
-	  hideCharts();
-	  sleepBarChart.getData().clear();
-	  ObservableList<XYChart.Data<String, Number>> sleepBarChartData = FXCollections.observableArrayList();
-	  List<SleepData> sleepDataList = FxApp.userDataFetch.getSleepDataByViewer();
-	  sleepDataList.stream()
-	  .forEach(sleepData -> sleepBarChartData.add(new XYChart.Data<>(sleepData.getDate().toString(), sleepData.getDuration())));
-	  XYChart.Series<String, Number> series = new XYChart.Series<>(sleepBarChartData);
-	  
-	  sleepBarChart.getData().add(series);
-	  sleepBarChart.setVisible(true);
+    hideCharts();
+    sleepBarChart.getData().clear();
+    ObservableList<XYChart.Data<String, Number>> sleepBarChartData =
+        FXCollections.observableArrayList();
+    List<SleepData> sleepDataList = FxApp.userDataFetch.getSleepDataByViewer();
+    sleepDataList
+        .stream()
+        .forEach(
+            sleepData ->
+                sleepBarChartData.add(
+                    new XYChart.Data<>(sleepData.getDate().toString(), sleepData.getDuration())));
+    XYChart.Series<String, Number> series = new XYChart.Series<>(sleepBarChartData);
+
+    sleepBarChart.getData().add(series);
+    sleepBarChart.setVisible(true);
   }
 
   @Override
@@ -185,9 +200,9 @@ public class UserController implements Initializable {
     updateDoctorsListViewItems();
 
     updateDoctorRequestListViewItems();
-    
+
     setDataChoiceBox();
-    
+
     hideCharts();
   }
 
@@ -238,16 +253,16 @@ public class UserController implements Initializable {
         .filter(request -> request.getStatusAsString().equals("PENDING"))
         .forEach(request -> doctorRequestListViewItems.add(request));
   }
-  
+
   private void hideCharts() {
-	  stepBarChart.setVisible(false);
-	  pulseLineChart.setVisible(false);
-	  sleepBarChart.setVisible(false);
-	 
+    stepBarChart.setVisible(false);
+    pulseLineChart.setVisible(false);
+    sleepBarChart.setVisible(false);
   }
+
   public void setDataChoiceBox() {
-	  dataChoiceBox.getItems().add("Pulse");
-	  dataChoiceBox.getItems().add("Steps");
-	  dataChoiceBox.getItems().add("Sleep - duration");
+    dataChoiceBox.getItems().add("Pulse");
+    dataChoiceBox.getItems().add("Steps");
+    dataChoiceBox.getItems().add("Sleep - duration");
   }
 }
