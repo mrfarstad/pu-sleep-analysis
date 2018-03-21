@@ -221,9 +221,11 @@ public class TestUserDataFetch {
     when(test.getData(anyString(), isNull())).thenReturn(response);
     List<SleepData> sleepData = userDataFetch.getSleepDataByViewer();
     assertTrue(sleepData.size() > 0);
+    String viewerId = sleepData.get(0).getUser().getId();
     for (SleepData sleep : sleepData) {
       assertTrue(sleep.getId() instanceof String);
       assertTrue(sleep.getUser() instanceof User);
+      assertTrue(sleep.getUser().getId().equals(viewerId));
       assertTrue(sleep.getDate() instanceof String);
       assertTrue(sleep.getDuration() > -1);
       assertTrue(sleep.getEfficiency() > -1);
@@ -286,7 +288,46 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void createStepsData() {}
+  public void stepsDataByViewer() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "stepsDataByViewerResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    List<StepsData> stepsData = userDataFetch.getStepsDataByViewer();
+    assertTrue(stepsData.size() > 0);
+    String viewerId = stepsData.get(0).getUser().getId();
+    for (StepsData steps : stepsData) {
+      assertTrue(steps.getId() instanceof String);
+      assertTrue(steps.getUser().getId().equals(viewerId));
+      assertTrue(steps.getUser() instanceof User);
+      assertTrue(steps.getDate() instanceof String);
+      assertTrue(steps.getSteps() > -1);
+    }
+  }
+
+  @Test
+  public void createStepsData() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "createStepsDataResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    StepsData steps = userDataFetch.createStepsData("2018-03-20", 20);
+    assertTrue(steps.getId() instanceof String);
+    assertTrue(steps.getUser() instanceof User);
+    assertTrue(steps.getDate() instanceof String);
+    assertTrue(steps.getSteps() > -1);
+  }
 
   @Test
   public void deleteStepsData() {
@@ -304,13 +345,67 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void getAllPulseData() {}
+  public void getAllPulseData() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "allPulseDataResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    List<PulseData> pulseData = userDataFetch.getAllPulseData();
+    assertTrue(pulseData.size() > 0);
+    for (PulseData pulse : pulseData) {
+      assertTrue(pulse.getId() instanceof String);
+      assertTrue(pulse.getUser() instanceof User);
+      assertTrue(pulse.getDate() instanceof String);
+      assertTrue(pulse.getRestHr() > -1);
+    }
+  }
 
   @Test
-  public void getPulseDataByViewer() {}
+  public void getPulseDataByViewer() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "pulseDataByViewerResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    List<PulseData> pulseData = userDataFetch.getPulseDataByViewer();
+    assertTrue(pulseData.size() > 0);
+    String viewerId = pulseData.get(0).getUser().getId();
+    for (PulseData pulse : pulseData) {
+      assertTrue(pulse.getId() instanceof String);
+      assertTrue(pulse.getUser().getId().equals(viewerId));
+      assertTrue(pulse.getUser() instanceof User);
+      assertTrue(pulse.getDate() instanceof String);
+      assertTrue(pulse.getRestHr() > -1);
+    }
+  }
 
   @Test
-  public void createPulseData() {}
+  public void createPulseData() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "createPulseDataResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    PulseData pulse = userDataFetch.createPulseData("2018-03-20", 60);
+    assertTrue(pulse.getId() instanceof String);
+    assertTrue(pulse.getUser() instanceof User);
+    assertTrue(pulse.getDate() instanceof String);
+    assertTrue(pulse.getRestHr() > -1);
+  }
 
   @Test
   public void deletePulseData() {

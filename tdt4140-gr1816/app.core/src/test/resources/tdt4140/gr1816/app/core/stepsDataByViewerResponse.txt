@@ -1,0 +1,1 @@
+{"data":{"stepsDataByViewer":[{"id":"5ab173e0c13edf12f7ba11ef","user":{"id":"5ab173c1c13edf146111e7bb","username":"test"},"date":"2017-04-02","steps":993},{"id":"5ab173e3c13edf12f7ba11f2","user":{"id":"5ab173c1c13edf146111e7bb","username":"test"},"date":"2017-04-03","steps":2393}]}}

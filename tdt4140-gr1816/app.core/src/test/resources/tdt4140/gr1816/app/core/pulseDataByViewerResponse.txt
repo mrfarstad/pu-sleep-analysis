@@ -1,0 +1,1 @@
+{"data":{"pulseDataByViewer":[{"id":"5ab173e1c13edf12f7ba11f0","date":"2017-04-02","user":{"id":"5ab173c1c13edf146111e7bb","username":"test"},"restHr":62},{"id":"5ab173e3c13edf12f7ba11f3","date":"2017-04-03","user":{"id":"5ab173c1c13edf146111e7bb","username":"test"},"restHr":60}]}}
