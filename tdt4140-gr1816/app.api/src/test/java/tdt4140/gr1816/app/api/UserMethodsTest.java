@@ -133,4 +133,237 @@ public class UserMethodsTest extends ApiBaseCase {
     assertNotNull(user);
     assertNotNull(user.get("id"));
   }
+
+  @Test
+  public void testDataAccessRequestsFromUserPerspective() {
+    // "Setup"
+    createUser();
+    createDoctor();
+    User user = GraphQLEndpoint.userRepository.findByUsername("test");
+    User doctor = GraphQLEndpoint.userRepository.findByUsername("doctor");
+
+    AuthContext userContext = forceAuth(user);
+    AuthContext doctorContext = forceAuth(doctor);
+
+    // Preps database by creating a request
+    ExecutionResult tempresult =
+        executeQuery(
+            "mutation {requestDataAccess(dataOwnerId: \"" + user.getId() + "\") {id status} }",
+            doctorContext);
+
+    String query =
+        "{\n"
+            + "  dataAccessRequestsForMe {\n"
+            + "    id\n"
+            + "    dataOwner {\n"
+            + "      id\n"
+            + "    }\n"
+            + "    requestedBy {\n"
+            + "      id\n"
+            + "    }\n"
+            + "    status\n"
+            + "  }\n"
+            + "}";
+
+    ExecutionResult res = executeQuery(query, userContext);
+
+    Map<String, Object> result = res.getData();
+
+    @SuppressWarnings("unchecked")
+    ArrayList<Map> dataAccessRequestsForMe = (ArrayList<Map>) result.get("dataAccessRequestsForMe");
+
+    assertEquals(dataAccessRequestsForMe.size(), 1);
+    assertEquals(dataAccessRequestsForMe.get(0).get("status"), "PENDING");
+  }
+
+  @Test
+  public void testDataAccessRequestsFromDoctorsPerspective() {
+    // "Setup"
+    createUser();
+    createDoctor();
+    User user = GraphQLEndpoint.userRepository.findByUsername("test");
+    User doctor = GraphQLEndpoint.userRepository.findByUsername("doctor");
+
+    AuthContext userContext = forceAuth(user);
+    AuthContext doctorContext = forceAuth(doctor);
+    // Preps database by creating a request
+    ExecutionResult tempresult =
+        executeQuery(
+            "mutation {requestDataAccess(dataOwnerId: \"" + user.getId() + "\") {id status} }",
+            doctorContext);
+
+    String query =
+        "{\n"
+            + "  myDataAccessRequests {\n"
+            + "    id\n"
+            + "    dataOwner {\n"
+            + "      id\n"
+            + "    }\n"
+            + "    requestedBy {\n"
+            + "      id\n"
+            + "    }\n"
+            + "    status\n"
+            + "  }\n"
+            + "}";
+    ExecutionResult res = executeQuery(query, doctorContext);
+
+    Map<String, Object> result = res.getData();
+
+    @SuppressWarnings("unchecked")
+    ArrayList<Map> dataAccessRequestsFromDoc = (ArrayList<Map>) result.get("myDataAccessRequests");
+    assertEquals(dataAccessRequestsFromDoc.size(), 1);
+    assertEquals(dataAccessRequestsFromDoc.get(0).get("status"), "PENDING");
+  }
+
+  @Test
+  public void testAnswerDataAccessRequest() {
+    // "Setup"
+    createUser();
+    createDoctor();
+    User user = GraphQLEndpoint.userRepository.findByUsername("test");
+    User doctor = GraphQLEndpoint.userRepository.findByUsername("doctor");
+
+    AuthContext userContext = forceAuth(user);
+    AuthContext doctorContext = forceAuth(doctor);
+    // Preps database by creating a request
+    ExecutionResult tempres =
+        executeQuery(
+            "mutation {requestDataAccess(dataOwnerId: \""
+                + user.getId()
+                + "\") {id dataOwner{id} requestedBy{id} status} }",
+            doctorContext);
+
+    Map<String, Object> tempresult = tempres.getData();
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> request = (Map<String, Object>) tempresult.get("requestDataAccess");
+
+    String ans = "ACCEPTED";
+    String answerQuery =
+        "mutation {\n"
+            + "  answerDataAccessRequest(dataAccessRequestId: \""
+            + request.get("id")
+            + "\", status: "
+            + ans
+            + ") {\n"
+            + "    status\n"
+            + "  }\n"
+            + "}";
+    ExecutionResult res = executeQuery(answerQuery, userContext);
+    Map<String, Object> result = res.getData();
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> answeredRequest =
+        (Map<String, Object>) result.get("answerDataAccessRequest");
+
+    assertNotNull(answeredRequest);
+    assertEquals(answeredRequest.get("status"), "ACCEPTED");
+
+    ans = "REJECTED";
+    answerQuery =
+        "mutation {\n"
+            + "  answerDataAccessRequest(dataAccessRequestId: \""
+            + request.get("id")
+            + "\", status: "
+            + ans
+            + ") {\n"
+            + "    status\n"
+            + "  }\n"
+            + "}";
+    res = executeQuery(answerQuery, userContext);
+    result = res.getData();
+    @SuppressWarnings("unchecked")
+    Map<String, Object> newAnsweredRequest =
+        (Map<String, Object>) result.get("answerDataAccessRequest");
+    assertEquals(newAnsweredRequest.get("status"), "REJECTED");
+  }
+
+  @Test
+  public void testSleepData() {
+    createUser();
+    User user = GraphQLEndpoint.userRepository.findByUsername("test");
+    AuthContext context = forceAuth(user);
+
+    String query =
+        "mutation{\n"
+            + "  createSleepData(\n"
+            + "    date: \"2018-01-01\"\n"
+            + "    duration: 200\n"
+            + "    efficiency: 20\n"
+            + "  ){\n"
+            + "    id\n"
+            + "    efficiency\n"
+            + "    user{\n"
+            + "      id\n"
+            + "    }\n"
+            + "  }\n"
+            + "}";
+    ExecutionResult res = executeQuery(query, context);
+    Map<String, Object> result = res.getData();
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> sleepData = (Map<String, Object>) result.get("createSleepData");
+
+    assertNotNull(sleepData);
+
+    Map<String, Object> fetchedUser = (Map<String, Object>) sleepData.get("user");
+
+    assertEquals(fetchedUser.get("id"), user.getId());
+  }
+
+  @Test
+  public void testStepsData() {
+    createUser();
+    User user = GraphQLEndpoint.userRepository.findByUsername("test");
+    AuthContext context = forceAuth(user);
+
+    String query =
+        "mutation {\n"
+            + "  createStepsData(date: \"2018-07-22\", steps: 7000) {\n"
+            + "    id\n"
+            + "    user {\n"
+            + "      id\n"
+            + "    }\n"
+            + "  }\n"
+            + "}";
+    ExecutionResult res = executeQuery(query, context);
+    Map<String, Object> result = res.getData();
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> stepsData = (Map<String, Object>) result.get("createStepsData");
+
+    assertNotNull(stepsData);
+
+    Map<String, Object> fetchedUser = (Map<String, Object>) stepsData.get("user");
+
+    assertEquals(fetchedUser.get("id"), user.getId());
+  }
+
+  @Test
+  public void testPulseData() {
+    createUser();
+    User user = GraphQLEndpoint.userRepository.findByUsername("test");
+    AuthContext context = forceAuth(user);
+
+    String query =
+        "mutation {\n"
+            + "  createPulseData(date: \"2018-07-22\", restHr: 65) {\n"
+            + "    id\n"
+            + "    user {\n"
+            + "      id\n"
+            + "    }\n"
+            + "  }\n"
+            + "}";
+    ExecutionResult res = executeQuery(query, context);
+    Map<String, Object> result = res.getData();
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> pulseData = (Map<String, Object>) result.get("createPulseData");
+
+    assertNotNull(pulseData);
+
+    Map<String, Object> fetchedUser = (Map<String, Object>) pulseData.get("user");
+
+    assertEquals(fetchedUser.get("id"), user.getId());
+  }
 }
