@@ -12,6 +12,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,15 +39,15 @@ public class UserGUITest extends ApplicationTest {
   @Override
   public void start(Stage stage) throws Exception {
     FxApp.userDataFetch = mock(UserDataFetch.class);
-    loginUser();
-    Parent root = FXMLLoader.load(getClass().getResource("UserGUI.fxml"));
+    Parent root = FXMLLoader.load(getClass().getResource("FxApp.fxml"));
     Scene scene = new Scene(root);
     stage.setScene(scene);
     stage.show();
   }
 
-  public void loginUser() {
-    String username = "User";
+  @Test
+  public void signIn() {
+    String username = "testUser";
     String password = "test";
     User userSample = new User("userID", username, password, false, "male", 22);
 
@@ -54,22 +56,30 @@ public class UserGUITest extends ApplicationTest {
 
     User testUser = FxApp.userDataFetch.signIn(username, password);
     assertTrue(testUser instanceof User);
+
+    TextField usernameField = lookup("#usernameField").query();
+    clickOn(usernameField);
+    write(username);
+    PasswordField passwordField = lookup("#passwordField").query();
+    clickOn(passwordField);
+    write(password);
+    clickOn("#signinButton");
+
+    testDataButton();
+    testAcceptAndRemoveDoctor();
   }
 
-  @Test
   public void testDataButton() {
     clickOn("#profileTab");
-    // Check if databutton is on by defult
     Button dataButton = lookup("#dataButton").query();
+
     assertEquals("Turn off", dataButton.getText());
-    // Click button and check of text changes
     clickOn(dataButton);
     assertEquals("Turn on", dataButton.getText());
     clickOn(dataButton);
     assertEquals("Turn off", dataButton.getText());
   }
 
-  @Test
   public void testAcceptAndRemoveDoctor() {
     clickOn("#doctorTab");
 
@@ -90,16 +100,19 @@ public class UserGUITest extends ApplicationTest {
     assertFalse(doctorRequestItems.contains(request));
 
     clickOn("#profileTab");
+    DataAccessRequest accRequest =
+        new DataAccessRequest(
+            "requestID", FxApp.userDataFetch.getCurrentUser(), doctorSample, "ACCEPTED");
     ListView doctorList = lookup("#doctorsListView").query();
-    ObservableList<String> doctorItems = doctorList.getItems();
+    ObservableList<DataAccessRequest> doctorItems = doctorList.getItems();
+    doctorItems.add(accRequest);
 
-    assertTrue(doctorItems.contains(request));
-    doctorList.getSelectionModel().select(request);
-    assertEquals(request.getStatusAsString(), "ACCEPTED");
+    assertTrue(doctorItems.contains(accRequest));
+    doctorList.getSelectionModel().select(accRequest);
+    assertEquals(accRequest.getStatusAsString(), "ACCEPTED");
 
     clickOn("#removeDoctorButton");
-    assertFalse(doctorItems.contains(request));
-    assertEquals(request.getStatusAsString(), "REJECTED");
+    assertFalse(doctorItems.contains(accRequest));
   }
 
   // TODO
