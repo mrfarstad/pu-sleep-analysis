@@ -12,9 +12,11 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.PieChart.Data;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -61,6 +63,11 @@ public class DoctorController implements Initializable {
   @FXML private ChoiceBox<String> dataChoiceBox;
   @FXML private Text patientTF;
   @FXML private Button viewGraphButton;
+  @FXML private DatePicker fromDate;
+  @FXML private DatePicker toDate;
+  
+  @FXML private BarChart<String, Number> sleepBarChart;
+  
   @FXML private PieChart sleepPieChart;
 
   @FXML private LineChart<String, Number> pulseLineChart;
@@ -100,7 +107,8 @@ public class DoctorController implements Initializable {
   public void handleViewGraphButton() {
     if (dataChoiceBox.getValue().equals("Sleep")) {
       hideCharts();
-      showSleepChart();
+      //showSleepPieChart();
+      showSleepBarChart();
     } else if (dataChoiceBox.getValue().equals("Pulse")) {
       hideCharts();
       showPulseChart();
@@ -109,8 +117,14 @@ public class DoctorController implements Initializable {
       showStepChart();
     }
   }
-
-  private void showSleepChart() {
+  
+  private void showSleepBarChart() {
+	  User user = getSelectedPatientCB();
+	  
+  }
+//Piechart
+  /*
+  private void showSleepPieChart() {
 	User user = getSelectedPatientCB();
     System.out.println("showSleepPieChart");
     ObservableList<PieChart.Data> pieChartData =
@@ -124,7 +138,7 @@ public class DoctorController implements Initializable {
     sleepPieChart.setData(pieChartData);
     sleepPieChart.setVisible(true);
   }
-
+*/
   private void showPulseChart() {
 	  User user = getSelectedPatientCB();
     ObservableList<XYChart.Data<String, Number>> lineChartData =
@@ -165,6 +179,7 @@ public class DoctorController implements Initializable {
     sleepPieChart.setVisible(false);
     pulseLineChart.setVisible(false);
     stepBarChart.setVisible(false);
+    sleepBarChart.setVisible(false);
   }
 
   @Override
@@ -220,6 +235,7 @@ public class DoctorController implements Initializable {
   public void setDataChoiceBox() {
     dataChoiceBox.getItems().add("Pulse");
     dataChoiceBox.getItems().add("Steps");
-    dataChoiceBox.getItems().add("Sleep");
+    dataChoiceBox.getItems().add("Sleep [piechart]");
+    dataChoiceBox.getItems().add("Sleep [barchart]");
   } 
 }

@@ -117,11 +117,15 @@
                                  <children>
                                     <AnchorPane prefHeight="366.0" prefWidth="188.0">
                                        <children>
-                                          <ChoiceBox fx:id="dataChoiceBox" layoutX="15.0" layoutY="132.0" prefWidth="150.0" />
-                                          <Button fx:id="viewGraphButton" layoutX="50.0" layoutY="187.0" mnemonicParsing="false" onAction="#handleViewGraphButton" text="View Graph" />
+                                          <ChoiceBox fx:id="dataChoiceBox" layoutX="16.0" layoutY="109.0" prefHeight="27.0" prefWidth="150.0" />
+                                          <Button fx:id="viewGraphButton" layoutX="46.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleViewGraphButton" text="View Graph" />
                                           <ChoiceBox fx:id="patientChoiceBox" layoutX="15.0" layoutY="47.0" prefWidth="150.0" />
                                           <Text layoutX="15.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient:" />
-                                          <Text layoutX="15.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Type: " />
+                                          <Text layoutX="16.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Type: " />
+                                          <DatePicker fx:id="fromDate" layoutX="16.0" layoutY="169.0" prefHeight="29.0" prefWidth="150.0" />
+                                          <DatePicker fx:id="toDate" layoutX="16.0" layoutY="230.0" prefHeight="27.0" prefWidth="150.0" />
+                                          <Text layoutX="16.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From: " />
+                                          <Text layoutX="14.0" layoutY="226.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To:" />
                                        </children>
                                     </AnchorPane>
                                  </children>
@@ -140,7 +144,15 @@
                                     </AnchorPane>
                                     <StackPane prefHeight="259.0" prefWidth="401.0">
                                        <children>
-                                          <PieChart fx:id="sleepPieChart" disable="true" legendVisible="false" prefHeight="200.0" prefWidth="392.0" title="Sleep Chart" />
+                                          <BarChart fx:id="sleepBarChart" title="Sleep Bar Chart">
+                                            <xAxis>
+                                              <CategoryAxis side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                              <NumberAxis side="LEFT" />
+                                            </yAxis>
+                                          </BarChart>
+                                          <PieChart fx:id="sleepPieChart" disable="true" legendVisible="false" prefHeight="200.0" prefWidth="392.0" title="Sleep Pie Chart" />
                                           <LineChart fx:id="pulseLineChart" disable="true" legendVisible="false" prefHeight="196.0" prefWidth="401.0" title="Pulse Chart">
                                             <xAxis>
                                               <CategoryAxis fx:id="pulseChartXAxis" side="BOTTOM" />
