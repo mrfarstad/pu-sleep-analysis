@@ -39,172 +39,6 @@ public class UserDataFetch {
   }
 
   // Returns user
-  public User createUser(
-      String username, String password, boolean isDoctor, String gender, int age) {
-    String createUserQuery =
-        "{\"query\":\"mutation{createUser(authProvider:{username:\\\""
-            + username
-            + "\\\" password:\\\""
-            + password
-            + "\\\"} isDoctor: "
-            + isDoctor
-            + " gender:\\\""
-            + gender
-            + "\\\" age: "
-            + age
-            + "){username}}\"}";
-    String responseJson = dataGetter.getData(createUserQuery, null);
-    ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
-    JsonParser parser;
-    User createdUser = null;
-    try {
-      parser = factory.createParser(responseJson);
-      JsonNode root = mapper.readTree(parser);
-      JsonNode thirdJsonObject = root.get("data").get("createUser");
-      createdUser = mapper.readerFor(new TypeReference<User>() {}).readValue(thirdJsonObject);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return createdUser;
-  }
-
-  public Boolean deleteUser(String username, String password) {
-    String query =
-        "{\"query\":\"mutation{deleteUser(auth:{username:\\\""
-            + username
-            + "\\\" password:\\\""
-            + password
-            + "\\\"})}\"}";
-    this.dataGetter.getData(query, null);
-    String responseJson = dataGetter.getData(deleteUserQuery, null);
-    ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
-    JsonParser parser;
-    Boolean success = false;
-    try {
-      parser = factory.createParser(responseJson);
-      JsonNode root = mapper.readTree(parser);
-      JsonNode thirdJsonObject = root.get("data").get("deleteUser");
-      success = mapper.readerFor(new TypeReference<Boolean>() {}).readValue(thirdJsonObject);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return success;
-  }
-
-  public User signIn(String username, String password) {
-    String signInQuery =
-        "{\"query\":\"mutation{signinUser(auth:{username:\\\""
-            + username
-            + "\\\" password:\\\""
-            + password
-            + "\\\"}){token user{id username isDoctor gender age}}}\"}";
-    String responseJson = dataGetter.getData(signInQuery, null);
-    ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
-    JsonParser parser;
-    String token = null;
-    User user = null;
-    try {
-      parser = factory.createParser(responseJson);
-      JsonNode root = mapper.readTree(parser);
-      JsonNode thirdJsonObject = root.get("data").get("signinUser").get("token");
-      JsonNode fouthJsonObject = root.get("data").get("signinUser").get("user");
-      token = mapper.readerFor(new TypeReference<String>() {}).readValue(thirdJsonObject);
-      user = mapper.readerFor(new TypeReference<User>() {}).readValue(fouthJsonObject);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    this.currentToken = token;
-    return user;
-  }
-
-  public List<User> getAllUsers() {
-    String responseJson = dataGetter.getData(allUsersQuery, null);
-    ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
-    JsonParser parser;
-    List<User> requests = null;
-    try {
-      parser = factory.createParser(responseJson);
-      JsonNode root = mapper.readTree(parser);
-      JsonNode thirdJsonObject = root.get("data").get("allUsers");
-      requests = mapper.readerFor(new TypeReference<List<User>>() {}).readValue(thirdJsonObject);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return requests;
-  }
-
-  public User getCurrentUser() {
-    String responseJson = dataGetter.getData(currentUserQuery, this.currentToken);
-    ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
-    JsonParser parser;
-    User requests = null;
-    try {
-      parser = factory.createParser(responseJson);
-      JsonNode root = mapper.readTree(parser);
-      JsonNode thirdJsonObject = root.get("data").get("viewer");
-      requests = mapper.readerFor(new TypeReference<User>() {}).readValue(thirdJsonObject);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return requests;
-  }
-
-  public User getUserById(String id) {
-    try {
-      return getAllUsers().stream().filter(user -> user.getId().equals(id)).findFirst().get();
-    } catch (NoSuchElementException e) {
-      return null;
-    }
-  }
-
-  public User getUserByUsername(String name) {
-    try {
-      return getAllUsers()
-          .stream()
-          .filter(user -> user.getUsername().equals(name))
-          .findFirst()
-          .get();
-    } catch (NoSuchElementException e) {
-      return null;
-    }
-  }
-
-  public List<DataAccessRequest> getAccessRequestsToUser() {
-    String responseJson = dataGetter.getData(accessRequestsToUserQuery, this.currentToken);
-    ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
-    JsonParser parser;
-    List<DataAccessRequest> requests = null;
-    try {
-      parser = factory.createParser(responseJson);
-      JsonNode root = mapper.readTree(parser);
-      JsonNode thirdJsonObject = root.get("data").get("dataAccessRequestsForMe");
-      requests =
-          mapper
-              .readerFor(new TypeReference<List<DataAccessRequest>>() {})
-              .readValue(thirdJsonObject);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return requests;
-  }
 
   public boolean requestDataAccess(User patient) {
     String mutation =
@@ -269,29 +103,6 @@ public class UserDataFetch {
     }
   }
 
-  public List<DataAccessRequest> getAccessRequestsByDoctor() {
-    String responseJson = dataGetter.getData(accessRequestsByDoctorQuery, this.currentToken);
-    ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
-    JsonParser parser;
-    List<DataAccessRequest> requests = null;
-    try {
-      parser = factory.createParser(responseJson);
-      JsonNode root = mapper.readTree(parser);
-      JsonNode thirdJsonObject = root.get("data").get("myDataAccessRequests");
-      requests =
-          mapper
-              .readerFor(new TypeReference<List<DataAccessRequest>>() {})
-              .readValue(thirdJsonObject);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-    return requests;
-  }
-
   public <T> T getGenericData(
       String fileName,
       List<String> levelNodes,
@@ -325,6 +136,76 @@ public class UserDataFetch {
     return sleepData;
   }
 
+  public List<User> getAllUsers() {
+    return getGenericData(
+        "allUsersQuery.txt", Arrays.asList("allUsers"), new TypeReference<List<User>>() {}, null);
+  }
+
+  public User createUser(
+      String username, String password, Boolean isDoctor, String gender, Integer age) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("username", username);
+    variables.put("password", password);
+    variables.put("isDoctor", isDoctor.toString());
+    variables.put("gender", gender);
+    variables.put("age", age.toString());
+    return getGenericData(
+        "createUserQuery.txt",
+        Arrays.asList("createUser"),
+        new TypeReference<User>() {},
+        variables);
+  }
+
+  public Boolean deleteUser(String username, String password) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("username", username);
+    variables.put("password", password);
+    return getGenericData(
+        "deleteUserQuery.txt",
+        Arrays.asList("deleteUser"),
+        new TypeReference<Boolean>() {},
+        variables);
+  }
+
+  public User getUserById(String id) {
+    try {
+      return getAllUsers().stream().filter(user -> user.getId().equals(id)).findFirst().get();
+    } catch (NoSuchElementException e) {
+      return null;
+    }
+  }
+
+  public User getUserByUsername(String name) {
+    try {
+      return getAllUsers()
+          .stream()
+          .filter(user -> user.getUsername().equals(name))
+          .findFirst()
+          .get();
+    } catch (NoSuchElementException e) {
+      return null;
+    }
+  }
+
+  public User signIn(String username, String password) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("username", username);
+    variables.put("password", password);
+    User viewer =
+        getGenericData(
+            "signInQuery.txt",
+            Arrays.asList("signinUser", "user"),
+            new TypeReference<User>() {},
+            variables);
+    this.currentToken = viewer.getId();
+    return viewer;
+  }
+
+  public User getCurrentUser() {
+    return getGenericData(
+        "currentUserQuery.txt", Arrays.asList("viewer"), new TypeReference<User>() {}, null);
+  }
+
   public List<SleepData> getAllSleepData() {
     return getGenericData(
         "allSleepDataQuery.txt",
@@ -338,6 +219,22 @@ public class UserDataFetch {
         "sleepDataByViewerQuery.txt",
         Arrays.asList("sleepDataByViewer"),
         new TypeReference<List<SleepData>>() {},
+        null);
+  }
+
+  public List<DataAccessRequest> getAccessRequestsToUser() {
+    return getGenericData(
+        "accessRequestsToUserQuery.txt",
+        Arrays.asList("dataAccessRequestsForMe"),
+        new TypeReference<List<DataAccessRequest>>() {},
+        null);
+  }
+
+  public List<DataAccessRequest> getAccessRequestsByDoctor() {
+    return getGenericData(
+        "accessRequestsByDoctorQuery.txt",
+        Arrays.asList("myDataAccessRequests"),
+        new TypeReference<List<DataAccessRequest>>() {},
         null);
   }
 
@@ -439,30 +336,37 @@ public class UserDataFetch {
 
   public static void main(String[] args) {
     UserDataFetch data = new UserDataFetch(new DataGetter());
-    data.signIn("test", "test");
-    List<SleepData> sleep = data.getAllSleepData();
-    List<StepsData> steps = data.getAllStepsData();
-    List<PulseData> pulse = data.getAllPulseData();
-    System.out.println(sleep);
-    System.out.println(steps);
-    System.out.println(pulse);
-    List<SleepData> sleepViewer = data.getSleepDataByViewer();
-    List<StepsData> stepsViewer = data.getStepsDataByViewer();
-    List<PulseData> pulseViewer = data.getPulseDataByViewer();
-    System.out.println(sleepViewer);
-    System.out.println(stepsViewer);
-    System.out.println(pulseViewer);
-    SleepData sleepCreate = data.createSleepData("2018-03-20", 10, 10);
-    StepsData stepsCreate = data.createStepsData("2018-03-20", 10);
-    PulseData pulseCreate = data.createPulseData("2018-03-20", 10);
-    System.out.println(sleepCreate);
-    System.out.println(stepsCreate);
-    System.out.println(pulseCreate);
-    Boolean sleepDelete = data.deleteSleepData(sleepCreate.getId());
-    Boolean stepsDelete = data.deleteStepsData(stepsCreate.getId());
-    Boolean pulseDelete = data.deletePulseData(pulseCreate.getId());
-    System.out.println(sleepDelete);
-    System.out.println(stepsDelete);
-    System.out.println(pulseDelete);
+    //    data.signIn("test", "test");
+    System.out.println(data.createUser("test", "test", true, "female", 20));
+    //    System.out.println(data.getAllUsers());
+    System.out.println(data.signIn("test", "test"));
+    System.out.println(data.currentToken);
+    System.out.println(data.getCurrentUser());
+    //    System.out.println(data.getAccessRequestsToUser());
+    System.out.println(data.getAccessRequestsByDoctor());
+    //    List<SleepData> sleep = data.getAllSleepData();
+    //    List<StepsData> steps = data.getAllStepsData();
+    //    List<PulseData> pulse = data.getAllPulseData();
+    //    System.out.println(sleep);
+    //    System.out.println(steps);
+    //    System.out.println(pulse);
+    //    List<SleepData> sleepViewer = data.getSleepDataByViewer();
+    //    List<StepsData> stepsViewer = data.getStepsDataByViewer();
+    //    List<PulseData> pulseViewer = data.getPulseDataByViewer();
+    //    System.out.println(sleepViewer);
+    //    System.out.println(stepsViewer);
+    //    System.out.println(pulseViewer);
+    //    SleepData sleepCreate = data.createSleepData("2018-03-20", 10, 10);
+    //    StepsData stepsCreate = data.createStepsData("2018-03-20", 10);
+    //    PulseData pulseCreate = data.createPulseData("2018-03-20", 10);
+    //    System.out.println(sleepCreate);
+    //    System.out.println(stepsCreate);
+    //    System.out.println(pulseCreate);
+    //    Boolean sleepDelete = data.deleteSleepData(sleepCreate.getId());
+    //    Boolean stepsDelete = data.deleteStepsData(stepsCreate.getId());
+    //    Boolean pulseDelete = data.deletePulseData(pulseCreate.getId());
+    //    System.out.println(sleepDelete);
+    //    System.out.println(stepsDelete);
+    //    System.out.println(pulseDelete);
   }
 }

@@ -1,0 +1,20 @@
+query {
+  dataAccessRequestsForMe {
+    id
+    dataOwner {
+      id
+      username
+      isDoctor
+      gender
+      age
+    }
+    requestedBy {
+      id
+      username
+      isDoctor
+      gender
+      age
+    }
+    status
+  }
+}

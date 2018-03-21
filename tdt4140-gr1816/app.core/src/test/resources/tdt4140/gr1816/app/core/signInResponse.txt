@@ -1,0 +1,1 @@
+{"data":{"signinUser":{"token":"5ab173c1c13edf146111e7bb","user":{"id":"5ab173c1c13edf146111e7bb","username":"test","isDoctor":true,"gender":"male","age":22}}}}

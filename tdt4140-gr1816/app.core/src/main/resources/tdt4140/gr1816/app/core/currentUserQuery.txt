@@ -1,0 +1,9 @@
+query {
+  viewer {
+    id
+    username
+    isDoctor
+    gender
+    age
+  }
+}

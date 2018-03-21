@@ -1,0 +1,9 @@
+query {
+  allUsers {
+    id
+    username
+    isDoctor
+    gender
+    age
+  }
+}

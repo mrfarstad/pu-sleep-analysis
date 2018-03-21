@@ -1,0 +1,12 @@
+mutation($username: String! $password: String!) {
+  signinUser(auth: {username: $username, password: $password}) {
+    token
+    user {
+      id
+      username
+      isDoctor
+      gender
+      age
+    }
+  }
+}

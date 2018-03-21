@@ -1,0 +1,1 @@
+{"data":{"createUser":{"id":"5ab24c46c13edf233e48b430","username":"test","isDoctor":true,"gender":"female","age":22}}}

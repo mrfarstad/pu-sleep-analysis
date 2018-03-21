@@ -1,0 +1,23 @@
+mutation ($dataAccessRequestId: ID! $status: DataAccessRequestStatus!) {
+  answerDataAccessRequest(
+    dataAccessRequestId: $dataAccessRequestId
+    status: $status
+  ) {
+    id
+    dataOwner {
+      id
+      username
+      isDoctor
+      gender
+      age
+    }
+    requestedBy {
+      id
+      username
+      isDoctor
+      gender
+      age
+    }
+    status
+  }
+}

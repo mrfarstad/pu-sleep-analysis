@@ -19,11 +19,6 @@ import tdt4140.gr1816.app.core.DataAccessRequest.DataAccessRequestStatus;
 
 public class TestUserDataFetch {
 
-  private static String createUserTestQuery =
-      "{\"query\":\"mutation{createUser(authProvider:{username:\\\"test\\\" password:\\\"test\\\"} isDoctor: true gender:\\\"male\\\" age: 22){username}}\"}";
-  /*private static String deleteUserQuery =
-   "{\"query\":\"mutation{deleteUser(auth:{username:\\\"test\\\" password:\\\"test\\\"})}\"}";
-  */
   private static String signInTestQuery =
       "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
   /*
@@ -33,9 +28,6 @@ public class TestUserDataFetch {
     private static String accessRequestsByDoctorQuery =
   	  "{\"query\":\"query{myDataAccessRequests{dataOwner{username isDoctor gender age}status}}\"}";
   */
-  private static String createUserResponse =
-      "{\"data\":{\"createUser\":{\"id\":\"5aa117f0c40c0b0451c261c2\",\"username\":\"test\",\"isDoctor\":true,\"gender\":\"male\",\"age\":33}}}";
-  private static String deleteUserResponse = "{\"data\":{\"deleteUser\":true}}";
   private static String getAllUsersResponse =
       "{\"data\":{\"allUsers\":[{\"id\":\"5a9e8503c13edf22f93825e7\",\"username\":\"test\",\"isDoctor\":true,\"gender\":\"male\",\"age\":22},{\"id\":\"5a9e85cac13edf22f93825e8\",\"username\":\"test\",\"isDoctor\":true,\"gender\":\"male\",\"age\":22}]}}";
   private static String getCurrentUserResponse =
@@ -55,25 +47,41 @@ public class TestUserDataFetch {
 
   @Test
   public void testCreateUserQuery() {
-    when(test.getData(createUserTestQuery, null)).thenReturn(createUserResponse);
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "createUserResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
 
-    assertEquals(test.getData(createUserTestQuery, null), createUserResponse);
+    assertEquals(test.getData("", null), response);
 
     // CreateUser should return a user:
-    User user = userDataFetch.createUser("test", "test", true, "male", 22);
+    User user = userDataFetch.createUser("test", "test", true, "female", 22);
     assertTrue(user instanceof User);
     assertNotNull(user);
     assertTrue(user.getUsername().equals("test"));
     assertTrue(user.isDoctor());
-    assertTrue(user.getGender().equals("male"));
-    assertTrue(user.getAge() == 33);
+    assertTrue(user.getGender().equals("female"));
+    assertTrue(user.getAge() == 22);
   }
 
   @Test
   public void testDeleteUserQuery() {
-    when(test.getData(userDataFetch.deleteUserQuery, null)).thenReturn(deleteUserResponse);
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "deleteUserResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
 
-    assertEquals(test.getData(userDataFetch.deleteUserQuery, null), deleteUserResponse);
+    assertEquals(test.getData("", null), response);
 
     // UserDataFetch should return a boolean (success)
     boolean success = userDataFetch.deleteUser("test", "test");
@@ -83,71 +91,112 @@ public class TestUserDataFetch {
 
   @Test
   public void testGetAllUsersQuery() {
-    // define what the mock class returns when methods are called
-    // this mocks the http response from the API
-    when(test.getData(userDataFetch.allUsersQuery, null)).thenReturn(getAllUsersResponse);
+    String response = "";
+    try {
+      response =
+          new String(Files.readAllBytes(Paths.get(resourceResponsePath + "allUsersResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
 
-    // test mock class
-    assertEquals(test.getData(userDataFetch.allUsersQuery, null), getAllUsersResponse);
-
-    // UserDataFetch.getAllUsers() should return List<User>
-    assertTrue(userDataFetch.getAllUsers() instanceof List);
+    assertEquals(test.getData("", null), response);
     List<User> users = userDataFetch.getAllUsers();
-    if (!users.isEmpty()) {
-      assertTrue(users.get(0) instanceof User);
+    assertTrue(users.size() > 0);
+    for (User user : users) {
+      assertTrue(user.getId() instanceof String);
+      assertTrue(user.getUsername() instanceof String);
+      assertTrue(new Boolean(user.isDoctor()) instanceof Boolean);
+      assertTrue(user.getGender() instanceof String);
+      assertTrue(user.getAge() > -1);
     }
   }
 
   @Test
   public void testGetCurrentUserQuery() {
-    when(test.getData(userDataFetch.currentUserQuery, userDataFetch.currentToken))
-        .thenReturn(getCurrentUserResponse);
+    String response = "";
+    try {
+      response =
+          new String(Files.readAllBytes(Paths.get(resourceResponsePath + "currentUserResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
 
-    assertEquals(
-        test.getData(userDataFetch.currentUserQuery, userDataFetch.currentToken),
-        getCurrentUserResponse);
-    assertTrue(userDataFetch.getCurrentUser() instanceof User);
+    assertEquals(test.getData("", null), response);
+    User user = userDataFetch.getCurrentUser();
+    assertNotNull(user);
+    assertTrue(user instanceof User);
+    assertTrue(user.getUsername().equals("test"));
+    assertTrue(user.isDoctor());
+    assertTrue(user.getGender().equals("male"));
+    assertTrue(user.getAge() == 22);
   }
 
   @Test
   public void testGetAccessRequestsToUser() {
-    when(test.getData(userDataFetch.accessRequestsToUserQuery, userDataFetch.currentToken))
-        .thenReturn(getAccessRequestsToUserResponse);
+	  String response = "";
+	    try {
+	      response =
+	          new String(Files.readAllBytes(Paths.get(resourceResponsePath + "accessRequestsToUserResponse.txt")));
+	    } catch (IOException e) {
+	      fail("Wrong filename for query");
+	    }
+	    when(test.getData(anyString(), isNull())).thenReturn(response);
 
-    assertEquals(
-        test.getData(userDataFetch.accessRequestsToUserQuery, userDataFetch.currentToken),
-        getAccessRequestsToUserResponse);
+	    assertEquals(test.getData("", null), response);
 
     assertTrue(userDataFetch.getAccessRequestsToUser() instanceof List);
     List<DataAccessRequest> requests = userDataFetch.getAccessRequestsToUser();
-    if (!requests.isEmpty()) {
-      assertTrue(requests.get(0) instanceof DataAccessRequest);
+    assertTrue(requests.size() > 0);
+    for (DataAccessRequest request : requests) {
+      assertTrue(request.getId() instanceof String);
+      assertTrue(request.getDataOwner() instanceof User);
+      assertTrue(request.getRequestedBy() instanceof User);
+      assertTrue(request.getStatus() instanceof DataAccessRequestStatus);
+      assertTrue(request.getStatusAsString() instanceof String);
     }
   }
 
   @Test
   public void testGetAccessRequestsByDoctor() {
-    when(test.getData(userDataFetch.accessRequestsByDoctorQuery, userDataFetch.currentToken))
-        .thenReturn(getAccessRequestsByDoctorResponse);
-    assertEquals(
-        test.getData(userDataFetch.accessRequestsByDoctorQuery, userDataFetch.currentToken),
-        getAccessRequestsByDoctorResponse);
+	  String response = "";
+	    try {
+	      response =
+	          new String(Files.readAllBytes(Paths.get(resourceResponsePath + "accessRequestsByDoctorResponse.txt")));
+	    } catch (IOException e) {
+	      fail("Wrong filename for query");
+	    }
+	    when(test.getData(anyString(), isNull())).thenReturn(response);
 
-    assertTrue(userDataFetch.getAccessRequestsByDoctor() instanceof List);
-    List<DataAccessRequest> requests = userDataFetch.getAccessRequestsByDoctor();
-    if (!requests.isEmpty()) {
-      assertTrue(requests.get(0) instanceof DataAccessRequest);
-    }
+	    assertEquals(test.getData("", null), response);
+
+  assertTrue(userDataFetch.getAccessRequestsByDoctor() instanceof List);
+  List<DataAccessRequest> requests = userDataFetch.getAccessRequestsByDoctor();
+  assertTrue(requests.size() > 0);
+  for (DataAccessRequest request : requests) {
+    assertTrue(request.getId() instanceof String);
+    assertTrue(request.getDataOwner() instanceof User);
+    assertTrue(request.getRequestedBy() instanceof User);
+    assertTrue(request.getStatus() instanceof DataAccessRequestStatus);
+    assertTrue(request.getStatusAsString() instanceof String);
   }
+}
 
   @Test
   public void testGetUserById() {
-    when(test.getData(userDataFetch.allUsersQuery, null)).thenReturn(getAllUsersResponse);
+    String response = "";
+    try {
+      response =
+          new String(Files.readAllBytes(Paths.get(resourceResponsePath + "allUsersResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
 
-    // test mock class
-    assertEquals(test.getData(userDataFetch.allUsersQuery, null), getAllUsersResponse);
+    assertEquals(test.getData("", null), response);
 
-    User user = userDataFetch.getUserById("5a9e8503c13edf22f93825e7");
+    User user = userDataFetch.getUserById("5ab173c1c13edf146111e7bb");
     assertTrue(user instanceof User);
     assertNotNull(user);
     assertTrue(user.getUsername().equals("test"));
@@ -157,10 +206,47 @@ public class TestUserDataFetch {
   }
 
   @Test
+  public void testGetUserByUsername() {
+    String response = "";
+    try {
+      response =
+          new String(Files.readAllBytes(Paths.get(resourceResponsePath + "allUsersResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+
+    assertEquals(test.getData("", null), response);
+
+    User user = userDataFetch.getUserByUsername("test");
+    assertTrue(user instanceof User);
+    assertNotNull(user);
+    assertTrue(user.getId().equals("5ab173c1c13edf146111e7bb"));
+    assertTrue(user.getUsername().equals("test"));
+    assertTrue(user.isDoctor());
+    assertTrue(user.getGender().equals("male"));
+    assertTrue(user.getAge() == 22);
+  }
+
+  @Test
   public void testSignIn() {
-    when(test.getData(anyString(), isNull())).thenReturn(signInResponse);
-    User testUser = userDataFetch.signIn("test", "test");
-    assertTrue(testUser instanceof User);
+    String response = "";
+    try {
+      response =
+          new String(Files.readAllBytes(Paths.get(resourceResponsePath + "signInResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+
+    assertEquals(test.getData("", null), response);
+    User user = userDataFetch.signIn("test", "test");
+    assertTrue(userDataFetch.currentToken.equals("5ab173c1c13edf146111e7bb"));
+    assertTrue(user.getId().equals("5ab173c1c13edf146111e7bb"));
+    assertTrue(user.getUsername().equals("test"));
+    assertTrue(user.isDoctor());
+    assertTrue(user.getGender().equals("male"));
+    assertTrue(user.getAge() == 22);
   }
 
   @Test
