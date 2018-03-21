@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.UserController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.UserController">
    <top>
       <HBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER">
          <children>
@@ -128,6 +136,45 @@
                      </padding>
                   </HBox>
                </content></Tab>
+            <Tab text="Graph">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <AnchorPane layoutX="-1.0" prefHeight="304.0" prefWidth="600.0">
+                           <children>
+                              <StackPane alignment="BOTTOM_CENTER" layoutX="202.0" layoutY="33.0" prefHeight="238.0" prefWidth="384.0">
+                                 <children>
+                                    <BarChart fx:id="stepBarChart" prefHeight="266.0" prefWidth="379.0">
+                                      <xAxis>
+                                        <CategoryAxis fx:id="stepChartXAxis" side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis fx:id="stepChartYAxis" side="LEFT" />
+                                      </yAxis>
+                                    </BarChart>
+                                    <LineChart fx:id="pulseLineChart">
+                                      <xAxis>
+                                        <CategoryAxis fx:id="pulseChartXAxis" side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                      </yAxis>
+                                    </LineChart>
+                                 </children>
+                              </StackPane>
+                              <ChoiceBox fx:id="dataChoiceBox" layoutX="30.0" layoutY="33.0" prefHeight="26.0" prefWidth="150.0" />
+                              <DatePicker fx:id="fromDate" layoutX="31.0" layoutY="89.0" prefHeight="26.0" prefWidth="151.0" />
+                              <DatePicker fx:id="toDate" layoutX="31.0" layoutY="138.0" prefHeight="29.0" prefWidth="150.0" />
+                              <Text layoutX="32.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Health Type" wrappingWidth="74.82275390625" />
+                              <Text layoutX="32.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From:" />
+                              <Text layoutX="29.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To:" wrappingWidth="40.21875" />
+                              <Button fx:id="viewGraphButton" layoutX="61.0" layoutY="204.0" mnemonicParsing="false" onAction="#handleViewGraphButton" text="View graph" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
         </tabs>
       </TabPane>
    </center>

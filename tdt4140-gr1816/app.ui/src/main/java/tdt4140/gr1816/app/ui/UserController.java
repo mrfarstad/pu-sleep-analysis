@@ -3,10 +3,19 @@ package tdt4140.gr1816.app.ui;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import tdt4140.gr1816.app.core.*;
@@ -33,6 +42,20 @@ public class UserController implements Initializable {
 
   @FXML private ListView<DataAccessRequest> doctorRequestListView;
 
+  // Graph Tab
+  @FXML private ChoiceBox<String> dataChoiceBox;
+  @FXML private DatePicker fromDate;
+  @FXML private DatePicker toDate;
+  @FXML private Button viewGraphButton;
+  
+  @FXML private BarChart<String, Number> stepBarChart;
+  @FXML private CategoryAxis stepChartXAxis;
+  @FXML private NumberAxis stepChartYAxis;
+  
+  @FXML private LineChart<String, Number> pulseLineChart;
+  @FXML private CategoryAxis pulseChartXAxis;
+  @FXML private NumberAxis pulseChartYAxis;
+  
   private User user;
   private UserDataFetch userDataFetch;
 
@@ -91,6 +114,32 @@ public class UserController implements Initializable {
     // CODE TO TURN ON DATA GATHERING
   }
 
+  public void handleViewGraphButton() {
+	  if (dataChoiceBox.getValue().equals("Steps")) {
+		hideCharts();
+		showStepChart(); 
+	  } else if (dataChoiceBox.getValue().equals("Pulse")){
+		  hideCharts();
+		  showPulseChart();
+	  }else if (dataChoiceBox.getValue().equals("Sleep - duration")) {
+		  hideCharts();
+		  showSleepDChart();
+	  }
+  }
+  
+  public void showStepChart() {
+	  hideCharts();
+	  ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
+	  
+	  stepBarChart.setVisible(true);
+  }
+  public void showPulseChart() {
+	  pulseLineChart.setVisible(true);
+  }
+  public void showSleepDChart() {
+	  
+  }
+
   @Override
   public void initialize(URL arg0, ResourceBundle arg1) {
 
@@ -106,6 +155,10 @@ public class UserController implements Initializable {
     updateDoctorsListViewItems();
 
     updateDoctorRequestListViewItems();
+    
+    setDataChoiceBox();
+    
+    hideCharts();
   }
 
   public void setProfileValues() {
@@ -154,5 +207,16 @@ public class UserController implements Initializable {
         .stream()
         .filter(request -> request.getStatusAsString().equals("PENDING"))
         .forEach(request -> doctorRequestListViewItems.add(request));
+  }
+  
+  private void hideCharts() {
+	  stepBarChart.setVisible(false);
+	  pulseLineChart.setVisible(false);
+	 
+  }
+  public void setDataChoiceBox() {
+	  dataChoiceBox.getItems().add("Pulse");
+	  dataChoiceBox.getItems().add("Steps");
+	  dataChoiceBox.getItems().add("Sleep - duration");
   }
 }
