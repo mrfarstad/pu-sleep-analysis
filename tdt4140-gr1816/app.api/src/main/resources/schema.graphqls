@@ -1,5 +1,8 @@
 type Query {
+	# Returns all the users
     allUsers: [User]
+    
+    # Returns the currently logged in user
     viewer: User
 
     # DataAccess requested by you
@@ -7,6 +10,16 @@ type Query {
 
     # DataAccess requested by others, for you
     dataAccessRequestsForMe: [DataAccessRequest]
+    
+    # Returns all user sleep/steps data
+    allSleepData: [SleepData]
+    allStepsData: [StepsData]
+    allPulseData: [PulseData]
+    
+    # Returns all viewer sleep/steps data
+    sleepDataByViewer: [SleepData]
+    stepsDataByViewer: [StepsData]
+    pulseDataByViewer: [PulseData]
 }
 
 
@@ -14,10 +27,19 @@ type Mutation {
   createUser(authProvider: AuthData!, isDoctor: Boolean!, gender: String!, age: Int!): User
   signinUser(auth: AuthData): SigninPayload
   deleteUser(auth: AuthData!): Boolean
+ 
+ # date is of the form 'YYYY-MM-DD'
+  createSleepData(date: String!, duration: Int!, efficiency: Int!): SleepData
+  createStepsData(date: String!, steps: Int!): StepsData
+  createPulseData(date: String!, restHr: Int!): PulseData
+  
+  deleteSleepData(sleepId: ID!): Boolean
+  deleteStepsData(stepsId: ID!): Boolean
+  deletePulseData(pulseId: ID!): Boolean
   
   requestDataAccess(dataOwnerId: ID!): DataAccessRequest
   answerDataAccessRequest(dataAccessRequestId: ID!, status: DataAccessRequestStatus!): DataAccessRequest
-}
+} 
 
 input AuthData {
 	username: String!
@@ -44,6 +66,30 @@ type User {
 	isDoctor: Boolean
 	gender: String
 	age: Int
+}
+
+type SleepData {
+	id: ID!
+	user: User
+	# date is of the form 'YYYY-MM-DD'
+	date: String
+	duration: Int
+	efficiency: Int
+}
+
+type StepsData {
+	id: ID!
+	user: User
+	# date is of the form 'YYYY-MM-DD'
+	date: String
+	steps: Int
+}
+
+type PulseData {
+	id: ID!
+	user: User!
+	date: String!
+	restHr: Int!
 }
 
 type SigninPayload {

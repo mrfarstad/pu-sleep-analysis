@@ -4,22 +4,38 @@ import com.coxautodev.graphql.tools.GraphQLRootResolver;
 import graphql.GraphQLException;
 import graphql.schema.DataFetchingEnvironment;
 import tdt4140.gr1816.app.api.DataAccessRequestRepository;
+import tdt4140.gr1816.app.api.PulseDataRepository;
+import tdt4140.gr1816.app.api.SleepDataRepository;
+import tdt4140.gr1816.app.api.StepsDataRepository;
 import tdt4140.gr1816.app.api.UserRepository;
 import tdt4140.gr1816.app.api.auth.AuthContext;
 import tdt4140.gr1816.app.api.auth.AuthData;
 import tdt4140.gr1816.app.api.types.DataAccessRequest;
 import tdt4140.gr1816.app.api.types.DataAccessRequestStatus;
+import tdt4140.gr1816.app.api.types.PulseData;
 import tdt4140.gr1816.app.api.types.SigninPayload;
+import tdt4140.gr1816.app.api.types.SleepData;
+import tdt4140.gr1816.app.api.types.StepsData;
 import tdt4140.gr1816.app.api.types.User;
 
 public class Mutation implements GraphQLRootResolver {
 
   private final UserRepository userRepository;
+  private final SleepDataRepository sleepDataRepository;
+  private final StepsDataRepository stepsDataRepository;
   private final DataAccessRequestRepository dataAccessRequestRepository;
+  private final PulseDataRepository pulseDataRepository;
 
   public Mutation(
-      UserRepository userRepository, DataAccessRequestRepository dataAccessRequestRepository) {
+      UserRepository userRepository,
+      SleepDataRepository sleepDataRepository,
+      StepsDataRepository stepsDataRepository,
+      PulseDataRepository pulseDataRepository,
+      DataAccessRequestRepository dataAccessRequestRepository) {
     this.userRepository = userRepository;
+    this.sleepDataRepository = sleepDataRepository;
+    this.stepsDataRepository = stepsDataRepository;
+    this.pulseDataRepository = pulseDataRepository;
     this.dataAccessRequestRepository = dataAccessRequestRepository;
   }
 
@@ -51,6 +67,61 @@ public class Mutation implements GraphQLRootResolver {
       return new SigninPayload(user.getId(), user);
     }
     throw new GraphQLException("Invalid credentials");
+  }
+
+  public SleepData createSleepData(
+      String date, int duration, int efficiency, DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      throw new GraphQLException("Please log in");
+    }
+    SleepData newSleepData = new SleepData(user.getId(), date, duration, efficiency);
+    return sleepDataRepository.saveSleepData(newSleepData);
+  }
+
+  public Boolean deleteSleepData(String sleepId) {
+    SleepData sleepData = sleepDataRepository.findById(sleepId);
+    if (sleepData == null) {
+      throw new GraphQLException("Invalid sleep id");
+    }
+    return sleepDataRepository.deleteSleepData(sleepData);
+  }
+
+  public StepsData createStepsData(String date, int steps, DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      throw new GraphQLException("Please log in");
+    }
+    StepsData newStepsData = new StepsData(user.getId(), date, steps);
+    return stepsDataRepository.saveStepsData(newStepsData);
+  }
+
+  public Boolean deleteStepsData(String stepsId) {
+    StepsData stepsData = stepsDataRepository.findById(stepsId);
+    if (stepsData == null) {
+      throw new GraphQLException("Invalid steps id");
+    }
+    return stepsDataRepository.deleteStepsData(stepsData);
+  }
+
+  public PulseData createPulseData(String date, int restHr, DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      throw new GraphQLException("Please log in");
+    }
+    PulseData newPulseData = new PulseData(user.getId(), date, restHr);
+    return pulseDataRepository.savePulseData(newPulseData);
+  }
+
+  public Boolean deletePulseData(String pulseDataId) {
+    PulseData pulseData = pulseDataRepository.findById(pulseDataId);
+    if (pulseData == null) {
+      throw new GraphQLException("Invalid pulse data id");
+    }
+    return pulseDataRepository.deletePulseData(pulseData);
   }
 
   public DataAccessRequest requestDataAccess(String dataOwnerId, DataFetchingEnvironment env) {

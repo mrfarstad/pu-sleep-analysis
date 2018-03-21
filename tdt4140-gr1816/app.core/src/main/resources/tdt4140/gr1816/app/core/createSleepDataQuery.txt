@@ -1,0 +1,12 @@
+mutation($date: String!, $duration: Int!, $efficiency: Int!) {
+  createSleepData(date: $date duration: $duration, efficiency: $efficiency) {
+    id
+    user {
+      id
+      username
+    }
+    date
+    duration
+    efficiency
+  }
+}

@@ -4,6 +4,7 @@ import static com.mongodb.client.model.Filters.eq;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
+import graphql.GraphQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
@@ -37,6 +38,11 @@ public class UserRepository {
   }
 
   public User saveUser(User user) {
+
+    User u = findByUsername(user.getUsername());
+    if (u != null) {
+      throw new GraphQLException("Duplicate username!!");
+    }
     Document doc = new Document();
     doc.append("username", user.getUsername());
     doc.append("password", user.getPassword());

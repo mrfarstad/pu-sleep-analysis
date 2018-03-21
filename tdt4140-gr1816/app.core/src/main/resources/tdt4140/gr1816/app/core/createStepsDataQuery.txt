@@ -1,0 +1,11 @@
+mutation($date: String!, $steps: Int!) {
+  createStepsData(date: $date steps: $steps) {
+    id
+    user {
+      id
+      username
+    }
+    date
+    steps
+  }
+}

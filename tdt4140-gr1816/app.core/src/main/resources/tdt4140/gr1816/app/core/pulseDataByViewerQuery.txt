@@ -1,0 +1,12 @@
+query {
+  pulseDataByViewer {
+    id
+    date
+    user {
+      id
+      username
+    }
+    minHr
+    maxHr
+  }
+}

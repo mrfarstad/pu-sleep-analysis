@@ -1,0 +1,11 @@
+query {
+  stepsDataByViewer {
+    id
+    date
+    user {
+      id
+      username
+    }
+    steps
+  }
+}

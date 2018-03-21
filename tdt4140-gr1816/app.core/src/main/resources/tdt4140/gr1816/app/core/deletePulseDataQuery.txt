@@ -1,0 +1,3 @@
+mutation($pulse: ID!) {
+  deletePulseData(pulseId: $pulse)
+}

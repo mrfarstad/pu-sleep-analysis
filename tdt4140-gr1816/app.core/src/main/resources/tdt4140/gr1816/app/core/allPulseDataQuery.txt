@@ -1,0 +1,12 @@
+query {
+  allPulseData {
+    id
+    date
+    user {
+      id
+      username
+    }
+    minHr
+    maxHr
+  }
+}

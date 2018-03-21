@@ -1,0 +1,11 @@
+mutation($date: String!, $restHr: Int!) {
+  createPulseData(date: $date restHr: $restHr) {
+    id
+    user {
+      id
+      username
+    }
+    date
+    restHr
+  }
+}

@@ -17,15 +17,21 @@ import javax.servlet.http.HttpServletResponse;
 import tdt4140.gr1816.app.api.auth.AuthContext;
 import tdt4140.gr1816.app.api.resolvers.DataAccessRequestResolver;
 import tdt4140.gr1816.app.api.resolvers.Mutation;
+import tdt4140.gr1816.app.api.resolvers.PulseDataResolver;
 import tdt4140.gr1816.app.api.resolvers.Query;
 import tdt4140.gr1816.app.api.resolvers.SigninResolver;
+import tdt4140.gr1816.app.api.resolvers.SleepDataResolver;
+import tdt4140.gr1816.app.api.resolvers.StepsDataResolver;
 import tdt4140.gr1816.app.api.types.User;
 
 @WebServlet(urlPatterns = "/graphql")
 public class GraphQLEndpoint extends SimpleGraphQLServlet {
 
   public static final UserRepository userRepository;
+  public static final SleepDataRepository sleepDataRepository;
   private static final DataAccessRequestRepository dataAccessRequestRepository;
+  public static final StepsDataRepository stepsDataRepository;
+  public static final PulseDataRepository pulseDataRepository;
 
   public static MongoDatabase mongo;
 
@@ -36,6 +42,9 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
         new MongoClient(host == null ? "localhost" : host)
             .getDatabase(dbname == null ? "gruppe16" : dbname);
     userRepository = new UserRepository(mongo.getCollection("users"));
+    sleepDataRepository = new SleepDataRepository(mongo.getCollection("sleepData"));
+    stepsDataRepository = new StepsDataRepository(mongo.getCollection("stepData"));
+    pulseDataRepository = new PulseDataRepository(mongo.getCollection("pulseData"));
     dataAccessRequestRepository =
         new DataAccessRequestRepository(mongo.getCollection("dataAccessRequests"));
   }
@@ -48,10 +57,23 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
     return SchemaParser.newParser()
         .file("schema.graphqls")
         .resolvers(
-            new Query(userRepository, dataAccessRequestRepository),
-            new Mutation(userRepository, dataAccessRequestRepository),
+            new Query(
+                userRepository,
+                sleepDataRepository,
+                stepsDataRepository,
+                pulseDataRepository,
+                dataAccessRequestRepository),
+            new Mutation(
+                userRepository,
+                sleepDataRepository,
+                stepsDataRepository,
+                pulseDataRepository,
+                dataAccessRequestRepository),
             new SigninResolver(),
-            new DataAccessRequestResolver(userRepository))
+            new DataAccessRequestResolver(userRepository),
+            new SleepDataResolver(userRepository),
+            new StepsDataResolver(userRepository),
+            new PulseDataResolver(userRepository))
         .build()
         .makeExecutableSchema();
   }
