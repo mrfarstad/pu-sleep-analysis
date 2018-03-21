@@ -12,9 +12,9 @@ type Query {
     dataAccessRequestsForMe: [DataAccessRequest]
     
     # Returns all user sleep/steps data
-    allSleepData: [SleepData]
-    allStepsData: [StepsData]
-    allPulseData: [PulseData]
+    allSleepData(userId: String!): [SleepData]
+    allStepsData(userId: String!): [StepsData]
+    allPulseData(userId: String!): [PulseData]
     
     # Returns all viewer sleep/steps data
     sleepDataByViewer: [SleepData]

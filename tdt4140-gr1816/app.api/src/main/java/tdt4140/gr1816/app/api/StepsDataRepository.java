@@ -25,9 +25,9 @@ public class StepsDataRepository {
     return stepsData(doc);
   }
 
-  public List<StepsData> getAllStepsData() {
+  public List<StepsData> getAllStepsData(String userId) {
     List<StepsData> allStepsData = new ArrayList<>();
-    for (Document doc : stepsDoc.find()) {
+    for (Document doc : stepsDoc.find(eq("user", userId))) {
       allStepsData.add(stepsData(doc));
     }
     return allStepsData;

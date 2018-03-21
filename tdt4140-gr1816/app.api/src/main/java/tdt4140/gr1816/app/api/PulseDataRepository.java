@@ -25,9 +25,9 @@ public class PulseDataRepository {
     return pulseData(doc);
   }
 
-  public List<PulseData> getAllPulseData() {
+  public List<PulseData> getAllPulseData(String userId) {
     List<PulseData> allPulseData = new ArrayList<>();
-    for (Document doc : pulseDataDoc.find()) {
+    for (Document doc : pulseDataDoc.find(eq("user", userId))) {
       allPulseData.add(pulseData(doc));
     }
     return allPulseData;

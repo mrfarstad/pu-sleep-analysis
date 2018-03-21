@@ -25,9 +25,9 @@ public class SleepDataRepository {
     return sleepData(doc);
   }
 
-  public List<SleepData> getAllSleepData() {
+  public List<SleepData> getAllSleepData(String userId) {
     List<SleepData> allSleepData = new ArrayList<>();
-    for (Document doc : sleepsDoc.find()) {
+    for (Document doc : sleepsDoc.find(eq("user", userId))) {
       allSleepData.add(sleepData(doc));
     }
     return allSleepData;
