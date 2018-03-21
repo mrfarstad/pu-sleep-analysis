@@ -15,6 +15,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -45,7 +46,7 @@ public class UserGUITest extends ApplicationTest {
     stage.show();
   }
 
-  @Test
+  @Before
   public void signIn() {
     String username = "testUser";
     String password = "test";
@@ -64,12 +65,11 @@ public class UserGUITest extends ApplicationTest {
     clickOn(passwordField);
     write(password);
     clickOn("#signinButton");
-
-    testDataButton();
-    testAcceptAndRemoveDoctor();
   }
 
-  public void testDataButton() {
+  @Test
+  public void testDataButton() throws Exception {
+    // signIn();
     clickOn("#profileTab");
     Button dataButton = lookup("#dataButton").query();
 
@@ -80,7 +80,9 @@ public class UserGUITest extends ApplicationTest {
     assertEquals("Turn off", dataButton.getText());
   }
 
-  public void testAcceptAndRemoveDoctor() {
+  @Test
+  public void testAcceptAndRemoveDoctor() throws Exception {
+    // signIn();
     clickOn("#doctorTab");
 
     ListView doctorRequestList = lookup("#doctorRequestListView").query();

@@ -17,6 +17,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -47,8 +48,8 @@ public class DoctorGUITest extends ApplicationTest {
     stage.show();
   }
 
-  @Test
-  public void testDoctorGUI() {
+  @Before
+  public void signIn() {
     String username = "testDoctor";
     String password = "test";
     User doctorSample = new User("doctorID", username, password, true, "male", 43);
@@ -66,12 +67,9 @@ public class DoctorGUITest extends ApplicationTest {
     clickOn(passwordField);
     write(password);
     clickOn("#signinButton");
-
-    testRequestButton();
-    testShowDataButton();
-    testShowMessageButton();
   }
 
+  @Test
   public void testRequestButton() {
     clickOn("#patientTab");
     TextField requestUserTextField = lookup("#requestUserTextField").query();
@@ -100,6 +98,7 @@ public class DoctorGUITest extends ApplicationTest {
     assertEquals(selected.getStatusAsString(), "PENDING");
   }
 
+  @Test
   public void testShowDataButton() {
     clickOn("#patientTab");
     TabPane tabPane = lookup("#tabPane").query();
@@ -108,6 +107,7 @@ public class DoctorGUITest extends ApplicationTest {
     assertEquals(2, tabPane.getSelectionModel().getSelectedIndex());
   }
 
+  @Test
   public void testShowMessageButton() {
     clickOn("#patientTab");
     TabPane tabPane = lookup("#tabPane").query();
