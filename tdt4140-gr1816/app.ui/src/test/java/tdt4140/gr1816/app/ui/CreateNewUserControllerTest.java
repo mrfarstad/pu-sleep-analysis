@@ -2,6 +2,8 @@ package tdt4140.gr1816.app.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,8 +13,11 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
+import tdt4140.gr1816.app.core.User;
+import tdt4140.gr1816.app.core.UserDataFetch;
 
 public class CreateNewUserControllerTest extends ApplicationTest {
 
@@ -32,41 +37,56 @@ public class CreateNewUserControllerTest extends ApplicationTest {
 
   @Override
   public void start(Stage stage) throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("CreateNewUserGUI.fxml"));
+    FxApp.userDataFetch = mock(UserDataFetch.class);
+    Parent root = FXMLLoader.load(getClass().getResource("FxApp.fxml"));
     Scene scene = new Scene(root);
     stage.setScene(scene);
     stage.show();
   }
 
+  @Ignore
   @Test
-  public void testSignupPasswordField() {
-    PasswordField signupPasswordField = lookup("#signupPasswordField").query();
-    clickOn(signupPasswordField);
-    write("passord123");
-    assertEquals("passord123", signupPasswordField.getText());
-  }
+  public void testCreateNewUser() {
+    clickOn("#createNewUserButton");
 
-  @Test
-  public void testSignupUsernameField() {
+    String username = "mathiaswahl";
+    String password = "passord123";
+    String age = "22";
+
+    User userSample = new User("userID", username, password, false, "male", Integer.parseInt(age));
+    when(FxApp.userDataFetch.createUser(username, password, false, "Male", Integer.parseInt(age)))
+        .thenReturn(userSample);
+
     TextField signupUsernameField = lookup("#signupUsernameField").query();
+    PasswordField signupPasswordField = lookup("#signupPasswordField").query();
+    TextField ageField = lookup("#ageField").query();
+    RadioButton isDoctor = lookup("#isDoctorRadioButton").query();
+    RadioButton genderButton = lookup("#femaleRadioButton").query();
+
     clickOn(signupUsernameField);
-    write("mathiaswahl");
-    assertEquals("mathiaswahl", signupUsernameField.getText());
-  }
+    write(username);
+    clickOn(signupPasswordField);
+    write(password);
+    clickOn(ageField);
+    write(age);
+    clickOn("#femaleRadioButton");
+    clickOn("#otherGenderRadioButton");
+    clickOn("#maleRadioButton");
+    clickOn(isDoctor);
+    clickOn(isDoctor);
 
-  @Test
-  public void testFemaleSelected() {
-    RadioButton female = lookup("#femaleRadioButton").query();
-    clickOn(female);
-    assertTrue(female.isSelected());
-  }
+    RadioButton gender = (RadioButton) genderButton.getToggleGroup().getSelectedToggle();
+    User newUser =
+        FxApp.userDataFetch.createUser(
+            signupUsernameField.getText(),
+            signupPasswordField.getText(),
+            isDoctor.isSelected(),
+            gender.getText(),
+            Integer.parseInt(ageField.getText()));
 
-  @Test
-  public void testMaleSelected() {
-    RadioButton female = lookup("#femaleRadioButton").query();
-    RadioButton male = lookup("#maleRadioButton").query();
-    clickOn(female);
-    clickOn(male);
-    assertTrue(male.isSelected());
+    assertTrue(newUser instanceof User);
+    assertEquals(newUser, userSample);
+
+    clickOn("#createUserButton");
   }
 }
