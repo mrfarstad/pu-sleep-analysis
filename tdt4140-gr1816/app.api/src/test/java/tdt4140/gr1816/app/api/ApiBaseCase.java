@@ -40,11 +40,13 @@ public class ApiBaseCase {
   }
 
   public User createUser() {
-    return GraphQLEndpoint.userRepository.saveUser(new User("test", "test", false, "male", 30));
+    return GraphQLEndpoint.userRepository.saveUser(
+        new User("test", "test", false, "male", 30, true));
   }
 
   public User createDoctor() {
-    return GraphQLEndpoint.userRepository.saveUser(new User("doctor", "doctor", true, "male", 32));
+    return GraphQLEndpoint.userRepository.saveUser(
+        new User("doctor", "doctor", true, "male", 32, true));
   }
 
   public AuthContext forceAuth(String username) {

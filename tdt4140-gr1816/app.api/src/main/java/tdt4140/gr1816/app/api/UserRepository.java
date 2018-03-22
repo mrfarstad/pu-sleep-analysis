@@ -45,6 +45,7 @@ public class UserRepository {
     }
     Document doc = new Document();
     doc.append("username", user.getUsername());
+    doc.append("isGatheringData", user.isGatheringData());
     doc.append("password", user.getPassword());
     doc.append("isDoctor", user.isDoctor());
     doc.append("gender", user.getGender());
@@ -56,7 +57,8 @@ public class UserRepository {
         user.getPassword(),
         user.isDoctor(),
         user.getGender(),
-        user.getAge());
+        user.getAge(),
+        user.isGatheringData());
   }
 
   public boolean deleteUser(User user) {
@@ -65,16 +67,28 @@ public class UserRepository {
     return result.wasAcknowledged();
   }
 
+  public boolean setIsGatheringData(User user, Boolean status) {
+    Document userDoc = users.find(eq("_id", new ObjectId(user.getId()))).first();
+
+    Document doc = new Document();
+    doc.append("isGatheringData", status);
+    users.updateOne(
+        eq("_id", new ObjectId(userDoc.get("_id").toString())), new Document("$set", doc));
+    return status;
+  }
+
   private User user(Document doc) {
     if (doc == null) {
       return null;
     }
+
     return new User(
         doc.get("_id").toString(),
         doc.getString("username"),
         doc.getString("password"),
         doc.getBoolean("isDoctor"),
         doc.getString("gender"),
-        doc.getInteger("age"));
+        doc.getInteger("age"),
+        doc.getBoolean("isGatheringData", true));
   }
 }

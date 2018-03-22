@@ -9,18 +9,37 @@ public class User {
   private String gender;
   private int age;
 
-  public User(String username, String password, boolean isDoctor, String gender, int age) {
-    this(null, username, password, isDoctor, gender, age);
+  private boolean isGatheringData = true;
+
+  public User(
+      String username,
+      String password,
+      boolean isDoctor,
+      String gender,
+      int age,
+      boolean isGatheringData) {
+    this(null, username, password, isDoctor, gender, age, isGatheringData);
   }
 
   public User(
-      String id, String username, String password, boolean isDoctor, String gender, int age) {
+      String id,
+      String username,
+      String password,
+      boolean isDoctor,
+      String gender,
+      int age,
+      boolean isGatheringData) {
     this.id = id;
     this.username = username;
     this.password = password;
     this.isDoctor = isDoctor;
     this.gender = gender;
     this.age = age;
+    this.isGatheringData = isGatheringData;
+  }
+
+  public boolean isGatheringData() {
+    return isGatheringData;
   }
 
   public String getId() {
