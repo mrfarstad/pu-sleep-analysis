@@ -174,3 +174,4 @@ fitbit-exporter/.idea/
 #
 fitbit-exporter/fitbit-exporter
 *.iml
+.idea/
