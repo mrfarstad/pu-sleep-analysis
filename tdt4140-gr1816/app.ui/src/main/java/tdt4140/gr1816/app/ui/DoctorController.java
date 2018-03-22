@@ -124,8 +124,12 @@ public class DoctorController implements Initializable {
     ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
     sleepBarChart.getData().clear();
     List<SleepData> sleepDataList = userDataFetch.getAllSleepData(user.getId());
-    sleepDataList.stream().forEach(sleepData -> barChartData.add(new
-    XYChart.Data<>(sleepData.getDate().toString(), sleepData.getDuration())));
+    sleepDataList
+        .stream()
+        .forEach(
+            sleepData ->
+                barChartData.add(
+                    new XYChart.Data<>(sleepData.getDate().toString(), sleepData.getDuration())));
     XYChart.Series<String, Number> series = new XYChart.Series<>(barChartData);
     sleepBarChart.getData().clear();
     sleepBarChart.getData().add(series);
@@ -155,7 +159,12 @@ public class DoctorController implements Initializable {
     ObservableList<XYChart.Data<String, Number>> lineChartData =
         FXCollections.observableArrayList();
     List<PulseData> pulseDataList = userDataFetch.getAllPulseData(user.getId());
-    pulseDataList.stream().forEach(pulseData -> lineChartData.add(new XYChart.Data<>(pulseData.getDate().toString(), pulseData.getRestHr())));
+    pulseDataList
+        .stream()
+        .forEach(
+            pulseData ->
+                lineChartData.add(
+                    new XYChart.Data<>(pulseData.getDate().toString(), pulseData.getRestHr())));
 
     XYChart.Series<String, Number> series = new XYChart.Series<>(lineChartData);
     pulseLineChart.getData().clear();
@@ -170,7 +179,11 @@ public class DoctorController implements Initializable {
     ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
     List<StepsData> stepDataList = userDataFetch.getAllStepsData(user.getId());
     stepDataList
-    .stream().forEach(stepData -> barChartData.add(new XYChart.Data<>(stepData.getDate().toString(), stepData.getSteps())));
+        .stream()
+        .forEach(
+            stepData ->
+                barChartData.add(
+                    new XYChart.Data<>(stepData.getDate().toString(), stepData.getSteps())));
     XYChart.Series<String, Number> series = new XYChart.Series<>(barChartData);
     stepBarChart.getData().clear();
     stepBarChart.getData().add(series);
