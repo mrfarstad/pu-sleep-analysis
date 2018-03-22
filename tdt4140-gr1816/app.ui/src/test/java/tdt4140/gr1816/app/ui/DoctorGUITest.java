@@ -52,7 +52,7 @@ public class DoctorGUITest extends ApplicationTest {
   public void signIn() {
     String username = "testDoctor";
     String password = "test";
-    User doctorSample = new User("doctorID", username, password, true, "male", 43);
+    User doctorSample = new User("doctorID", username, password, true, "male", 43, true);
 
     when(FxApp.userDataFetch.signIn(username, password)).thenReturn(doctorSample);
     when(FxApp.userDataFetch.getCurrentUser()).thenReturn(doctorSample);
@@ -86,7 +86,7 @@ public class DoctorGUITest extends ApplicationTest {
     requestUserTextField.clear();
 
     String username = "testUser";
-    User userSample = new User("testUserID", username, "test", false, "female", 50);
+    User userSample = new User("testUserID", username, "test", false, "female", 50, true);
     DataAccessRequest request =
         new DataAccessRequest(
             "requestID", userSample, FxApp.userDataFetch.getCurrentUser(), "PENDING");

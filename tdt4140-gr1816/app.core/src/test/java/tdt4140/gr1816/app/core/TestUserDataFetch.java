@@ -272,16 +272,16 @@ public class TestUserDataFetch {
     DataAccessRequest request =
         new DataAccessRequest(
             "5ab26cd7c13edf233e48b455",
-            new User("5ab26cb8c13edf233e48b454", "martin	", "martin", false, "male", 22),
-            new User("5ab173c1c13edf146111e7bb", "mathias", "mathias", true, "male", 22),
+            new User("5ab26cb8c13edf233e48b454", "martin	", "martin", false, "male", 22, true),
+            new User("5ab173c1c13edf146111e7bb", "mathias", "mathias", true, "male", 22, true),
             "PENDING");
     assertTrue(userDataFetch.answerDataAccessRequest(request, "ACCEPTED"));
   }
 
   @Test
   public void testDataAccessRequest() {
-    User testUser1 = new User("5a9e8503c13edf22f93825e7", "test", "test", true, "female", 22);
-    User testUser2 = new User("5a9e85cac13edf22f93825e8", "testo", "testo", true, "male", 22);
+    User testUser1 = new User("5a9e8503c13edf22f93825e7", "test", "test", true, "female", 22, true);
+    User testUser2 = new User("5a9e85cac13edf22f93825e8", "testo", "testo", true, "male", 22, true);
     DataAccessRequest request = new DataAccessRequest(null, testUser1, testUser2, "ACCEPTED");
     assertTrue(request.toString() instanceof String);
     assertNull(request.getId());

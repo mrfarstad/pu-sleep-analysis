@@ -18,7 +18,12 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
-import tdt4140.gr1816.app.core.*;
+import tdt4140.gr1816.app.core.DataAccessRequest;
+import tdt4140.gr1816.app.core.PulseData;
+import tdt4140.gr1816.app.core.SleepData;
+import tdt4140.gr1816.app.core.StepsData;
+import tdt4140.gr1816.app.core.User;
+import tdt4140.gr1816.app.core.UserDataFetch;
 
 public class UserController implements Initializable {
 
@@ -65,20 +70,16 @@ public class UserController implements Initializable {
   private User user;
   private UserDataFetch userDataFetch;
 
-  private boolean dataGatheringOn;
   ObservableList<DataAccessRequest> doctorsListViewItems;
   ObservableList<DataAccessRequest> doctorRequestListViewItems;
 
   public void handleDataButton() {
-    if (dataGatheringOn) {
-      dataButton.setText("Turn on");
-      dataGatheringOn = false;
+    if (user.getIsGatheringData()) {
       turnOffDataGathering();
     } else {
-      dataButton.setText("Turn off");
-      dataGatheringOn = true;
       turnOnDataGathering();
     }
+    setInitialDataButtonValue();
   }
 
   public void handleDeleteDataButton() {
@@ -151,12 +152,18 @@ public class UserController implements Initializable {
     }
   }
 
+  public void toggleDataGathering() {
+    boolean newStatus = !user.getIsGatheringData();
+    userDataFetch.setIsGatheringData(newStatus);
+    user.setIsGatheringData(newStatus);
+  }
+
   public void turnOffDataGathering() {
-    // CODE TO TURN OFF DATA GATHERING
+    toggleDataGathering();
   }
 
   public void turnOnDataGathering() {
-    // CODE TO TURN ON DATA GATHERING
+    toggleDataGathering();
   }
 
   public void handleViewGraphButton() {
@@ -265,8 +272,7 @@ public class UserController implements Initializable {
   }
 
   public void setInitialDataButtonValue() {
-    dataGatheringOn = true;
-
+    boolean dataGatheringOn = user.getIsGatheringData();
     if (dataGatheringOn) {
       dataButton.setText("Turn off");
     } else {

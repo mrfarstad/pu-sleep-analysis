@@ -53,7 +53,8 @@ public class CreateNewUserControllerTest extends ApplicationTest {
     String password = "passord123";
     String age = "22";
 
-    User userSample = new User("userID", username, password, false, "male", Integer.parseInt(age));
+    User userSample =
+        new User("userID", username, password, false, "male", Integer.parseInt(age), true);
     when(FxApp.userDataFetch.createUser(username, password, false, "Male", Integer.parseInt(age)))
         .thenReturn(userSample);
 

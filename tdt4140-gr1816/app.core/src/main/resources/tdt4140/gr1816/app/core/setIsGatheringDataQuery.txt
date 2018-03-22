@@ -1,0 +1,3 @@
+mutation ($isGatheringData: Boolean!) {
+  setIsGatheringData(isGatheringData: $isGatheringData)
+}
