@@ -126,11 +126,11 @@
                                     </AnchorPane>
                                  </children>
                               </VBox>
-                              <VBox alignment="TOP_CENTER" prefHeight="368.0" prefWidth="401.0">
+                              <VBox alignment="TOP_CENTER" prefHeight="368.0" prefWidth="419.0">
                                  <children>
                                     <AnchorPane prefHeight="54.0" prefWidth="401.0">
                                        <children>
-                                          <Text layoutX="34.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Health data associated with ">
+                                          <Text layoutX="33.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Health data associated with ">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -138,14 +138,14 @@
                                           <Text fx:id="patientTF" layoutX="221.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="120.0" />
                                        </children>
                                     </AnchorPane>
-                                    <StackPane prefHeight="259.0" prefWidth="401.0">
+                                    <StackPane prefHeight="324.0" prefWidth="419.0">
                                        <children>
                                           <BarChart fx:id="sleepBarChart" title="Sleep Bar Chart">
                                             <xAxis>
-                                              <CategoryAxis side="BOTTOM" />
+                                              <CategoryAxis fx:id="sleepChartXAxis" side="BOTTOM" />
                                             </xAxis>
                                             <yAxis>
-                                              <NumberAxis side="LEFT" />
+                                              <NumberAxis fx:id="sleepChartYAxis" side="LEFT" />
                                             </yAxis>
                                           </BarChart>
                                           <PieChart fx:id="sleepPieChart" disable="true" legendVisible="false" prefHeight="200.0" prefWidth="392.0" title="Sleep Pie Chart" />
@@ -157,7 +157,7 @@
                                               <NumberAxis fx:id="pulseChartYAxis" side="LEFT" upperBound="220.0" />
                                             </yAxis>
                                           </LineChart>
-                                          <BarChart fx:id="stepBarChart" prefHeight="244.0" prefWidth="383.0" title="Step Chart">
+                                          <BarChart fx:id="stepBarChart" prefHeight="302.0" prefWidth="422.0" title="Step Chart">
                                             <xAxis>
                                               <CategoryAxis fx:id="stepChartXAxis" side="BOTTOM" />
                                             </xAxis>

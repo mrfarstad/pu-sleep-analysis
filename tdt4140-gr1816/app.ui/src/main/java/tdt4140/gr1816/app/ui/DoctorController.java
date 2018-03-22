@@ -119,6 +119,7 @@ public class DoctorController implements Initializable {
   private void showSleepBarChart() {
     hideCharts();
     User user = getSelectedPatientCB();
+    sleepBarChart.setBarGap(0);
     sleepChartXAxis.setLabel("Date");
     sleepChartYAxis.setLabel("Duration in hours");
     ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
@@ -129,7 +130,8 @@ public class DoctorController implements Initializable {
         .forEach(
             sleepData ->
                 barChartData.add(
-                    new XYChart.Data<>(sleepData.getDate().toString(), sleepData.getDuration())));
+                    new XYChart.Data<>(
+                        sleepData.getDate().toString(), sleepData.getDuration() / 60)));
     XYChart.Series<String, Number> series = new XYChart.Series<>(barChartData);
     sleepBarChart.getData().clear();
     sleepBarChart.getData().add(series);
@@ -174,6 +176,7 @@ public class DoctorController implements Initializable {
 
   private void showStepChart() {
     User user = getSelectedPatientCB();
+    stepBarChart.setBarGap(0);
     stepChartXAxis.setLabel("Date");
     stepChartYAxis.setLabel("Steps");
     ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
@@ -251,7 +254,6 @@ public class DoctorController implements Initializable {
   public void setDataChoiceBox() {
     dataChoiceBox.getItems().add("Pulse");
     dataChoiceBox.getItems().add("Steps");
-    dataChoiceBox.getItems().add("Sleep [piechart]");
-    dataChoiceBox.getItems().add("Sleep [barchart]");
+    dataChoiceBox.getItems().add("Sleep");
   }
 }
