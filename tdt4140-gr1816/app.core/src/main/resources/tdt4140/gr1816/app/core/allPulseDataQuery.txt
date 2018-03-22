@@ -1,12 +1,11 @@
-query {
-  allPulseData {
+query($userId: String!) {
+  allPulseData(userId: $userId) {
     id
     date
     user {
       id
       username
     }
-    minHr
-    maxHr
+    restHr
   }
 }

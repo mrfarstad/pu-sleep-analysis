@@ -1,0 +1,6 @@
+mutation($username: String! $password: String!) {
+  deleteUser(auth: {
+    username: $username
+    password: $password
+  })
+}

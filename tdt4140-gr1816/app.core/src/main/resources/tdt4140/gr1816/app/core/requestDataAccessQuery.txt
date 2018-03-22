@@ -1,0 +1,22 @@
+mutation ($dataOwnerId: ID!) {
+  requestDataAccess(
+    dataOwnerId: $dataOwnerId
+  ) {
+    id
+    dataOwner {
+      id
+      username
+      isDoctor
+      gender
+      age
+    }
+    requestedBy {
+      id
+      username
+      isDoctor
+      gender
+      age
+    }
+    status
+  }
+}

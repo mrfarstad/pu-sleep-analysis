@@ -1,0 +1,17 @@
+mutation($username: String!, $password: String!, $isDoctor: Boolean!, $gender: String!, $age: Int!){
+  createUser(
+    authProvider: {
+      username: $username
+      password: $password
+    }
+    isDoctor: $isDoctor
+    gender: $gender
+    age: $age
+  ) {
+    id
+    username
+    isDoctor
+    gender
+    age
+  }
+}
