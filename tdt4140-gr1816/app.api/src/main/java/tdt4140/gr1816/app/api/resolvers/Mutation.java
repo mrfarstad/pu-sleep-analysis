@@ -40,7 +40,7 @@ public class Mutation implements GraphQLRootResolver {
   }
 
   public User createUser(AuthData auth, boolean isDoctor, String gender, int age) {
-    User newUser = new User(auth.getUsername(), auth.getPassword(), isDoctor, gender, age);
+    User newUser = new User(auth.getUsername(), auth.getPassword(), isDoctor, gender, age, true);
     return userRepository.saveUser(newUser);
   }
 
@@ -76,6 +76,9 @@ public class Mutation implements GraphQLRootResolver {
     if (user == null) {
       throw new GraphQLException("Please log in");
     }
+    if (!user.isGatheringData()) {
+      throw new GraphQLException("This is not legal. DataGathering is disabled");
+    }
     SleepData newSleepData = new SleepData(user.getId(), date, duration, efficiency);
     return sleepDataRepository.saveSleepData(newSleepData);
   }
@@ -94,6 +97,9 @@ public class Mutation implements GraphQLRootResolver {
     if (user == null) {
       throw new GraphQLException("Please log in");
     }
+    if (!user.isGatheringData()) {
+      throw new GraphQLException("This is not legal. DataGathering is disabled");
+    }
     StepsData newStepsData = new StepsData(user.getId(), date, steps);
     return stepsDataRepository.saveStepsData(newStepsData);
   }
@@ -111,6 +117,9 @@ public class Mutation implements GraphQLRootResolver {
     User user = context.getUser();
     if (user == null) {
       throw new GraphQLException("Please log in");
+    }
+    if (!user.isGatheringData()) {
+      throw new GraphQLException("This is not legal. DataGathering is disabled");
     }
     PulseData newPulseData = new PulseData(user.getId(), date, restHr);
     return pulseDataRepository.savePulseData(newPulseData);
@@ -141,5 +150,14 @@ public class Mutation implements GraphQLRootResolver {
     AuthContext context = env.getContext();
     User user = context.getUser();
     return dataAccessRequestRepository.answerDataAccessRequest(dataAccessRequestId, status, user);
+  }
+
+  public boolean setIsGatheringData(Boolean status, DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      throw new GraphQLException("Invalid user");
+    }
+    return userRepository.setIsGatheringData(user, status);
   }
 }
