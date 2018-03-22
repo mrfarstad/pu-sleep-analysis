@@ -1,6 +1,7 @@
 package tdt4140.gr1816.app.ui;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -35,9 +36,9 @@ public class UserController implements Initializable {
 
   @FXML private Text genderText;
 
-  @FXML private ListView<DataAccessRequest> doctorsListView;
+  @FXML private DatePicker dataDatePicker;
 
-  @FXML private ListView<String> dataListView;
+  @FXML private ListView<DataAccessRequest> doctorsListView;
 
   @FXML private ListView<DataAccessRequest> doctorRequestListView;
 
@@ -63,7 +64,6 @@ public class UserController implements Initializable {
   private UserDataFetch userDataFetch;
 
   private boolean dataGatheringOn;
-  ObservableList<String> dataListViewItems;
   ObservableList<DataAccessRequest> doctorsListViewItems;
   ObservableList<DataAccessRequest> doctorRequestListViewItems;
 
@@ -80,7 +80,32 @@ public class UserController implements Initializable {
   }
 
   public void handleDeleteDataButton() {
-    dataListViewItems.remove(dataListView.getSelectionModel().getSelectedItem());
+    LocalDate ld = dataDatePicker.getValue();
+
+    deleteSleepDataFromDate(ld);
+    deleteStepsDataFromDate(ld);
+    deletePulseDataFromDate(ld);
+  }
+
+  public void deleteSleepDataFromDate(LocalDate ld) {
+    List<SleepData> sleepDataList = FxApp.userDataFetch.getSleepDataByViewer();
+    SleepData sleepData =
+        sleepDataList.stream().filter(sd -> sd.getDate().equals(ld)).findFirst().orElse(null);
+    userDataFetch.deleteSleepData(sleepData.getId());
+  }
+
+  public void deleteStepsDataFromDate(LocalDate ld) {
+    List<StepsData> stepsDataList = FxApp.userDataFetch.getStepsDataByViewer();
+    StepsData stepsData =
+        stepsDataList.stream().filter(sd -> sd.getDate().equals(ld)).findFirst().orElse(null);
+    userDataFetch.deleteStepsData(stepsData.getId());
+  }
+
+  public void deletePulseDataFromDate(LocalDate ld) {
+    List<PulseData> pulseDataList = FxApp.userDataFetch.getPulseDataByViewer();
+    PulseData pulseData =
+        pulseDataList.stream().filter(pd -> pd.getDate().equals(ld)).findFirst().orElse(null);
+    userDataFetch.deletePulseData(pulseData.getId());
   }
 
   public void handleRemoveDoctorButton() {
@@ -202,8 +227,6 @@ public class UserController implements Initializable {
 
     setInitialDataButtonValue();
 
-    setDataListViewItems();
-
     updateDoctorsListViewItems();
 
     updateDoctorRequestListViewItems();
@@ -234,13 +257,6 @@ public class UserController implements Initializable {
     }
   }
 
-  public void setDataListViewItems() {
-    dataListViewItems = dataListView.getItems();
-    dataListViewItems.add("Data 1");
-    dataListViewItems.add("Data 2");
-    dataListViewItems.add("Data 3");
-  }
-
   public void updateDoctorsListViewItems() {
     doctorsListViewItems = doctorsListView.getItems();
     doctorsListViewItems.clear();
@@ -254,7 +270,7 @@ public class UserController implements Initializable {
   public void updateDoctorRequestListViewItems() {
     doctorRequestListViewItems = doctorRequestListView.getItems();
     doctorRequestListViewItems.clear();
-    List<DataAccessRequest> requests = this.userDataFetch.getAccessRequestsToUser();
+    List<DataAccessRequest> requests = userDataFetch.getAccessRequestsToUser();
     requests
         .stream()
         .filter(request -> request.getStatusAsString().equals("PENDING"))
