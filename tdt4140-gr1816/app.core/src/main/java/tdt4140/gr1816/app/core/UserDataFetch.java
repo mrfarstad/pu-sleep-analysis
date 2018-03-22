@@ -25,8 +25,17 @@ public class UserDataFetch {
   public UserDataFetch(DataGetter dataGetter) {
     this.dataGetter = dataGetter;
   }
+  
+  /*
+   * Generic method for querying the API
+   * params:
+   * 	fileName - Name of the file containing the GraphQL query
+   * 	levelNodes - A list of subnodes that will be traversed in the JSON to fetch the correct data
+   * 	typeReference - The type of the data that will be returned from the subnode
+   * 	variables - Values will be placed next to the given key. Mostly used in mutations
+   */
 
-  public <T> T getGenericData(
+  private <T> T getGenericData(
       String fileName,
       List<String> levelNodes,
       TypeReference<T> typeReference,
