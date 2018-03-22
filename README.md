@@ -10,20 +10,33 @@ can be improved.
 
 ### Database
 
-
 To start mongodb
 ```bash
 $ docker-compose up -d
 ```
 
+### Build project
+
+```
+$ mvn -f tdt4140-gr1816/pom.xml install
+```
+
 ### Run API
 
 ```bash
-cd tdt4140-gr1816/app.api
-mvn jetty:run
+
+$ mvn -f tdt4140-gr1816/app.api/pom.xml jetty:run
+```
+Then open http://localhost:8080
+
+
+### Build and run UI
+
+```bash
+$ mvn -f tdt4140-gr1816/app.ui/pom.xml clean compile assembly:single
+$ java -jar tdt4140-gr1816/app.ui/target/tdt4140-gr1816.app.ui-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 ```
 
-Then open http://localhost:8080
 
 ### Code formatting
 
