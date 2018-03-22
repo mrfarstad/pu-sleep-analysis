@@ -5,16 +5,19 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.isNull;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
+
 import org.junit.Test;
+
 import tdt4140.gr1816.app.core.DataAccessRequest.DataAccessRequestStatus;
 
 public class TestUserDataFetch {
@@ -306,12 +309,12 @@ public class TestUserDataFetch {
       fail("Wrong filename for query");
     }
     when(test.getData(anyString(), isNull())).thenReturn(response);
-    List<SleepData> sleepData = userDataFetch.getAllSleepData();
+    List<SleepData> sleepData = userDataFetch.getAllSleepData("");
     assertTrue(sleepData.size() > 0);
     for (SleepData sleep : sleepData) {
       assertTrue(sleep.getId() instanceof String);
       assertTrue(sleep.getUser() instanceof User);
-      assertTrue(sleep.getDate() instanceof String);
+      assertTrue(sleep.getDate() instanceof LocalDate);
       assertTrue(sleep.getDuration() > -1);
       assertTrue(sleep.getEfficiency() > -1);
     }
@@ -336,7 +339,7 @@ public class TestUserDataFetch {
       assertTrue(sleep.getId() instanceof String);
       assertTrue(sleep.getUser() instanceof User);
       assertTrue(sleep.getUser().getId().equals(viewerId));
-      assertTrue(sleep.getDate() instanceof String);
+      assertTrue(sleep.getDate() instanceof LocalDate);
       assertTrue(sleep.getDuration() > -1);
       assertTrue(sleep.getEfficiency() > -1);
     }
@@ -356,7 +359,7 @@ public class TestUserDataFetch {
     SleepData sleep = userDataFetch.createSleepData("2018-03-20", 20, 95);
     assertTrue(sleep.getId() instanceof String);
     assertTrue(sleep.getUser() instanceof User);
-    assertTrue(sleep.getDate() instanceof String);
+    assertTrue(sleep.getDate() instanceof LocalDate);
     assertTrue(sleep.getDuration() > -1);
     assertTrue(sleep.getEfficiency() > -1);
   }
@@ -387,12 +390,12 @@ public class TestUserDataFetch {
       fail("Wrong filename for query");
     }
     when(test.getData(anyString(), isNull())).thenReturn(response);
-    List<StepsData> stepsData = userDataFetch.getAllStepsData();
+    List<StepsData> stepsData = userDataFetch.getAllStepsData("");
     assertTrue(stepsData.size() > 0);
     for (StepsData steps : stepsData) {
       assertTrue(steps.getId() instanceof String);
       assertTrue(steps.getUser() instanceof User);
-      assertTrue(steps.getDate() instanceof String);
+      assertTrue(steps.getDate() instanceof LocalDate);
       assertTrue(steps.getSteps() > -1);
     }
   }
@@ -416,7 +419,7 @@ public class TestUserDataFetch {
       assertTrue(steps.getId() instanceof String);
       assertTrue(steps.getUser().getId().equals(viewerId));
       assertTrue(steps.getUser() instanceof User);
-      assertTrue(steps.getDate() instanceof String);
+      assertTrue(steps.getDate() instanceof LocalDate);
       assertTrue(steps.getSteps() > -1);
     }
   }
@@ -435,7 +438,7 @@ public class TestUserDataFetch {
     StepsData steps = userDataFetch.createStepsData("2018-03-20", 20);
     assertTrue(steps.getId() instanceof String);
     assertTrue(steps.getUser() instanceof User);
-    assertTrue(steps.getDate() instanceof String);
+    assertTrue(steps.getDate() instanceof LocalDate);
     assertTrue(steps.getSteps() > -1);
   }
 
@@ -465,12 +468,12 @@ public class TestUserDataFetch {
       fail("Wrong filename for query");
     }
     when(test.getData(anyString(), isNull())).thenReturn(response);
-    List<PulseData> pulseData = userDataFetch.getAllPulseData();
+    List<PulseData> pulseData = userDataFetch.getAllPulseData("");
     assertTrue(pulseData.size() > 0);
     for (PulseData pulse : pulseData) {
       assertTrue(pulse.getId() instanceof String);
       assertTrue(pulse.getUser() instanceof User);
-      assertTrue(pulse.getDate() instanceof String);
+      assertTrue(pulse.getDate() instanceof LocalDate);
       assertTrue(pulse.getRestHr() > -1);
     }
   }
@@ -494,7 +497,7 @@ public class TestUserDataFetch {
       assertTrue(pulse.getId() instanceof String);
       assertTrue(pulse.getUser().getId().equals(viewerId));
       assertTrue(pulse.getUser() instanceof User);
-      assertTrue(pulse.getDate() instanceof String);
+      assertTrue(pulse.getDate() instanceof LocalDate);
       assertTrue(pulse.getRestHr() > -1);
     }
   }
@@ -513,7 +516,7 @@ public class TestUserDataFetch {
     PulseData pulse = userDataFetch.createPulseData("2018-03-20", 60);
     assertTrue(pulse.getId() instanceof String);
     assertTrue(pulse.getUser() instanceof User);
-    assertTrue(pulse.getDate() instanceof String);
+    assertTrue(pulse.getDate() instanceof LocalDate);
     assertTrue(pulse.getRestHr() > -1);
   }
 

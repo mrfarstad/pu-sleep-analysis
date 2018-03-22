@@ -1,5 +1,5 @@
-query {
-  allStepsData {
+query($userId: String!) {
+  allStepsData(userId: $userId) {
     id
     date
     user {

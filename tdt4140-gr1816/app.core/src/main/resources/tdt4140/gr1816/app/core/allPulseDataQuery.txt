@@ -1,5 +1,5 @@
-query {
-  allPulseData {
+query($userId: String!) {
+  allPulseData(userId: $userId) {
     id
     date
     user {

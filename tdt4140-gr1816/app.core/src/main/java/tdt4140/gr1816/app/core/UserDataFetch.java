@@ -25,14 +25,14 @@ public class UserDataFetch {
   public UserDataFetch(DataGetter dataGetter) {
     this.dataGetter = dataGetter;
   }
-  
+
   /*
    * Generic method for querying the API
    * params:
    * 	fileName - Name of the file containing the GraphQL query
    * 	levelNodes - A list of subnodes that will be traversed in the JSON to fetch the correct data
    * 	typeReference - The type of the data that will be returned from the subnode
-   * 	variables - Values will be placed next to the given key. Mostly used in mutations
+   * 	variables - Values will be placed next to the given key
    */
 
   private <T> T getGenericData(
@@ -138,12 +138,14 @@ public class UserDataFetch {
         "currentUserQuery.txt", Arrays.asList("viewer"), new TypeReference<User>() {}, null);
   }
 
-  public List<SleepData> getAllSleepData() {
+  public List<SleepData> getAllSleepData(String userId) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("userId", userId);
     return getGenericData(
         "allSleepDataQuery.txt",
         Arrays.asList("allSleepData"),
         new TypeReference<List<SleepData>>() {},
-        null);
+        variables);
   }
 
   public List<SleepData> getSleepDataByViewer() {
@@ -192,12 +194,14 @@ public class UserDataFetch {
         variables);
   }
 
-  public List<StepsData> getAllStepsData() {
+  public List<StepsData> getAllStepsData(String userId) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("userId", userId);
     return getGenericData(
         "allStepsDataQuery.txt",
         Arrays.asList("allStepsData"),
         new TypeReference<List<StepsData>>() {},
-        null);
+        variables);
   }
 
   public List<StepsData> getStepsDataByViewer() {
@@ -229,12 +233,14 @@ public class UserDataFetch {
         variables);
   }
 
-  public List<PulseData> getAllPulseData() {
+  public List<PulseData> getAllPulseData(String userId) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("userId", userId);
     return getGenericData(
         "allPulseDataQuery.txt",
         Arrays.asList("allPulseData"),
         new TypeReference<List<PulseData>>() {},
-        null);
+        variables);
   }
 
   public List<PulseData> getPulseDataByViewer() {

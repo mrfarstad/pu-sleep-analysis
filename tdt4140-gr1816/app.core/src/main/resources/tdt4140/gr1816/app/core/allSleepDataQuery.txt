@@ -1,5 +1,5 @@
-query {
-  allSleepData {
+query($userId: String!) {
+  allSleepData(userId: $userId) {
     id
     date
     user {
