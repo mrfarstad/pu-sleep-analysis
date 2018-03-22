@@ -42,7 +42,7 @@ public class UserGUITest extends ApplicationTest {
 
   @Override
   public void start(Stage stage) throws Exception {
-    FxApp.userDataFetch = mock(UserDataFetch.class);
+    SleepAnalysis.userDataFetch = mock(UserDataFetch.class);
     Parent root = FXMLLoader.load(getClass().getResource("FxApp.fxml"));
     Scene scene = new Scene(root);
     stage.setScene(scene);
@@ -55,10 +55,10 @@ public class UserGUITest extends ApplicationTest {
     String password = "test";
     User userSample = new User("userID", username, password, false, "male", 22, true);
 
-    when(FxApp.userDataFetch.signIn(username, password)).thenReturn(userSample);
-    when(FxApp.userDataFetch.getCurrentUser()).thenReturn(userSample);
+    when(SleepAnalysis.userDataFetch.signIn(username, password)).thenReturn(userSample);
+    when(SleepAnalysis.userDataFetch.getCurrentUser()).thenReturn(userSample);
 
-    User testUser = FxApp.userDataFetch.signIn(username, password);
+    User testUser = SleepAnalysis.userDataFetch.signIn(username, password);
     assertTrue(testUser instanceof User);
 
     TextField usernameField = lookup("#usernameField").query();
@@ -96,7 +96,7 @@ public class UserGUITest extends ApplicationTest {
     User doctorSample = new User("doctorID", "Doctor", "test", true, "female", 34, true);
     DataAccessRequest request =
         new DataAccessRequest(
-            "requestID", FxApp.userDataFetch.getCurrentUser(), doctorSample, "PENDING");
+            "requestID", SleepAnalysis.userDataFetch.getCurrentUser(), doctorSample, "PENDING");
 
     doctorRequestItems.add(request);
 
@@ -109,7 +109,7 @@ public class UserGUITest extends ApplicationTest {
     clickOn("#profileTab");
     DataAccessRequest accRequest =
         new DataAccessRequest(
-            "requestID", FxApp.userDataFetch.getCurrentUser(), doctorSample, "ACCEPTED");
+            "requestID", SleepAnalysis.userDataFetch.getCurrentUser(), doctorSample, "ACCEPTED");
     ListView doctorList = lookup("#doctorsListView").query();
     ObservableList<DataAccessRequest> doctorItems = doctorList.getItems();
     doctorItems.add(accRequest);

@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import tdt4140.gr1816.app.core.*;
 
-public class FxAppController {
+public class SleepAnalysisController {
 
   @FXML private TextField usernameField;
   @FXML private PasswordField passwordField;
@@ -22,7 +22,7 @@ public class FxAppController {
     String file, username, password;
     username = usernameField.getText();
     password = passwordField.getText();
-    User loginUser = FxApp.userDataFetch.signIn(username, password);
+    User loginUser = SleepAnalysis.userDataFetch.signIn(username, password);
     if (loginUser.isDoctor()) {
       file = "DoctorGUI.fxml";
     } else if (!loginUser.isDoctor()) {

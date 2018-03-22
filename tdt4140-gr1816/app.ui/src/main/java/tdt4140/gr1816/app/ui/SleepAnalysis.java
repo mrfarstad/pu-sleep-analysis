@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import tdt4140.gr1816.app.core.*;
 
-public class FxApp extends Application {
+public class SleepAnalysis extends Application {
 
   protected static UserDataFetch userDataFetch;
 

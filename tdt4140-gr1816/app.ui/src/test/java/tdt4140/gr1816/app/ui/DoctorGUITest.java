@@ -41,7 +41,7 @@ public class DoctorGUITest extends ApplicationTest {
 
   @Override
   public void start(Stage stage) throws Exception {
-    FxApp.userDataFetch = mock(UserDataFetch.class);
+    SleepAnalysis.userDataFetch = mock(UserDataFetch.class);
     Parent root = FXMLLoader.load(getClass().getResource("FxApp.fxml"));
     Scene scene = new Scene(root);
     stage.setScene(scene);
@@ -54,10 +54,10 @@ public class DoctorGUITest extends ApplicationTest {
     String password = "test";
     User doctorSample = new User("doctorID", username, password, true, "male", 43, true);
 
-    when(FxApp.userDataFetch.signIn(username, password)).thenReturn(doctorSample);
-    when(FxApp.userDataFetch.getCurrentUser()).thenReturn(doctorSample);
+    when(SleepAnalysis.userDataFetch.signIn(username, password)).thenReturn(doctorSample);
+    when(SleepAnalysis.userDataFetch.getCurrentUser()).thenReturn(doctorSample);
 
-    User testUser = FxApp.userDataFetch.signIn(username, password);
+    User testUser = SleepAnalysis.userDataFetch.signIn(username, password);
     assertTrue(testUser instanceof User);
 
     TextField usernameField = lookup("#usernameField").query();
@@ -89,8 +89,8 @@ public class DoctorGUITest extends ApplicationTest {
     User userSample = new User("testUserID", username, "test", false, "female", 50, true);
     DataAccessRequest request =
         new DataAccessRequest(
-            "requestID", userSample, FxApp.userDataFetch.getCurrentUser(), "PENDING");
-    when(FxApp.userDataFetch.getUserByUsername(username)).thenReturn(userSample);
+            "requestID", userSample, SleepAnalysis.userDataFetch.getCurrentUser(), "PENDING");
+    when(SleepAnalysis.userDataFetch.getUserByUsername(username)).thenReturn(userSample);
     patientItems.add(request);
 
     patientList.getSelectionModel().select(request);

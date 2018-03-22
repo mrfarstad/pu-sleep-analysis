@@ -32,7 +32,7 @@ public class CreateNewUserController {
     RadioButton gender = (RadioButton) femaleRadioButton.getToggleGroup().getSelectedToggle();
     int age = Integer.parseInt(ageField.getText());
 
-    FxApp.userDataFetch.createUser(username, password, isDoctor, gender.getText(), age);
+    SleepAnalysis.userDataFetch.createUser(username, password, isDoctor, gender.getText(), age);
 
     // Open up login-screen and close this window
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FxApp.fxml"));
