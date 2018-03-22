@@ -37,7 +37,7 @@ public class CreateNewUserControllerTest extends ApplicationTest {
 
   @Override
   public void start(Stage stage) throws Exception {
-    FxApp.userDataFetch = mock(UserDataFetch.class);
+    Login.userDataFetch = mock(UserDataFetch.class);
     Parent root = FXMLLoader.load(getClass().getResource("FxApp.fxml"));
     Scene scene = new Scene(root);
     stage.setScene(scene);
@@ -55,7 +55,7 @@ public class CreateNewUserControllerTest extends ApplicationTest {
 
     User userSample =
         new User("userID", username, password, false, "male", Integer.parseInt(age), true);
-    when(FxApp.userDataFetch.createUser(username, password, false, "Male", Integer.parseInt(age)))
+    when(Login.userDataFetch.createUser(username, password, false, "Male", Integer.parseInt(age)))
         .thenReturn(userSample);
 
     TextField signupUsernameField = lookup("#signupUsernameField").query();
@@ -78,7 +78,7 @@ public class CreateNewUserControllerTest extends ApplicationTest {
 
     RadioButton gender = (RadioButton) genderButton.getToggleGroup().getSelectedToggle();
     User newUser =
-        FxApp.userDataFetch.createUser(
+        Login.userDataFetch.createUser(
             signupUsernameField.getText(),
             signupPasswordField.getText(),
             isDoctor.isSelected(),

@@ -91,7 +91,7 @@ public class UserController implements Initializable {
   }
 
   public void deleteSleepDataFromDate(LocalDate ld) {
-    List<SleepData> sleepDataList = FxApp.userDataFetch.getSleepDataByViewer();
+    List<SleepData> sleepDataList = Login.userDataFetch.getSleepDataByViewer();
     SleepData sleepData =
         sleepDataList.stream().filter(sd -> sd.getDate().equals(ld)).findFirst().orElse(null);
     if (sleepData != null) {
@@ -103,7 +103,7 @@ public class UserController implements Initializable {
   }
 
   public void deleteStepsDataFromDate(LocalDate ld) {
-    List<StepsData> stepsDataList = FxApp.userDataFetch.getStepsDataByViewer();
+    List<StepsData> stepsDataList = Login.userDataFetch.getStepsDataByViewer();
     StepsData stepsData =
         stepsDataList.stream().filter(sd -> sd.getDate().equals(ld)).findFirst().orElse(null);
     if (stepsData != null) {
@@ -115,7 +115,7 @@ public class UserController implements Initializable {
   }
 
   public void deletePulseDataFromDate(LocalDate ld) {
-    List<PulseData> pulseDataList = FxApp.userDataFetch.getPulseDataByViewer();
+    List<PulseData> pulseDataList = Login.userDataFetch.getPulseDataByViewer();
     PulseData pulseData =
         pulseDataList.stream().filter(pd -> pd.getDate().equals(ld)).findFirst().orElse(null);
     if (pulseData != null) {
@@ -129,7 +129,7 @@ public class UserController implements Initializable {
   public void handleRemoveDoctorButton() {
     DataAccessRequest selected = doctorsListView.getSelectionModel().getSelectedItem();
     if (selected != null) {
-      FxApp.userDataFetch.answerDataAccessRequest(selected, "REJECTED");
+      Login.userDataFetch.answerDataAccessRequest(selected, "REJECTED");
       doctorsListViewItems.remove(selected);
     }
   }
@@ -137,7 +137,7 @@ public class UserController implements Initializable {
   public void handleAcceptDoctorButton() {
     DataAccessRequest selected = doctorRequestListView.getSelectionModel().getSelectedItem();
     if (selected != null) {
-      FxApp.userDataFetch.answerDataAccessRequest(selected, "ACCEPTED");
+      Login.userDataFetch.answerDataAccessRequest(selected, "ACCEPTED");
       doctorRequestListViewItems.remove(selected);
       updateDoctorsListViewItems();
     }
@@ -146,7 +146,7 @@ public class UserController implements Initializable {
   public void handleRejectDoctorButton() {
     DataAccessRequest selected = doctorRequestListView.getSelectionModel().getSelectedItem();
     if (selected != null) {
-      FxApp.userDataFetch.answerDataAccessRequest(selected, "REJECTED");
+      Login.userDataFetch.answerDataAccessRequest(selected, "REJECTED");
       doctorRequestListViewItems.remove(selected);
       updateDoctorsListViewItems();
     }
@@ -186,7 +186,7 @@ public class UserController implements Initializable {
     stepChartXAxis.setLabel("Date");
     stepChartYAxis.setLabel("Steps");
     ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
-    List<StepsData> stepsDataList = FxApp.userDataFetch.getStepsDataByViewer();
+    List<StepsData> stepsDataList = Login.userDataFetch.getStepsDataByViewer();
     stepsDataList
         .stream()
         .forEach(
@@ -206,7 +206,7 @@ public class UserController implements Initializable {
     pulseChartYAxis.setLabel("RestHR");
     ObservableList<XYChart.Data<String, Number>> lineChartData =
         FXCollections.observableArrayList();
-    List<PulseData> pulseDataList = FxApp.userDataFetch.getPulseDataByViewer();
+    List<PulseData> pulseDataList = Login.userDataFetch.getPulseDataByViewer();
     pulseDataList
         .stream()
         .forEach(
@@ -227,7 +227,7 @@ public class UserController implements Initializable {
     sleepChartYAxis.setLabel("Duration in hours");
     ObservableList<XYChart.Data<String, Number>> sleepBarChartData =
         FXCollections.observableArrayList();
-    List<SleepData> sleepDataList = FxApp.userDataFetch.getSleepDataByViewer();
+    List<SleepData> sleepDataList = Login.userDataFetch.getSleepDataByViewer();
     sleepDataList
         .stream()
         .forEach(
@@ -244,7 +244,7 @@ public class UserController implements Initializable {
   @Override
   public void initialize(URL arg0, ResourceBundle arg1) {
 
-    this.userDataFetch = FxApp.userDataFetch;
+    this.userDataFetch = Login.userDataFetch;
     this.user = userDataFetch.getCurrentUser();
 
     setProfileValues();
