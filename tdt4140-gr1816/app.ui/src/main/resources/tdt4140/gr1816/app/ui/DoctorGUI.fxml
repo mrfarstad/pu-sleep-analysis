@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
@@ -15,10 +17,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.DoctorController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.DoctorController">
    <center>
       <TabPane fx:id="tabPane">
          <tabs>
@@ -55,6 +59,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </VBox>
+                        <Button mnemonicParsing="false" text="Button" />
                      </children></HBox>
                </content>
             </Tab>
@@ -99,9 +104,76 @@
                </content>
             </Tab>
             <Tab fx:id="dataTab" closable="false" text="Patient Data">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-              </content>
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <HBox prefHeight="368.0" prefWidth="600.0">
+                           <children>
+                              <VBox alignment="TOP_CENTER" prefHeight="368.0" prefWidth="180.0">
+                                 <children>
+                                    <AnchorPane prefHeight="366.0" prefWidth="188.0">
+                                       <children>
+                                          <ChoiceBox fx:id="dataChoiceBox" layoutX="16.0" layoutY="109.0" prefHeight="27.0" prefWidth="150.0" />
+                                          <Button fx:id="viewGraphButton" layoutX="46.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleViewGraphButton" text="View Graph" />
+                                          <ChoiceBox fx:id="patientChoiceBox" layoutX="15.0" layoutY="47.0" prefWidth="150.0" />
+                                          <Text layoutX="15.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient:" />
+                                          <Text layoutX="16.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Type: " />
+                                          <DatePicker fx:id="fromDate" layoutX="16.0" layoutY="169.0" prefHeight="29.0" prefWidth="150.0" />
+                                          <DatePicker fx:id="toDate" layoutX="16.0" layoutY="230.0" prefHeight="27.0" prefWidth="150.0" />
+                                          <Text layoutX="16.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From: " />
+                                          <Text layoutX="14.0" layoutY="226.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To:" />
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="TOP_CENTER" prefHeight="368.0" prefWidth="401.0">
+                                 <children>
+                                    <AnchorPane prefHeight="54.0" prefWidth="401.0">
+                                       <children>
+                                          <Text layoutX="34.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Health data associated with ">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fx:id="patientTF" layoutX="221.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="120.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <StackPane prefHeight="259.0" prefWidth="401.0">
+                                       <children>
+                                          <BarChart fx:id="sleepBarChart" title="Sleep Bar Chart">
+                                            <xAxis>
+                                              <CategoryAxis side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                              <NumberAxis side="LEFT" />
+                                            </yAxis>
+                                          </BarChart>
+                                          <PieChart fx:id="sleepPieChart" disable="true" legendVisible="false" prefHeight="200.0" prefWidth="392.0" title="Sleep Pie Chart" />
+                                          <LineChart fx:id="pulseLineChart" disable="true" legendVisible="false" prefHeight="196.0" prefWidth="401.0" title="Pulse Chart">
+                                            <xAxis>
+                                              <CategoryAxis fx:id="pulseChartXAxis" side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                              <NumberAxis fx:id="pulseChartYAxis" side="LEFT" upperBound="220.0" />
+                                            </yAxis>
+                                          </LineChart>
+                                          <BarChart fx:id="stepBarChart" prefHeight="244.0" prefWidth="383.0" title="Step Chart">
+                                            <xAxis>
+                                              <CategoryAxis fx:id="stepChartXAxis" side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                              <NumberAxis fx:id="stepChartYAxis" side="LEFT" />
+                                            </yAxis>
+                                          </BarChart>
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </content>
             </Tab>
             <Tab fx:id="messageTab" closable="false" text="Patient Message">
               <content>
