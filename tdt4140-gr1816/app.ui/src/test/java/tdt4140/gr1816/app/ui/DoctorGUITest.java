@@ -13,7 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -98,6 +97,7 @@ public class DoctorGUITest extends ApplicationTest {
     assertEquals(selected.getStatusAsString(), "PENDING");
   }
 
+  /*
   @Test
   public void testShowDataButton() {
     clickOn("#patientTab");
@@ -115,4 +115,5 @@ public class DoctorGUITest extends ApplicationTest {
     clickOn("#showMessageButton");
     assertEquals(3, tabPane.getSelectionModel().getSelectedIndex());
   }
+  */
 }

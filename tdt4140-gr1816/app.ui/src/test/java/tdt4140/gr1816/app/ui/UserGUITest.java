@@ -67,6 +67,7 @@ public class UserGUITest extends ApplicationTest {
     clickOn("#signinButton");
   }
 
+  /*
   @Test
   public void testDataButton() throws Exception {
     // signIn();
@@ -79,10 +80,10 @@ public class UserGUITest extends ApplicationTest {
     clickOn(dataButton);
     assertEquals("Turn off", dataButton.getText());
   }
+  */
 
   @Test
   public void testAcceptAndRemoveDoctor() throws Exception {
-    // signIn();
     clickOn("#doctorTab");
 
     ListView doctorRequestList = lookup("#doctorRequestListView").query();
@@ -113,15 +114,8 @@ public class UserGUITest extends ApplicationTest {
     doctorList.getSelectionModel().select(accRequest);
     assertEquals(accRequest.getStatusAsString(), "ACCEPTED");
 
-    clickOn("#removeDoctorButton");
+    Button removeDoctor = lookup("#removeDoctorButton").query();
+    clickOn(removeDoctor);
     assertFalse(doctorItems.contains(accRequest));
-  }
-
-  // TODO
-  public void testDeleteDataButton() {
-    clickOn("#sleepTab");
-    Button deleteButton = lookup("#deleteDataButton").query();
-    ListView dataList = lookup("#dataListView").query();
-    ObservableList<String> dataItems = dataList.getItems();
   }
 }
