@@ -18,6 +18,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import tdt4140.gr1816.app.core.*;
@@ -68,6 +69,7 @@ public class DoctorGUITest extends ApplicationTest {
     clickOn("#signinButton");
   }
 
+  @Ignore
   @Test
   public void testRequestButton() {
     clickOn("#patientTab");

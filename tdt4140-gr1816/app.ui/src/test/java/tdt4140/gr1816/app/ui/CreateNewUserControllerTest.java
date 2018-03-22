@@ -13,6 +13,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import tdt4140.gr1816.app.core.User;
@@ -43,6 +44,7 @@ public class CreateNewUserControllerTest extends ApplicationTest {
     stage.show();
   }
 
+  @Ignore
   @Test
   public void testCreateNewUser() {
     clickOn("#createNewUserButton");

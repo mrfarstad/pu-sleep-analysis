@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import tdt4140.gr1816.app.core.*;
@@ -82,6 +83,7 @@ public class UserGUITest extends ApplicationTest {
   }
   */
 
+  @Ignore
   @Test
   public void testAcceptAndRemoveDoctor() throws Exception {
     clickOn("#doctorTab");
