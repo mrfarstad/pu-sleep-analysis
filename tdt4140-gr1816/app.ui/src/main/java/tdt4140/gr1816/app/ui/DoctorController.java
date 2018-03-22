@@ -65,6 +65,8 @@ public class DoctorController implements Initializable {
   @FXML private DatePicker toDate;
 
   @FXML private BarChart<String, Number> sleepBarChart;
+  @FXML private CategoryAxis sleepChartXAxis;
+  @FXML private NumberAxis sleepChartYAxis;
 
   @FXML private PieChart sleepPieChart;
 
@@ -81,7 +83,7 @@ public class DoctorController implements Initializable {
 
   public void handleRequestButton() {
     String username = requestUserTextField.getText();
-    User newPatient = FxApp.userDataFetch.getUserByUsername(username);
+    User newPatient = userDataFetch.getUserByUsername(username);
     if (newPatient == null) {
       requestFeedbackText.setText("User not found");
     } else if (FxApp.userDataFetch.requestDataAccess(newPatient)) {
@@ -115,7 +117,19 @@ public class DoctorController implements Initializable {
   }
 
   private void showSleepBarChart() {
+    hideCharts();
     User user = getSelectedPatientCB();
+    sleepChartXAxis.setLabel("Date");
+    sleepChartYAxis.setLabel("Duration in hours");
+    ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
+    sleepBarChart.getData().clear();
+    List<SleepData> sleepDataList = userDataFetch.getAllSleepData(user.getId());
+    sleepDataList.stream().forEach(sleepData -> barChartData.add(new
+    XYChart.Data<>(sleepData.getDate().toString(), sleepData.getDuration())));
+    XYChart.Series<String, Number> series = new XYChart.Series<>(barChartData);
+    sleepBarChart.getData().clear();
+    sleepBarChart.getData().add(series);
+    sleepBarChart.setVisible(true);
   }
   // Piechart
   /*
@@ -136,17 +150,12 @@ public class DoctorController implements Initializable {
   */
   private void showPulseChart() {
     User user = getSelectedPatientCB();
+    pulseChartXAxis.setLabel("Date");
+    pulseChartYAxis.setLabel("Pulse, restHR");
     ObservableList<XYChart.Data<String, Number>> lineChartData =
-        FXCollections.observableArrayList(
-            new XYChart.Data("1", 90),
-            new XYChart.Data("2", 95),
-            new XYChart.Data("3", 92),
-            new XYChart.Data("4", 101),
-            new XYChart.Data("5", 130),
-            new XYChart.Data("6", 90),
-            new XYChart.Data("7", 90),
-            new XYChart.Data("8", 120),
-            new XYChart.Data("9", 180));
+        FXCollections.observableArrayList();
+    List<PulseData> pulseDataList = userDataFetch.getAllPulseData(user.getId());
+    pulseDataList.stream().forEach(pulseData -> lineChartData.add(new XYChart.Data<>(pulseData.getDate().toString(), pulseData.getRestHr())));
 
     XYChart.Series<String, Number> series = new XYChart.Series<>(lineChartData);
     pulseLineChart.getData().clear();
@@ -156,14 +165,12 @@ public class DoctorController implements Initializable {
 
   private void showStepChart() {
     User user = getSelectedPatientCB();
-    ObservableList<XYChart.Data<String, Number>> barChartData =
-        FXCollections.observableArrayList(
-            new XYChart.Data("20.09", 3059),
-            new XYChart.Data<>("21.09", 10084),
-            new XYChart.Data<>("22.09", 6738),
-            new XYChart.Data("23.09", 7559),
-            new XYChart.Data<>("24.09", 12084),
-            new XYChart.Data<>("25.09", 8738));
+    stepChartXAxis.setLabel("Date");
+    stepChartYAxis.setLabel("Steps");
+    ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
+    List<StepsData> stepDataList = userDataFetch.getAllStepsData(user.getId());
+    stepDataList
+    .stream().forEach(stepData -> barChartData.add(new XYChart.Data<>(stepData.getDate().toString(), stepData.getSteps())));
     XYChart.Series<String, Number> series = new XYChart.Series<>(barChartData);
     stepBarChart.getData().clear();
     stepBarChart.getData().add(series);
@@ -204,7 +211,7 @@ public class DoctorController implements Initializable {
   public void updatePatientListViewItems() {
     patientListViewItems = patientListView.getItems();
     patientListViewItems.clear();
-    List<DataAccessRequest> requests = FxApp.userDataFetch.getAccessRequestsByDoctor();
+    List<DataAccessRequest> requests = userDataFetch.getAccessRequestsByDoctor();
     requests
         .stream()
         .filter(request -> !patientListViewItems.contains(request))
@@ -213,7 +220,7 @@ public class DoctorController implements Initializable {
 
   public void setPatientChoiceBox() {
     acceptedPatientList.clear();
-    List<DataAccessRequest> requests = FxApp.userDataFetch.getAccessRequestsByDoctor();
+    List<DataAccessRequest> requests = userDataFetch.getAccessRequestsByDoctor();
     requests
         .stream()
         .filter(request -> !acceptedPatientList.contains(request.getDataOwner()))

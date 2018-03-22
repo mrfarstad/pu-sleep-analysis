@@ -1,9 +1,8 @@
 package tdt4140.gr1816.app.core;
 
-import java.time.LocalDate;
-
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDate;
 
 public class StepsData {
   @JsonProperty("id")
