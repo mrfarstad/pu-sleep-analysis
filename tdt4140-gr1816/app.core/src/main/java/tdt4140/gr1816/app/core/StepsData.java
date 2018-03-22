@@ -1,5 +1,7 @@
 package tdt4140.gr1816.app.core;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +13,7 @@ public class StepsData {
   private User user;
 
   @JsonProperty("date")
-  private String date;
+  private LocalDate date;
 
   @JsonProperty("steps")
   private int steps;
@@ -23,7 +25,7 @@ public class StepsData {
       @JsonProperty("duration") int steps) {
     this.id = id;
     this.user = user;
-    this.date = date;
+    this.date = LocalDate.parse(date);
     this.steps = steps;
   }
 
@@ -38,7 +40,7 @@ public class StepsData {
   }
 
   @JsonGetter
-  public String getDate() {
+  public LocalDate getDate() {
     return date;
   }
 
