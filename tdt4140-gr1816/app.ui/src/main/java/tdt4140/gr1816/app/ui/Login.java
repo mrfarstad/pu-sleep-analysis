@@ -7,13 +7,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import tdt4140.gr1816.app.core.*;
 
-public class SleepAnalysis extends Application {
+public class Login extends Application {
 
   protected static UserDataFetch userDataFetch;
 
   @Override
   public void start(Stage stage) throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("FxApp.fxml"));
+    Parent root = FXMLLoader.load(getClass().getResource("LoginGUI.fxml"));
     Scene scene = new Scene(root);
     stage.setScene(scene);
     stage.show();

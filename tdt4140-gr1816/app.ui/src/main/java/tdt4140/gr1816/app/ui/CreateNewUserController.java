@@ -32,10 +32,10 @@ public class CreateNewUserController {
     RadioButton gender = (RadioButton) femaleRadioButton.getToggleGroup().getSelectedToggle();
     int age = Integer.parseInt(ageField.getText());
 
-    SleepAnalysis.userDataFetch.createUser(username, password, isDoctor, gender.getText(), age);
+    Login.userDataFetch.createUser(username, password, isDoctor, gender.getText(), age);
 
     // Open up login-screen and close this window
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("FxApp.fxml"));
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LoginGUI.fxml"));
     Parent root1 = (Parent) fxmlLoader.load();
     Stage createStage = new Stage();
     createStage.setScene(new Scene(root1));

@@ -86,7 +86,7 @@ public class DoctorController implements Initializable {
     User newPatient = userDataFetch.getUserByUsername(username);
     if (newPatient == null) {
       requestFeedbackText.setText("User not found");
-    } else if (SleepAnalysis.userDataFetch.requestDataAccess(newPatient)) {
+    } else if (Login.userDataFetch.requestDataAccess(newPatient)) {
       updatePatientListViewItems();
       requestFeedbackText.setText("Request sent");
     } else {
@@ -203,7 +203,7 @@ public class DoctorController implements Initializable {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
 
-    this.userDataFetch = SleepAnalysis.userDataFetch;
+    this.userDataFetch = Login.userDataFetch;
     this.user = userDataFetch.getCurrentUser();
 
     setProfileValues();
