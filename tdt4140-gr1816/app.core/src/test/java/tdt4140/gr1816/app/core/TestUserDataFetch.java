@@ -270,7 +270,11 @@ public class TestUserDataFetch {
 
     assertEquals(test.getData("", null), response);
     DataAccessRequest request =
-        new DataAccessRequest("5ab26cb8c13edf233e48b454", "5ab173c1c13edf146111e7bb", "PENDING");
+        new DataAccessRequest(
+            "5ab26cd7c13edf233e48b455",
+            new User("5ab26cb8c13edf233e48b454", "martin	", "martin", false, "male", 22),
+            new User("5ab173c1c13edf146111e7bb", "mathias", "mathias", true, "male", 22),
+            "PENDING");
     assertTrue(userDataFetch.answerDataAccessRequest(request, "ACCEPTED"));
   }
 
