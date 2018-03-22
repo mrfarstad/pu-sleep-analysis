@@ -24,6 +24,9 @@ public class User {
   @JsonProperty("age")
   private int age;
 
+  @JsonProperty("isGatheringData")
+  private boolean isGatheringData;
+
   @JsonCreator
   public User(
       @JsonProperty("id") String id,
@@ -31,13 +34,15 @@ public class User {
       @JsonProperty("password") String password,
       @JsonProperty("isDoctor") boolean isDoctor,
       @JsonProperty("gender") String gender,
-      @JsonProperty("age") int age) {
+      @JsonProperty("age") int age,
+      @JsonProperty("isGatheringData") boolean isGatheringData) {
     this.id = id;
     this.username = username;
     this.password = password;
     this.isDoctor = isDoctor;
     this.gender = gender;
     this.age = age;
+    this.isGatheringData = isGatheringData;
   }
 
   @JsonGetter
@@ -68,6 +73,15 @@ public class User {
   @JsonGetter
   public int getAge() {
     return age;
+  }
+
+  @JsonGetter
+  public boolean getIsGatheringData() {
+    return this.isGatheringData;
+  }
+
+  public void setIsGatheringData(boolean isGatheringData) {
+    this.isGatheringData = isGatheringData;
   }
 
   public String toString() {

@@ -130,6 +130,7 @@ public class UserDataFetch {
             new TypeReference<User>() {},
             variables);
     this.currentToken = viewer.getId();
+
     return viewer;
   }
 
@@ -190,6 +191,16 @@ public class UserDataFetch {
     return getGenericData(
         "deleteSleepDataQuery.txt",
         Arrays.asList("deleteSleepData"),
+        new TypeReference<Boolean>() {},
+        variables);
+  }
+
+  public Boolean setIsGatheringData(Boolean isGatheringData) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("isGatheringData", isGatheringData.toString());
+    return getGenericData(
+        "setIsGatheringDataQuery.txt",
+        Arrays.asList("setIsGatheringData"),
         new TypeReference<Boolean>() {},
         variables);
   }

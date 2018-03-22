@@ -59,7 +59,6 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </VBox>
-                        <Button mnemonicParsing="false" text="Button" />
                      </children></HBox>
                </content>
             </Tab>

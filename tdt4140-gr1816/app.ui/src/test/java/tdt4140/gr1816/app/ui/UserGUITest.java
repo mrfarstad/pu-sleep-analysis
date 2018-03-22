@@ -20,7 +20,9 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
-import tdt4140.gr1816.app.core.*;
+import tdt4140.gr1816.app.core.DataAccessRequest;
+import tdt4140.gr1816.app.core.User;
+import tdt4140.gr1816.app.core.UserDataFetch;
 
 public class UserGUITest extends ApplicationTest {
 
@@ -51,7 +53,7 @@ public class UserGUITest extends ApplicationTest {
   public void signIn() {
     String username = "testUser";
     String password = "test";
-    User userSample = new User("userID", username, password, false, "male", 22);
+    User userSample = new User("userID", username, password, false, "male", 22, true);
 
     when(FxApp.userDataFetch.signIn(username, password)).thenReturn(userSample);
     when(FxApp.userDataFetch.getCurrentUser()).thenReturn(userSample);
@@ -91,7 +93,7 @@ public class UserGUITest extends ApplicationTest {
     ListView doctorRequestList = lookup("#doctorRequestListView").query();
     ObservableList<DataAccessRequest> doctorRequestItems = doctorRequestList.getItems();
 
-    User doctorSample = new User("doctorID", "Doctor", "test", true, "female", 34);
+    User doctorSample = new User("doctorID", "Doctor", "test", true, "female", 34, true);
     DataAccessRequest request =
         new DataAccessRequest(
             "requestID", FxApp.userDataFetch.getCurrentUser(), doctorSample, "PENDING");
