@@ -1,1 +1,1 @@
-{"data":{"createStepsData":{"id":"5ab23c60c13edf233e48b429","date":"test","user":{"id":"5ab173c1c13edf146111e7bb","username":"test","isDoctor":true,"gender":"male","age":22},"steps":10}}}
+{"data":{"createStepsData":{"id":"5ab23c60c13edf233e48b429","date":"2018-03-22","user":{"id":"5ab173c1c13edf146111e7bb","username":"test","isDoctor":true,"gender":"male","age":22},"steps":10}}}
