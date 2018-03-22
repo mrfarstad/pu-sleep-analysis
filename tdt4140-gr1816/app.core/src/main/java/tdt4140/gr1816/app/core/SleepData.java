@@ -2,6 +2,7 @@ package tdt4140.gr1816.app.core;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDate;
 
 public class SleepData {
   @JsonProperty("id")
@@ -11,7 +12,7 @@ public class SleepData {
   private User user;
 
   @JsonProperty("date")
-  private String date;
+  private LocalDate date;
 
   @JsonProperty("duration")
   private int duration;
@@ -27,7 +28,7 @@ public class SleepData {
       @JsonProperty("efficiency") int efficiency) {
     this.id = id;
     this.user = user;
-    this.date = date;
+    this.date = LocalDate.parse(date);
     this.duration = duration;
     this.efficiency = efficiency;
   }
@@ -43,7 +44,7 @@ public class SleepData {
   }
 
   @JsonGetter
-  public String getDate() {
+  public LocalDate getDate() {
     return date;
   }
 
