@@ -19,26 +19,6 @@ import tdt4140.gr1816.app.core.DataAccessRequest.DataAccessRequestStatus;
 
 public class TestUserDataFetch {
 
-  private static String signInTestQuery =
-      "{\"query\":\"mutation{signinUser(auth:{username:\\\"test\\\" password:\\\"test\\\"}){token}}\"}";
-  /*
-    private static String currentUserQuery = "{\"query\":\"query{viewer{id username isDoctor gender age}}\"}";
-    private static String accessRequestsToUserQuery =
-  	  "{\"query\":\"query{dataAccessRequestsForMe{requestedBy{username isDoctor gender age}status}}\"}";
-    private static String accessRequestsByDoctorQuery =
-  	  "{\"query\":\"query{myDataAccessRequests{dataOwner{username isDoctor gender age}status}}\"}";
-  */
-  private static String getAllUsersResponse =
-      "{\"data\":{\"allUsers\":[{\"id\":\"5a9e8503c13edf22f93825e7\",\"username\":\"test\",\"isDoctor\":true,\"gender\":\"male\",\"age\":22},{\"id\":\"5a9e85cac13edf22f93825e8\",\"username\":\"test\",\"isDoctor\":true,\"gender\":\"male\",\"age\":22}]}}";
-  private static String getCurrentUserResponse =
-      "{\"data\":{\"viewer\":{\"id\":\"5a9e8503c13edf22f93825e7\",\"username\":\"test\",\"isDoctor\":true,\"gender\":\"male\",\"age\":22}}}";
-  private static String getAccessRequestsToUserResponse =
-      "{\"data\":{\"dataAccessRequestsForMe\":[{\"requestedBy\":{\"username\":\"boye\",\"isDoctor\":true,\"gender\":\"male\",\"age\":33},\"status\":\"PENDING\"}]}}";
-  private static String getAccessRequestsByDoctorResponse =
-      "{\"data\":{\"myDataAccessRequests\":[{\"dataOwner\":{\"username\":\"mathiawa\",\"isDoctor\":false,\"gender\":\"male\",\"age\":21},\"status\":\"PENDING\"},{\"dataOwner\":{\"username\":\"doctor\",\"isDoctor\":true,\"gender\":\"male\",\"age\":40},\"status\":\"PENDING\"}]}}";
-  private static String signInResponse =
-      "{\"data\":{\"signinUser\":{\"token\":\"5aa82961c40c0b35eb3e8663\",\"user\":{\"id\":\"5aa82961c40c0b35eb3e8663\",\"username\":\"test\",\"isDoctor\":true,\"gender\":\"male\",\"age\":22}}}}";
-
   //  create mock
   private DataGetter test = mock(DataGetter.class);
 
@@ -117,7 +97,8 @@ public class TestUserDataFetch {
     String response = "";
     try {
       response =
-          new String(Files.readAllBytes(Paths.get(resourceResponsePath + "currentUserResponse.txt")));
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "currentUserResponse.txt")));
     } catch (IOException e) {
       fail("Wrong filename for query");
     }
@@ -132,56 +113,6 @@ public class TestUserDataFetch {
     assertTrue(user.getGender().equals("male"));
     assertTrue(user.getAge() == 22);
   }
-
-  @Test
-  public void testGetAccessRequestsToUser() {
-	  String response = "";
-	    try {
-	      response =
-	          new String(Files.readAllBytes(Paths.get(resourceResponsePath + "accessRequestsToUserResponse.txt")));
-	    } catch (IOException e) {
-	      fail("Wrong filename for query");
-	    }
-	    when(test.getData(anyString(), isNull())).thenReturn(response);
-
-	    assertEquals(test.getData("", null), response);
-
-    assertTrue(userDataFetch.getAccessRequestsToUser() instanceof List);
-    List<DataAccessRequest> requests = userDataFetch.getAccessRequestsToUser();
-    assertTrue(requests.size() > 0);
-    for (DataAccessRequest request : requests) {
-      assertTrue(request.getId() instanceof String);
-      assertTrue(request.getDataOwner() instanceof User);
-      assertTrue(request.getRequestedBy() instanceof User);
-      assertTrue(request.getStatus() instanceof DataAccessRequestStatus);
-      assertTrue(request.getStatusAsString() instanceof String);
-    }
-  }
-
-  @Test
-  public void testGetAccessRequestsByDoctor() {
-	  String response = "";
-	    try {
-	      response =
-	          new String(Files.readAllBytes(Paths.get(resourceResponsePath + "accessRequestsByDoctorResponse.txt")));
-	    } catch (IOException e) {
-	      fail("Wrong filename for query");
-	    }
-	    when(test.getData(anyString(), isNull())).thenReturn(response);
-
-	    assertEquals(test.getData("", null), response);
-
-  assertTrue(userDataFetch.getAccessRequestsByDoctor() instanceof List);
-  List<DataAccessRequest> requests = userDataFetch.getAccessRequestsByDoctor();
-  assertTrue(requests.size() > 0);
-  for (DataAccessRequest request : requests) {
-    assertTrue(request.getId() instanceof String);
-    assertTrue(request.getDataOwner() instanceof User);
-    assertTrue(request.getRequestedBy() instanceof User);
-    assertTrue(request.getStatus() instanceof DataAccessRequestStatus);
-    assertTrue(request.getStatusAsString() instanceof String);
-  }
-}
 
   @Test
   public void testGetUserById() {
@@ -247,6 +178,99 @@ public class TestUserDataFetch {
     assertTrue(user.isDoctor());
     assertTrue(user.getGender().equals("male"));
     assertTrue(user.getAge() == 22);
+  }
+
+  @Test
+  public void testGetAccessRequestsToUser() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "accessRequestsToUserResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+
+    assertEquals(test.getData("", null), response);
+
+    assertTrue(userDataFetch.getAccessRequestsToUser() instanceof List);
+    List<DataAccessRequest> requests = userDataFetch.getAccessRequestsToUser();
+    assertTrue(requests.size() > 0);
+    for (DataAccessRequest request : requests) {
+      assertTrue(request.getId() instanceof String);
+      assertTrue(request.getDataOwner() instanceof User);
+      assertTrue(request.getRequestedBy() instanceof User);
+      assertTrue(request.getStatus() instanceof DataAccessRequestStatus);
+      assertTrue(request.getStatusAsString() instanceof String);
+    }
+  }
+
+  @Test
+  public void testGetAccessRequestsByDoctor() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "accessRequestsByDoctorResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+
+    assertEquals(test.getData("", null), response);
+
+    assertTrue(userDataFetch.getAccessRequestsByDoctor() instanceof List);
+    List<DataAccessRequest> requests = userDataFetch.getAccessRequestsByDoctor();
+    assertTrue(requests.size() > 0);
+    for (DataAccessRequest request : requests) {
+      assertTrue(request.getId() instanceof String);
+      assertTrue(request.getDataOwner() instanceof User);
+      assertTrue(request.getRequestedBy() instanceof User);
+      assertTrue(request.getStatus() instanceof DataAccessRequestStatus);
+      assertTrue(request.getStatusAsString() instanceof String);
+    }
+  }
+
+  @Test
+  public void testRequestDataAccessRequest() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "requestDataAccessResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), anyString())).thenReturn(response);
+
+    String oldToken = userDataFetch.currentToken;
+    userDataFetch.currentToken = "5ab173c1c13edf146111e7bb";
+    assertEquals(test.getData("", "5ab173c1c13edf146111e7bb"), response);
+    assertTrue(userDataFetch.requestDataAccess("5ab26b19c13edf233e48b451"));
+    userDataFetch.currentToken = oldToken;
+  }
+
+  @Test
+  public void testAnswerDataAccessRequest() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "answerDataAccessRequestResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+
+    assertEquals(test.getData("", null), response);
+    DataAccessRequest request =
+        new DataAccessRequest("5ab26cb8c13edf233e48b454", "5ab173c1c13edf146111e7bb", "PENDING");
+    assertTrue(userDataFetch.answerDataAccessRequest(request, "ACCEPTED"));
   }
 
   @Test

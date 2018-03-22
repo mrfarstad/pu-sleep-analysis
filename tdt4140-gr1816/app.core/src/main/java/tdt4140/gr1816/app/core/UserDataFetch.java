@@ -19,88 +19,11 @@ import java.util.NoSuchElementException;
 public class UserDataFetch {
 
   protected String currentToken = null;
-
-  public String deleteUserQuery =
-      "{\"query\":\"mutation{deleteUser(auth:{username:\\\"test\\\" password:\\\"test\\\"})}\"}";
-
-  public String allUsersQuery = "{\"query\":\"query{allUsers{id username isDoctor gender age}}\"}";
-  public String currentUserQuery = "{\"query\":\"query{viewer{id username isDoctor gender age}}\"}";
-  public String accessRequestsToUserQuery =
-      "{\"query\":\"query{dataAccessRequestsForMe{id dataOwner{id username isDoctor gender age} requestedBy{id username isDoctor gender age}status}}\"}";
-  public String accessRequestsByDoctorQuery =
-      "{\"query\":\"query{myDataAccessRequests{id dataOwner{id username isDoctor gender age} requestedBy{id username isDoctor gender age}status}}\"}";
-
   private DataGetter dataGetter;
-
   public static UserDataFetch userDataFetch = new UserDataFetch(new DataGetter());
 
   public UserDataFetch(DataGetter dataGetter) {
     this.dataGetter = dataGetter;
-  }
-
-  // Returns user
-
-  public boolean requestDataAccess(User patient) {
-    String mutation =
-        "{\"query\":\"mutation{requestDataAccess(dataOwnerId: \\\""
-            + patient.getId()
-            + "\\\"){id dataOwner { id username isDoctor gender age }requestedBy { id username isDoctor gender age } status }}\"}";
-    String responseJson = dataGetter.getData(mutation, this.currentToken);
-
-    ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
-    JsonParser parser;
-    DataAccessRequest accessRequest = null;
-    try {
-      parser = factory.createParser(responseJson);
-      JsonNode root = mapper.readTree(parser);
-      JsonNode thirdJsonObject = root.get("data").get("requestDataAccess");
-      accessRequest =
-          mapper.readerFor(new TypeReference<DataAccessRequest>() {}).readValue(thirdJsonObject);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-    if (accessRequest.getRequestedBy().getId().equals(this.currentToken)
-        && (accessRequest.getDataOwner().getId().equals(patient.getId()))) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  public boolean answerDataAccessRequest(DataAccessRequest request, String answer) {
-    String mutation =
-        "{\"query\":\"mutation{answerDataAccessRequest(dataAccessRequestId: \\\""
-            + request.getId()
-            + "\\\", status: "
-            + answer
-            + "){id dataOwner { id username isDoctor gender age }requestedBy { id username isDoctor gender age }status }}\"}";
-
-    String responseJson = dataGetter.getData(mutation, this.currentToken);
-
-    ObjectMapper mapper = new ObjectMapper();
-    JsonFactory factory = mapper.getFactory();
-    JsonParser parser;
-    DataAccessRequest accessRequest = null;
-    try {
-      parser = factory.createParser(responseJson);
-      JsonNode root = mapper.readTree(parser);
-      JsonNode thirdJsonObject = root.get("data").get("answerDataAccessRequest");
-      accessRequest =
-          mapper.readerFor(new TypeReference<DataAccessRequest>() {}).readValue(thirdJsonObject);
-    } catch (JsonParseException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    if (accessRequest.getStatusAsString().equals(answer)) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   public <T> T getGenericData(
@@ -108,13 +31,13 @@ public class UserDataFetch {
       List<String> levelNodes,
       TypeReference<T> typeReference,
       Map<String, String> variables) {
-    T sleepData = null;
-    String resourcePath = "../app.core/src/main/resources/tdt4140/gr1816/app/core/";
+    T data = null;
+    String resourcePath = "src/main/resources/tdt4140/gr1816/app/core/";
     try {
       ObjectMapper mapper = new ObjectMapper();
       ObjectNode obj = mapper.createObjectNode();
-      String allSleepDataQuery = new String(Files.readAllBytes(Paths.get(resourcePath + fileName)));
-      obj.put("query", allSleepDataQuery);
+      String query = new String(Files.readAllBytes(Paths.get(resourcePath + fileName)));
+      obj.put("query", query);
       if (variables != null) {
         JsonNode variableJson = mapper.valueToTree(variables);
         obj.put("variables", variableJson.toString());
@@ -127,13 +50,13 @@ public class UserDataFetch {
       for (String node : levelNodes) {
         jsonObject = jsonObject.get(node);
       }
-      sleepData = mapper.readerFor(typeReference).readValue(jsonObject);
+      data = mapper.readerFor(typeReference).readValue(jsonObject);
     } catch (JsonParseException e) {
       e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
     }
-    return sleepData;
+    return data;
   }
 
   public List<User> getAllUsers() {
@@ -334,39 +257,41 @@ public class UserDataFetch {
         variables);
   }
 
-  public static void main(String[] args) {
-    UserDataFetch data = new UserDataFetch(new DataGetter());
-    //    data.signIn("test", "test");
-    System.out.println(data.createUser("test", "test", true, "female", 20));
-    //    System.out.println(data.getAllUsers());
-    System.out.println(data.signIn("test", "test"));
-    System.out.println(data.currentToken);
-    System.out.println(data.getCurrentUser());
-    //    System.out.println(data.getAccessRequestsToUser());
-    System.out.println(data.getAccessRequestsByDoctor());
-    //    List<SleepData> sleep = data.getAllSleepData();
-    //    List<StepsData> steps = data.getAllStepsData();
-    //    List<PulseData> pulse = data.getAllPulseData();
-    //    System.out.println(sleep);
-    //    System.out.println(steps);
-    //    System.out.println(pulse);
-    //    List<SleepData> sleepViewer = data.getSleepDataByViewer();
-    //    List<StepsData> stepsViewer = data.getStepsDataByViewer();
-    //    List<PulseData> pulseViewer = data.getPulseDataByViewer();
-    //    System.out.println(sleepViewer);
-    //    System.out.println(stepsViewer);
-    //    System.out.println(pulseViewer);
-    //    SleepData sleepCreate = data.createSleepData("2018-03-20", 10, 10);
-    //    StepsData stepsCreate = data.createStepsData("2018-03-20", 10);
-    //    PulseData pulseCreate = data.createPulseData("2018-03-20", 10);
-    //    System.out.println(sleepCreate);
-    //    System.out.println(stepsCreate);
-    //    System.out.println(pulseCreate);
-    //    Boolean sleepDelete = data.deleteSleepData(sleepCreate.getId());
-    //    Boolean stepsDelete = data.deleteStepsData(stepsCreate.getId());
-    //    Boolean pulseDelete = data.deletePulseData(pulseCreate.getId());
-    //    System.out.println(sleepDelete);
-    //    System.out.println(stepsDelete);
-    //    System.out.println(pulseDelete);
+  public boolean requestDataAccess(User patient) {
+    return requestDataAccess(patient.getId());
+  }
+
+  public boolean requestDataAccess(String patientId) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("dataOwnerId", patientId);
+    DataAccessRequest accessRequest =
+        getGenericData(
+            "requestDataAccessQuery.txt",
+            Arrays.asList("requestDataAccess"),
+            new TypeReference<DataAccessRequest>() {},
+            variables);
+    if (accessRequest.getRequestedBy().getId().equals(this.currentToken)
+        && (accessRequest.getDataOwner().getId().equals(patientId))) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean answerDataAccessRequest(DataAccessRequest request, String answer) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("dataAccessRequestId", request.getId());
+    variables.put("status", answer);
+    DataAccessRequest accessRequest =
+        getGenericData(
+            "answerDataAccessRequestQuery.txt",
+            Arrays.asList("answerDataAccessRequest"),
+            new TypeReference<DataAccessRequest>() {},
+            variables);
+    if (accessRequest.getStatusAsString().equals(answer)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
