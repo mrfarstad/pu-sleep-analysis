@@ -536,4 +536,31 @@ public class TestUserDataFetch {
     Boolean deletePulse = userDataFetch.deletePulseData("");
     assertTrue(deletePulse);
   }
+
+  @Test
+  public void messagesForMe() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "messagesForMeResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    List<Message> messages = userDataFetch.messagesForMe();
+    assertTrue(messages.size() > 0);
+    String viewerId = messages.get(0).getTo().getId();
+    for (Message message : messages) {
+      assertTrue(message.getId() instanceof String);
+      assertTrue(message.getFrom() instanceof User);
+      assertTrue(message.getFrom().getId().equals("5ab24b5fc13edf233e48b42c"));
+      assertTrue(message.getTo() instanceof User);
+      assertTrue(message.getTo().getId().equals(viewerId));
+      assertTrue(message.getSubject() instanceof String);
+      assertTrue(message.getSubject().length() > 0);
+      assertTrue(message.getMessage() instanceof String);
+      assertTrue(message.getMessage().length() > 0);
+    }
+  }
 }
