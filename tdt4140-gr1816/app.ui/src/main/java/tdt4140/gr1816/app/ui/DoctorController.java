@@ -21,6 +21,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import tdt4140.gr1816.app.core.*;
@@ -32,6 +34,8 @@ public class DoctorController implements Initializable {
   @FXML private Button showDataButton;
 
   @FXML private Button showMessageButton;
+  
+  @FXML private Button sendMessageButton;
 
   @FXML private Text nameText;
 
@@ -40,6 +44,22 @@ public class DoctorController implements Initializable {
   @FXML private Text ageText;
 
   @FXML private Text requestFeedbackText;
+  
+  @FXML private Text subjectText;
+  
+  @FXML private Text toText;
+  
+  @FXML private Text fromText;
+  
+  @FXML private TextField subjectTextField;
+  
+  @FXML private TextArea sendMessageTextArea;
+  
+  @FXML private TextArea messageTextArea;
+  
+  @FXML private ChoiceBox<User> toChoiceBox;
+  
+  @FXML private Label sentLabel;
 
   @FXML private Tab dataTab;
 
@@ -54,8 +74,11 @@ public class DoctorController implements Initializable {
   @FXML private TextField requestUserTextField;
 
   @FXML private ListView<DataAccessRequest> patientListView;
+  
+  @FXML private ListView<Message> messagesListView;
 
   ObservableList<DataAccessRequest> patientListViewItems;
+  ObservableList<Message> messagesListViewItems;
 
   // Patient data tab
   @FXML private ChoiceBox<User> patientChoiceBox;
@@ -204,6 +227,22 @@ public class DoctorController implements Initializable {
     stepBarChart.setVisible(false);
     sleepBarChart.setVisible(false);
   }
+  
+  public void handleMessagesListViewClicked() {
+	  Message message = messagesListView.getSelectionModel().getSelectedItem();
+	  subjectText.setText(message.getSubject());
+	  fromText.setText(message.getFrom());
+	  toText.setText(message.getTo());
+	  messageTextArea.setText(message.getMessage());
+  }
+
+  
+  public void handleSendMessageButton() {
+	  String subject = subjectTextField.getText();
+	  User from = user;
+	  User to = toChoiceBox.getValue();
+	  String message = sendMessageTextArea.getText();
+  }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -214,10 +253,11 @@ public class DoctorController implements Initializable {
     setProfileValues();
 
     setDataChoiceBox();
-    setPatientChoiceBox();
+    setPatientChoiceBoxes();
     hideCharts();
 
     updatePatientListViewItems();
+    updateMessagesListViewItems();
   }
 
   public void setProfileValues() {
@@ -238,8 +278,16 @@ public class DoctorController implements Initializable {
         .filter(request -> !patientListViewItems.contains(request))
         .forEach(request -> patientListViewItems.add(request));
   }
+  
+  public void updateMessagesListViewItems() {
+	  messagesListViewItems = messagesListView.getItems();
+	  messagesListViewItems.clear();
+	  List<Message> messages = userDataFetch.messagesForMe();
+	  messages.stream().forEach(request -> messagesListViewItems.add(message));
+  }
 
-  public void setPatientChoiceBox() {
+
+  public void setPatientChoiceBoxes() {
     acceptedPatientList.clear();
     List<DataAccessRequest> requests = userDataFetch.getAccessRequestsByDoctor();
     requests
@@ -248,6 +296,7 @@ public class DoctorController implements Initializable {
         .filter(request -> request.getStatusAsString().equals("ACCEPTED"))
         .forEach(request -> acceptedPatientList.add(request.getDataOwner()));
     patientChoiceBox.setItems(acceptedPatientList);
+    toChoiceBox.setItems(acceptedPatientList);
   }
 
   public User getSelectedPatientCB() {
