@@ -328,4 +328,22 @@ public class UserDataFetch {
         new TypeReference<List<Message>>() {},
         null);
   }
+
+  public Boolean createMessage(String toId, String subject, String message) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("toId", toId);
+    variables.put("subject", subject);
+    variables.put("message", message);
+    Message msg =
+        getGenericData(
+            "createMessageQuery.txt",
+            Arrays.asList("createMessage"),
+            new TypeReference<Message>() {},
+            variables);
+    if (msg.getFrom().getId().equals(this.currentToken) && (msg.getTo().getId().equals(toId))) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

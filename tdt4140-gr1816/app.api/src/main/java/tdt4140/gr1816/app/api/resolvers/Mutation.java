@@ -167,13 +167,13 @@ public class Mutation implements GraphQLRootResolver {
   }
 
   public Message createMessage(
-      String fromId, String toId, String subject, String message, DataFetchingEnvironment env) {
+      String toId, String subject, String message, DataFetchingEnvironment env) {
     AuthContext context = env.getContext();
     User user = context.getUser();
     if (user == null) {
       throw new GraphQLException("Please log in");
     }
-    Message msg = new Message(fromId, toId, subject, message);
+    Message msg = new Message(user.getId(), toId, subject, message);
     return messageRepository.createMessage(msg);
   }
 }
