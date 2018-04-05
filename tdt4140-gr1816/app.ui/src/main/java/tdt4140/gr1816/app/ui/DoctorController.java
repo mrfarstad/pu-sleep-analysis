@@ -3,6 +3,7 @@ package tdt4140.gr1816.app.ui;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,6 +22,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import tdt4140.gr1816.app.core.*;
 
 public class DoctorController implements Initializable {
@@ -84,6 +86,8 @@ public class DoctorController implements Initializable {
   public void handleRequestButton() {
     String username = requestUserTextField.getText();
     User newPatient = userDataFetch.getUserByUsername(username);
+    PauseTransition pause = new PauseTransition(Duration.seconds(4));
+    pause.setOnFinished(event -> requestFeedbackText.setText(""));
     if (newPatient == null) {
       requestFeedbackText.setText("User not found");
     } else if (Login.userDataFetch.requestDataAccess(newPatient)) {
@@ -92,6 +96,7 @@ public class DoctorController implements Initializable {
     } else {
       requestFeedbackText.setText("Request failed");
     }
+    pause.play();
   }
 
   public void handleShowDataButton() {

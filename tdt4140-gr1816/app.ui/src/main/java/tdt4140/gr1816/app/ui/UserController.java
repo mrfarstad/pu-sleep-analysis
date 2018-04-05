@@ -4,6 +4,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,6 +19,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import tdt4140.gr1816.app.core.DataAccessRequest;
 import tdt4140.gr1816.app.core.PulseData;
 import tdt4140.gr1816.app.core.SleepData;
@@ -85,9 +87,13 @@ public class UserController implements Initializable {
   public void handleDeleteDataButton() {
     LocalDate ld = dataDatePicker.getValue();
 
+    PauseTransition pause = new PauseTransition(Duration.seconds(3));
+    pause.setOnFinished(event -> dataDeletionResponseText.setText(""));
+
     deleteSleepDataFromDate(ld);
     deleteStepsDataFromDate(ld);
     deletePulseDataFromDate(ld);
+    pause.play();
   }
 
   public void deleteSleepDataFromDate(LocalDate ld) {
