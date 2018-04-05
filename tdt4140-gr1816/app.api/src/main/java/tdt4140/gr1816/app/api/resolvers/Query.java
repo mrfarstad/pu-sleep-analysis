@@ -17,18 +17,21 @@ public class Query implements GraphQLRootResolver {
   private final StepsDataRepository stepsDataRepository;
   private final PulseDataRepository pulseDataRepository;
   private final DataAccessRequestRepository dataAccessRequestRepository;
+  private final MessageRepository messageRepository;
 
   public Query(
       UserRepository userRepository,
       SleepDataRepository sleepDataRepository,
       StepsDataRepository stepsDataRepository,
       PulseDataRepository pulseDataRepository,
-      DataAccessRequestRepository dataAccessRequestRepository) {
+      DataAccessRequestRepository dataAccessRequestRepository,
+      MessageRepository messageRepository) {
     this.userRepository = userRepository;
     this.sleepDataRepository = sleepDataRepository;
     this.stepsDataRepository = stepsDataRepository;
     this.pulseDataRepository = pulseDataRepository;
     this.dataAccessRequestRepository = dataAccessRequestRepository;
+    this.messageRepository = messageRepository;
   }
 
   public User viewer(DataFetchingEnvironment env) {
@@ -140,5 +143,14 @@ public class Query implements GraphQLRootResolver {
         .stream()
         .filter(request -> request.getDataOwnerId().equals(user.getId()))
         .collect(Collectors.toList());
+  }
+
+  public List<Message> messagesForMe(DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      return new ArrayList<Message>();
+    }
+    return messageRepository.getAllMessagesToUser(user.getId());
   }
 }
