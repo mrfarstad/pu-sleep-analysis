@@ -35,6 +35,7 @@ public class MessageRepository {
 
     doc.append("fromId", message.getFromId());
     doc.append("toId", message.getToId());
+    doc.append("subject", message.getSubject());
     doc.append("message", message.getMessage());
 
     messages.insertOne(doc);
@@ -46,6 +47,7 @@ public class MessageRepository {
         doc.get("_id").toString(),
         doc.getString("fromId"),
         doc.getString("toId"),
+        doc.getString("subject"),
         doc.getString("message"));
   }
 }
