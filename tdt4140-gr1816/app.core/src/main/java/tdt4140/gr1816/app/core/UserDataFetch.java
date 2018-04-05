@@ -320,4 +320,12 @@ public class UserDataFetch {
       return false;
     }
   }
+
+  public List<Message> messagesForMe() {
+    return getGenericData(
+        "messagesForMeQuery.txt",
+        Arrays.asList("messagesForMe"),
+        new TypeReference<List<Message>>() {},
+        null);
+  }
 }

@@ -59,6 +59,11 @@ public class Message {
   }
 
   @JsonGetter
+  public String getSubject() {
+    return subject;
+  }
+
+  @JsonGetter
   public String getMessage() {
     return message;
   }
