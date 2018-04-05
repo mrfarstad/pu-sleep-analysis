@@ -18,6 +18,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import tdt4140.gr1816.app.core.DataAccessRequest;
@@ -36,6 +39,8 @@ public class UserController implements Initializable {
   @FXML private Button removeDoctorButton;
 
   @FXML private Button deleteDataButton;
+  
+  @FXML private Button sendButton;
 
   @FXML private Text nameText;
 
@@ -44,12 +49,30 @@ public class UserController implements Initializable {
   @FXML private Text genderText;
 
   @FXML private Text dataDeletionResponseText;
+  
+  @FXML private Text subjectText;
+  
+  @FXML private Text toText;
+  
+  @FXML private Text fromText;
+  
+  @FXML private TextField subjectTextField;
+  
+  @FXML private TextArea sendMessageTextArea;
+  
+  @FXML private TextArea messageTextArea;
+  
+  @FXML private ChoiceBox<DataAccessRequest> toChoiceBox;
+  
+  @FXML private Label sentLabel;
 
   @FXML private DatePicker dataDatePicker;
 
   @FXML private ListView<DataAccessRequest> doctorsListView;
 
   @FXML private ListView<DataAccessRequest> doctorRequestListView;
+  
+  @FXML private ListView<DataAccessRequest> messagesListView;
 
   // Graph Tab
   @FXML private ChoiceBox<String> dataChoiceBox;
@@ -74,6 +97,8 @@ public class UserController implements Initializable {
 
   ObservableList<DataAccessRequest> doctorsListViewItems;
   ObservableList<DataAccessRequest> doctorRequestListViewItems;
+  ObservableList<DataAccessRequest> messagesListViewItems;
+  ObservableList<DataAccessRequest> acceptedDoctorsList = FXCollections.observableArrayList();
 
   public void handleDataButton() {
     if (user.getIsGatheringData()) {
@@ -246,6 +271,21 @@ public class UserController implements Initializable {
     sleepBarChart.getData().add(series);
     sleepBarChart.setVisible(true);
   }
+  
+  public void handleMessagesListViewClicked() {
+	  Message message = messagesListView.getSelectionModel().getSelectedItem();
+	  subjectText.setText(message.getSubject());
+	  fromText.setText(message.getFrom());
+	  toText.setText(message.getTo());
+	  messageTextArea.setText(message.getMessage());
+  }
+  
+  public void handleSendMessageButton() {
+	  String subject = subjectTextField.getText();
+	  User from = user;
+	  DataAccessRequest to = toChoiceBox.getValue();
+	  String message = sendMessageTextArea.getText();
+  }
 
   @Override
   public void initialize(URL arg0, ResourceBundle arg1) {
@@ -260,10 +300,14 @@ public class UserController implements Initializable {
     updateDoctorsListViewItems();
 
     updateDoctorRequestListViewItems();
+    
+    updateMessagesListViewItems();
 
     setDataChoiceBox();
 
     hideCharts();
+    
+    updateToChoiceBox();
   }
 
   public void setProfileValues() {
@@ -305,6 +349,13 @@ public class UserController implements Initializable {
         .filter(request -> request.getStatusAsString().equals("PENDING"))
         .forEach(request -> doctorRequestListViewItems.add(request));
   }
+  
+  public void updateMessagesListViewItems() {
+	  messagesListViewItems = messagesListView.getItems();
+	  messagesListViewItems.clear();
+	  List<Message> messages = userDataFetch.messagesForMe();
+	  messages.stream().forEach(request -> messagesListViewItems.add(message));
+  }
 
   private void hideCharts() {
     stepBarChart.setVisible(false);
@@ -316,5 +367,15 @@ public class UserController implements Initializable {
     dataChoiceBox.getItems().add("Pulse");
     dataChoiceBox.getItems().add("Steps");
     dataChoiceBox.getItems().add("Sleep - duration");
+  }
+  
+  public void updateToChoiceBox() {
+	  acceptedDoctorsList = toChoiceBox.getItems();
+	  acceptedDoctorsList.clear();
+	  List<DataAccessRequest> requests = userDataFetch.getAccessRequestsToUser();
+	    requests
+	        .stream()
+	        .filter(request -> request.getStatusAsString().equals("ACCEPTED"))
+	        .forEach(request -> acceptedDoctorsList.add(request));
   }
 }

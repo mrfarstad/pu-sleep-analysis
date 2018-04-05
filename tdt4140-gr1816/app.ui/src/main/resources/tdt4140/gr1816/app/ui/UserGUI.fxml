@@ -12,6 +12,8 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -20,7 +22,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.UserController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.UserController">
    <top>
       <HBox alignment="TOP_CENTER" prefHeight="48.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -206,6 +208,132 @@
                      </children>
                   </HBox>
                </content></Tab>
+            <Tab text="Messages">
+               <content>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="307.0" prefWidth="170.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <ListView fx:id="messagesListView" onMouseClicked="#handleMessagesListViewClicked" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </ListView>
+                           </children>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" prefHeight="307.0" prefWidth="361.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="Message:" />
+                              <HBox layoutX="10.0" layoutY="82.0" prefHeight="0.0" prefWidth="396.0">
+                                 <children>
+                                    <VBox prefHeight="53.0" prefWidth="53.0">
+                                       <children>
+                                          <Label text="Subject:">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="To:">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                          <Label text="From:">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Text fx:id="subjectText" strokeType="OUTSIDE" strokeWidth="0.0" text="message" />
+                                          <Text fx:id="toText" strokeType="OUTSIDE" strokeWidth="0.0" text="Person" />
+                                          <Text fx:id="fromText" strokeType="OUTSIDE" strokeWidth="0.0" text="Person" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <TextArea fx:id="messageTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" text="hallo &#10;hilsen&#10;meg" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </TextArea>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </content>
+            </Tab>
+            <Tab text="Send Message">
+               <content>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" prefHeight="307.0" prefWidth="361.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="Message:" />
+                              <HBox layoutX="10.0" layoutY="82.0" prefHeight="0.0" prefWidth="396.0">
+                                 <children>
+                                    <VBox prefHeight="53.0" prefWidth="53.0">
+                                       <children>
+                                          <Label text="Subject:">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <Label text="To:">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <TextField fx:id="subjectTextField" />
+                                          <ChoiceBox fx:id="toCoiceBox" prefHeight="26.0" prefWidth="322.0" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <TextArea fx:id="sendMessageTextArea" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </TextArea>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="307.0" prefWidth="170.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label text="Press to send message:">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Button fx:id="sendMessageButton" mnemonicParsing="false" onAction="#handleSendMessageButton" prefHeight="170.0" prefWidth="170.0" text="Send" />
+                              <Label fx:id="sentLabel" text="Message sent!" visible="false">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
    </center>
