@@ -70,7 +70,7 @@ public class UserController implements Initializable {
 
   @FXML private ListView<DataAccessRequest> doctorRequestListView;
   
-  @FXML private ListView<DataAccessRequest> messagesListView;
+  @FXML private ListView<Message> messagesListView;
 
   // Graph Tab
   @FXML private ChoiceBox<String> dataChoiceBox;
