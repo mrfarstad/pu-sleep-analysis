@@ -236,7 +236,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void testRequestDataAccessRequest() {
+  public void testRequestDataAccess() {
     String response = "";
     try {
       response =
@@ -248,11 +248,9 @@ public class TestUserDataFetch {
     }
     when(test.getData(anyString(), anyString())).thenReturn(response);
 
-    String oldToken = userDataFetch.currentToken;
     userDataFetch.currentToken = "5ab173c1c13edf146111e7bb";
     assertEquals(test.getData("", "5ab173c1c13edf146111e7bb"), response);
     assertTrue(userDataFetch.requestDataAccess("5ab26b19c13edf233e48b451"));
-    userDataFetch.currentToken = oldToken;
   }
 
   @Test
@@ -348,7 +346,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void createSleepData() {
+  public void testCreateSleepData() {
     String response = "";
     try {
       response =
@@ -367,7 +365,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void deleteSleepData() {
+  public void testDeleteSleepData() {
     String response = "";
     try {
       response =
@@ -382,7 +380,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void getAllStepsData() {
+  public void testGetAllStepsData() {
     String response = "";
     try {
       response =
@@ -403,7 +401,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void stepsDataByViewer() {
+  public void testStepsDataByViewer() {
     String response = "";
     try {
       response =
@@ -427,7 +425,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void createStepsData() {
+  public void testCreateStepsData() {
     String response = "";
     try {
       response =
@@ -445,7 +443,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void deleteStepsData() {
+  public void testDeleteStepsData() {
     String response = "";
     try {
       response =
@@ -460,7 +458,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void getAllPulseData() {
+  public void testGetAllPulseData() {
     String response = "";
     try {
       response =
@@ -481,7 +479,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void getPulseDataByViewer() {
+  public void testGetPulseDataByViewer() {
     String response = "";
     try {
       response =
@@ -505,7 +503,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void createPulseData() {
+  public void testCreatePulseData() {
     String response = "";
     try {
       response =
@@ -523,7 +521,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void deletePulseData() {
+  public void testDeletePulseData() {
     String response = "";
     try {
       response =
@@ -538,7 +536,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void messagesForMe() {
+  public void testMessagesForMe() {
     String response = "";
     try {
       response =
@@ -562,5 +560,23 @@ public class TestUserDataFetch {
       assertTrue(message.getMessage() instanceof String);
       assertTrue(message.getMessage().length() > 0);
     }
+  }
+
+  @Test
+  public void testCreateMessage() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "createMessageResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), anyString())).thenReturn(response);
+
+    User to = new User("5ab24b72c13edf233e48b42d", "test", "test", true, "female", 22, true);
+    userDataFetch.currentToken = "5ab24b5fc13edf233e48b42c";
+    assertEquals(test.getData("", "5ab24b5fc13edf233e48b42c"), response);
+    assertTrue(userDataFetch.createMessage(to.getId(), "subject", "message content"));
   }
 }
