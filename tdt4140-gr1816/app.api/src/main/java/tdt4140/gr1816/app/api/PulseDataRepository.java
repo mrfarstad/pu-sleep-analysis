@@ -5,8 +5,11 @@ import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -31,6 +34,23 @@ public class PulseDataRepository {
       allPulseData.add(pulseData(doc));
     }
     return allPulseData;
+  }
+
+  /*
+   * This method assumes that the dates are of the correct form 'yyyy-mm-dd'
+   */
+  public List<PulseData> getPulseDataBetweenDates(String userId, String startDate, String endDate) {
+    return getAllPulseData(userId)
+        .stream()
+        .filter(
+            data -> {
+              DateTimeFormatter dmf = DateTimeFormatter.ISO_LOCAL_DATE;
+              LocalDate from = LocalDate.parse(startDate, dmf);
+              LocalDate to = LocalDate.parse(endDate, dmf);
+              LocalDate date = LocalDate.parse(data.getDate(), dmf);
+              return date.compareTo(from) > 0 && date.compareTo(to) < 0;
+            })
+        .collect(Collectors.toList());
   }
 
   public PulseData savePulseData(PulseData pulseData) {
