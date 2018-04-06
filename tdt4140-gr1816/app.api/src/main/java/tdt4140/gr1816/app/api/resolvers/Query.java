@@ -103,6 +103,14 @@ public class Query implements GraphQLRootResolver {
     return pulseDataRepository.getAllPulseData(userId);
   }
 
+  public List<PulseData> pulseDataBetweenDates(
+      String userId, String startDate, String endDate, DataFetchingEnvironment env) {
+    if (!hasUserAccess(env, userId)) {
+      throw new GraphQLException("Cannot access user data");
+    }
+    return pulseDataRepository.getPulseDataBetweenDates(userId, startDate, endDate);
+  }
+
   public List<PulseData> pulseDataByViewer(DataFetchingEnvironment env) {
     AuthContext context = env.getContext();
     User user = context.getUser();
