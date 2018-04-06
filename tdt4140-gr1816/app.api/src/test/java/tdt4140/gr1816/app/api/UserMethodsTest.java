@@ -365,5 +365,23 @@ public class UserMethodsTest extends ApiBaseCase {
     Map<String, Object> fetchedUser = (Map<String, Object>) pulseData.get("user");
 
     assertEquals(fetchedUser.get("id"), user.getId());
+    
+    String query1 =
+            "query {\n"
+                + "  pulseDataBetweenDates(userId: \""
+                + user.getId()
+                + "\", startDate: \"2018-07-01\", endDate: \"2018-08-02\") {\n"
+                + "    id\n"
+                + "  }\n"
+                + "}";
+        ExecutionResult res1 = executeQuery(query1, context);
+        Map<String, Object> result1 = res1.getData();
+
+        @SuppressWarnings("unchecked")
+        ArrayList<Map> pulseDataList = (ArrayList<Map>) result1.get("pulseDataBetweenDates");
+        
+        assertEquals(pulseDataList.size(), 1);
+        assertTrue(pulseDataList.get(0).get("id") != null);
+        assertTrue(pulseDataList.get(0).get("id") instanceof String);
   }
 }
