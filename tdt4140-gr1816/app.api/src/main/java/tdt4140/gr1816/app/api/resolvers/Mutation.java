@@ -56,10 +56,10 @@ public class Mutation implements GraphQLRootResolver {
     }
     throw new GraphQLException("Invalid credentials");
   }
-  
+
   public boolean forgotPassword(String username) {
-	  User user = userRepository.findByUsername(username);
-	  return userRepository.forgotPassword(user);
+    User user = userRepository.findByUsername(username);
+    return userRepository.forgotPassword(user);
   }
 
   public SigninPayload signinUser(AuthData auth) throws IllegalAccessException {

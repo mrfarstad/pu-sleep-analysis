@@ -8,7 +8,6 @@ import graphql.GraphQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import tdt4140.gr1816.app.api.types.User;
@@ -64,30 +63,30 @@ public class UserRepository {
   }
 
   public boolean forgotPassword(User user) {
-	    if (user == null) {
-	      return false;
-	    }
-	    String password = generateNewPassword(12);
-	    Document userDoc = users.find(eq("_id", new ObjectId(user.getId()))).first();
+    if (user == null) {
+      return false;
+    }
+    String password = generateNewPassword(12);
+    Document userDoc = users.find(eq("_id", new ObjectId(user.getId()))).first();
 
-	    Document doc = new Document();
-	    doc.append("password", password);
-	    users.updateOne(
-	        eq("_id", new ObjectId(userDoc.get("_id").toString())), new Document("$set", doc));
-	    System.out.println("Your new password is: " + password);
-	    return true;
-	  }
-  
+    Document doc = new Document();
+    doc.append("password", password);
+    users.updateOne(
+        eq("_id", new ObjectId(userDoc.get("_id").toString())), new Document("$set", doc));
+    System.out.println("Your new password is: " + password);
+    return true;
+  }
+
   public String generateNewPassword(int numberOfChars) {
-	  String CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-      StringBuilder strBuilder = new StringBuilder();
-      Random rnd = new Random();
-      while (strBuilder.length() < numberOfChars) {
-          int index = (int) (rnd.nextFloat() * CHARSET.length());
-          strBuilder.append(CHARSET.charAt(index));
-      }
-      String password = strBuilder.toString();
-	  return password;
+    String CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    StringBuilder strBuilder = new StringBuilder();
+    Random rnd = new Random();
+    while (strBuilder.length() < numberOfChars) {
+      int index = (int) (rnd.nextFloat() * CHARSET.length());
+      strBuilder.append(CHARSET.charAt(index));
+    }
+    String password = strBuilder.toString();
+    return password;
   }
 
   public boolean deleteUser(User user) {
