@@ -89,14 +89,47 @@ public class UserDataFetch {
   }
 
   public Boolean deleteUser(String username, String password) {
+
+    boolean deleteData = true;
+
+    // Rid steps Data
+    List<StepsData> stepsData = getStepsDataByViewer();
+    for (StepsData entry : stepsData) {
+      boolean success = deleteStepsData(entry.getId());
+      if (!success) {
+        deleteData = false;
+      }
+    }
+    // Rid pulse Data
+    List<PulseData> pulseData = getPulseDataByViewer();
+    for (PulseData entry : pulseData) {
+      boolean success = deletePulseData(entry.getId());
+      if (!success) {
+        deleteData = false;
+      }
+    }
+    // Rid Sleep Data
+    List<SleepData> sleepData = getSleepDataByViewer();
+    for (SleepData entry : sleepData) {
+      boolean success = deleteSleepData(entry.getId());
+      if (!success) {
+        deleteData = false;
+      }
+    }
+
+    // Rid accessRequests
+
+    // Rid User Credentials
     Map<String, String> variables = new HashMap<>();
     variables.put("username", username);
     variables.put("password", password);
-    return getGenericData(
-        "deleteUserQuery.txt",
-        Arrays.asList("deleteUser"),
-        new TypeReference<Boolean>() {},
-        variables);
+    boolean deleteCredentials =
+        getGenericData(
+            "deleteUserQuery.txt",
+            Arrays.asList("deleteUser"),
+            new TypeReference<Boolean>() {},
+            variables);
+    return (deleteCredentials && deleteData);
   }
 
   public boolean forgotPassword(String username) {
