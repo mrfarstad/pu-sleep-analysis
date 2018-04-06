@@ -98,6 +98,16 @@ public class UserDataFetch {
         new TypeReference<Boolean>() {},
         variables);
   }
+  
+  public boolean forgotPassword(String username) {
+	  Map<String, String> variables = new HashMap<>();
+	    variables.put("username", username);
+	    return getGenericData(
+	        "forgotPasswordQuery.txt",
+	        Arrays.asList("forgotPassword"),
+	        new TypeReference<Boolean>() {},
+	        variables);
+  }
 
   public User getUserById(String id) {
     try {

@@ -52,7 +52,7 @@ public class LoginController {
       forgotPasswordText.setText("Please write your username");
     } else if (newPasswordUser == null) {
       forgotPasswordText.setText("User not found");
-    } else if (Login.userDataFetch.generateNewPassword(newPasswordUser)) {
+    } else if (Login.userDataFetch.forgotPassword(usernameField.getText())) {
       forgotPasswordText.setText("New password sent");
     }
     pause.play();
