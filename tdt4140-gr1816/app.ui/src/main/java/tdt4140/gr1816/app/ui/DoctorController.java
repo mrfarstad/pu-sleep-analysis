@@ -114,6 +114,9 @@ public class DoctorController implements Initializable {
   @FXML private CategoryAxis stepChartXAxis;
   @FXML private NumberAxis stepChartYAxis;
 
+  @FXML private Text averageNumberText;
+  @FXML private Text averageText;
+
   private UserDataFetch userDataFetch;
   private User user;
 
@@ -201,6 +204,9 @@ public class DoctorController implements Initializable {
     sleepBarChart.getData().clear();
     sleepBarChart.getData().add(series);
     sleepBarChart.setVisible(true);
+
+    averageText.setText("Average hours of sleep: ");
+    averageNumberText.setText(Integer.toString(Login.userDataFetch.getAverage("sleep")));
   }
   // Piechart
   /*
@@ -237,6 +243,9 @@ public class DoctorController implements Initializable {
     pulseLineChart.getData().clear();
     pulseLineChart.getData().add(series);
     pulseLineChart.setVisible(true);
+
+    averageText.setText("Average heart rate: ");
+    averageNumberText.setText(Integer.toString(Login.userDataFetch.getAverage("pulse")));
   }
 
   private void showStepChart() {
@@ -256,6 +265,9 @@ public class DoctorController implements Initializable {
     stepBarChart.getData().clear();
     stepBarChart.getData().add(series);
     stepBarChart.setVisible(true);
+
+    averageText.setText("Average steps: ");
+    averageNumberText.setText(Integer.toString(Login.userDataFetch.getAverage("steps")));
   }
 
   private void hideCharts() {
@@ -361,7 +373,6 @@ public class DoctorController implements Initializable {
 
   public User getSelectedPatientCB() {
     User user = patientChoiceBox.getValue();
-    patientTF.setText(user.getUsername() + ".");
     return user;
   }
 

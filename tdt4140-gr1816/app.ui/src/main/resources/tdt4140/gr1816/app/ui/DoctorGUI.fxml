@@ -145,15 +145,15 @@
                                  <children>
                                     <AnchorPane prefHeight="366.0" prefWidth="188.0">
                                        <children>
-                                          <ChoiceBox fx:id="dataChoiceBox" layoutX="16.0" layoutY="109.0" prefHeight="27.0" prefWidth="150.0" />
-                                          <Button fx:id="viewGraphButton" layoutX="46.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleViewGraphButton" text="View Graph" />
-                                          <ChoiceBox fx:id="patientChoiceBox" layoutX="15.0" layoutY="47.0" prefWidth="150.0" />
-                                          <Text layoutX="15.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient:" />
-                                          <Text layoutX="16.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Type: " />
-                                          <DatePicker fx:id="fromDate" layoutX="16.0" layoutY="169.0" prefHeight="29.0" prefWidth="150.0" />
-                                          <DatePicker fx:id="toDate" layoutX="16.0" layoutY="230.0" prefHeight="27.0" prefWidth="150.0" />
-                                          <Text layoutX="16.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From: " />
-                                          <Text layoutX="14.0" layoutY="226.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To:" />
+                                          <ChoiceBox fx:id="dataChoiceBox" layoutX="16.0" layoutY="94.0" prefHeight="27.0" prefWidth="150.0" />
+                                          <Button fx:id="viewGraphButton" layoutX="46.0" layoutY="265.0" mnemonicParsing="false" onAction="#handleViewGraphButton" text="View Graph" />
+                                          <ChoiceBox fx:id="patientChoiceBox" layoutX="15.0" layoutY="32.0" prefWidth="150.0" />
+                                          <Text layoutX="15.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient:" />
+                                          <Text layoutX="16.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Type: " />
+                                          <DatePicker fx:id="fromDate" layoutX="16.0" layoutY="154.0" prefHeight="29.0" prefWidth="150.0" />
+                                          <DatePicker fx:id="toDate" layoutX="16.0" layoutY="215.0" prefHeight="27.0" prefWidth="150.0" />
+                                          <Text layoutX="16.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From: " />
+                                          <Text layoutX="14.0" layoutY="211.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To:" />
                                        </children>
                                     </AnchorPane>
                                  </children>
@@ -162,12 +162,15 @@
                                  <children>
                                     <AnchorPane prefHeight="54.0" prefWidth="401.0">
                                        <children>
-                                          <Text layoutX="33.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Health data associated with ">
+                                          <Text fx:id="averageText" layoutX="31.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="169.0">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
                                           </Text>
-                                          <Text fx:id="patientTF" layoutX="221.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="120.0" />
+                                          <Text fx:id="averageNumberText" fill="#1755eb" layoutX="220.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="67.0">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font></Text>
                                        </children>
                                     </AnchorPane>
                                     <StackPane prefHeight="324.0" prefWidth="419.0">

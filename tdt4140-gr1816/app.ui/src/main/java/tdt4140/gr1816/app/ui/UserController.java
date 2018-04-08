@@ -95,7 +95,7 @@ public class UserController implements Initializable {
   @FXML private BarChart<String, Number> sleepBarChart;
   @FXML private CategoryAxis sleepChartXAxis;
   @FXML private NumberAxis sleepChartYAxis;
-
+  
   // Edit profile
   @FXML private Button editProfileButton;
   @FXML private Text editProfileResponse;
@@ -108,6 +108,9 @@ public class UserController implements Initializable {
   @FXML private TextField newAgeField;
   @FXML private RadioButton male;
   @FXML private Button saveButton;
+  
+  @FXML private Text averageText;
+  @FXML private Text averageNumberText;
 
   private User user;
   private UserDataFetch userDataFetch;
@@ -329,9 +332,11 @@ public class UserController implements Initializable {
                 barChartData.add(
                     new XYChart.Data<>(stepData.getDate().toString(), stepData.getSteps())));
     XYChart.Series<String, Number> series = new XYChart.Series<>(barChartData);
-
     stepBarChart.getData().add(series);
     stepBarChart.setVisible(true);
+
+    averageText.setText("Average steps: ");
+    averageNumberText.setText(Integer.toString(Login.userDataFetch.getAverage("steps")));
   }
 
   public void showPulseChart() {
@@ -349,9 +354,11 @@ public class UserController implements Initializable {
                 lineChartData.add(
                     new XYChart.Data<>(pulseData.getDate().toString(), pulseData.getRestHr())));
     XYChart.Series<String, Number> series = new XYChart.Series<>(lineChartData);
-
     pulseLineChart.getData().add(series);
     pulseLineChart.setVisible(true);
+
+    averageText.setText("Average resting heart rate: ");
+    averageNumberText.setText(Integer.toString(Login.userDataFetch.getAverage("pulse")));
   }
 
   public void showSleepDChart() {
@@ -371,9 +378,11 @@ public class UserController implements Initializable {
                     new XYChart.Data<>(
                         sleepData.getDate().toString(), sleepData.getDuration() / 60)));
     XYChart.Series<String, Number> series = new XYChart.Series<>(sleepBarChartData);
-
     sleepBarChart.getData().add(series);
     sleepBarChart.setVisible(true);
+
+    averageText.setText("Average hour of sleep: ");
+    averageNumberText.setText(Integer.toString(Login.userDataFetch.getAverage("sleep")));
   }
 
   public void handleMessagesListViewClicked() {
@@ -491,6 +500,8 @@ public class UserController implements Initializable {
     stepBarChart.setVisible(false);
     pulseLineChart.setVisible(false);
     sleepBarChart.setVisible(false);
+    averageText.setText("");
+    averageNumberText.setText("");
   }
 
   public void setDataChoiceBox() {

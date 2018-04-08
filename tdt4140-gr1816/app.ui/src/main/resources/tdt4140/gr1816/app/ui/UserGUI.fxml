@@ -261,6 +261,12 @@
                               <Text layoutX="32.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From:" />
                               <Text layoutX="29.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To:" wrappingWidth="40.21875" />
                               <Button fx:id="viewGraphButton" layoutX="61.0" layoutY="204.0" mnemonicParsing="false" onAction="#handleViewGraphButton" text="View graph" />
+                              <Text fx:id="averageText" layoutX="6.0" layoutY="275.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" wrappingWidth="155.0" />
+                              <Text fx:id="averageNumberText" fill="#1755eb" layoutX="148.0" layoutY="276.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" wrappingWidth="55.21875">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Text>
                            </children>
                         </AnchorPane>
                      </children>
