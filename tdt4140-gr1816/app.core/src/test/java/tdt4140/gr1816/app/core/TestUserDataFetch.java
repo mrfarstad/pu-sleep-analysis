@@ -16,6 +16,12 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.Test;
+import org.mockito.Mockito;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import tdt4140.gr1816.app.core.DataAccessRequest.DataAccessRequestStatus;
 
 public class TestUserDataFetch {
@@ -25,6 +31,7 @@ public class TestUserDataFetch {
 
   private UserDataFetch userDataFetch = new UserDataFetch(test);
   String resourceResponsePath = "src/test/resources/tdt4140/gr1816/app/core/";
+  String resourceQueryPath = "src/main/resources/tdt4140/gr1816/app/core/";
 
   @Test
   public void testCreateUserQuery() {
@@ -61,14 +68,95 @@ public class TestUserDataFetch {
       fail("Wrong filename for query");
     }
     when(test.getData(anyString(), isNull())).thenReturn(response);
-
     assertEquals(test.getData("", null), response);
-
+    
+    // Steps:
+    String stepsQuery = "";
+    String stepsResponse = "";
+    String deleteStepsResponse = "";
+    try {
+      stepsQuery =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceQueryPath + "stepsDataByViewerQuery.txt")));
+      stepsQuery = "{\"query\":\"" + stepsQuery + "\"}";
+      stepsResponse =
+              new String(
+                  Files.readAllBytes(Paths.get(resourceResponsePath + "stepsDataByViewerResponse.txt")) );
+      deleteStepsResponse =
+              new String(
+                  Files.readAllBytes(Paths.get(resourceResponsePath + "deleteStepsDataResponse.txt")) );
+      
+    } catch (IOException e) {
+      fail("Wrong filename(s) for query/responce (steps)");
+    }
+   
+    
+    try {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode obj = mapper.createObjectNode();
+        obj.put("query", stepsQuery);
+    } catch (Exception e){
+    		e.printStackTrace();
+    }
+    
+    when(test.getData(Mockito.contains("stepsDataByViewer"), isNull())).thenReturn(stepsResponse);
+    when(test.getData(Mockito.contains("deleteStepsData"), isNull())).thenReturn(deleteStepsResponse);
+    assertEquals(test.getData(stepsQuery.toString(), null), stepsResponse);
+    
+    
+    // Pulse:
+    String pulseQuery = "";
+    String pulseResponse = "";
+    String deletePulseResponse = "";
+    try {
+        pulseQuery =
+            new String(
+                Files.readAllBytes(
+                    Paths.get(resourceQueryPath + "pulseDataByViewerQuery.txt")));
+        pulseResponse =
+                new String(
+                    Files.readAllBytes(Paths.get(resourceResponsePath + "pulseDataByViewerResponse.txt")));
+        deletePulseResponse =
+                new String(
+                    Files.readAllBytes(Paths.get(resourceResponsePath + "deletePulseDataResponse.txt")) );
+      } catch (IOException e) {
+        fail("Wrong filename(s) for query/responce (pulse)");
+      }
+        
+    when(test.getData(Mockito.contains("pulseDataByViewer"), isNull())).thenReturn(pulseResponse);
+    when(test.getData(Mockito.contains("deletePulseData"), isNull())).thenReturn(deletePulseResponse);
+    assertEquals(test.getData(pulseQuery, null), pulseResponse);
+    
+    //Sleep:
+    String sleepQuery = "";
+    String sleepResponse = "";
+    String deleteSleepResponse = "";
+    try {
+        sleepQuery =
+            new String(
+                Files.readAllBytes(
+                    Paths.get(resourceQueryPath + "sleepDataByViewerQuery.txt")));
+        sleepResponse =
+                new String(
+                    Files.readAllBytes(Paths.get(resourceResponsePath + "sleepDataByViewerResponse.txt")));
+        deleteSleepResponse =
+                new String(
+                    Files.readAllBytes(Paths.get(resourceResponsePath + "deleteSleepDataResponse.txt")) );
+      } catch (IOException e) {
+        fail("Wrong filename for query");
+      }
+    when(test.getData(Mockito.contains("sleepDataByViewer"), isNull())).thenReturn(sleepResponse);
+    when(test.getData(Mockito.contains("deleteSleepData"), isNull())).thenReturn(deleteSleepResponse);
+    assertEquals(test.getData(sleepQuery, null), sleepResponse);
+    
+    
+    
     // UserDataFetch should return a boolean (success)
-    // WILL BE FIXED:
-    /*boolean success = userDataFetch.deleteUser("test", "test");
+   
+    boolean success = userDataFetch.deleteUser("test", "test");
     assertNotNull(success);
-    assertTrue(success);*/
+    assertTrue(success);
   }
 
   @Test
