@@ -68,6 +68,10 @@ public class UserDataFetch {
     return data;
   }
 
+  public void logOut() {
+    this.currentToken = null;
+  }
+
   public List<User> getAllUsers() {
     return getGenericData(
         "allUsersQuery.txt", Arrays.asList("allUsers"), new TypeReference<List<User>>() {}, null);
