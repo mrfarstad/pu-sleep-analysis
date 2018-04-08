@@ -4,6 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLRootResolver;
 import graphql.GraphQLException;
 import graphql.schema.DataFetchingEnvironment;
 import tdt4140.gr1816.app.api.DataAccessRequestRepository;
+import tdt4140.gr1816.app.api.MessageRepository;
 import tdt4140.gr1816.app.api.PulseDataRepository;
 import tdt4140.gr1816.app.api.SleepDataRepository;
 import tdt4140.gr1816.app.api.StepsDataRepository;
@@ -12,6 +13,7 @@ import tdt4140.gr1816.app.api.auth.AuthContext;
 import tdt4140.gr1816.app.api.auth.AuthData;
 import tdt4140.gr1816.app.api.types.DataAccessRequest;
 import tdt4140.gr1816.app.api.types.DataAccessRequestStatus;
+import tdt4140.gr1816.app.api.types.Message;
 import tdt4140.gr1816.app.api.types.PulseData;
 import tdt4140.gr1816.app.api.types.SigninPayload;
 import tdt4140.gr1816.app.api.types.SleepData;
@@ -25,18 +27,21 @@ public class Mutation implements GraphQLRootResolver {
   private final StepsDataRepository stepsDataRepository;
   private final DataAccessRequestRepository dataAccessRequestRepository;
   private final PulseDataRepository pulseDataRepository;
+  private final MessageRepository messageRepository;
 
   public Mutation(
       UserRepository userRepository,
       SleepDataRepository sleepDataRepository,
       StepsDataRepository stepsDataRepository,
       PulseDataRepository pulseDataRepository,
-      DataAccessRequestRepository dataAccessRequestRepository) {
+      DataAccessRequestRepository dataAccessRequestRepository,
+      MessageRepository messageRepository) {
     this.userRepository = userRepository;
     this.sleepDataRepository = sleepDataRepository;
     this.stepsDataRepository = stepsDataRepository;
     this.pulseDataRepository = pulseDataRepository;
     this.dataAccessRequestRepository = dataAccessRequestRepository;
+    this.messageRepository = messageRepository;
   }
 
   public User createUser(AuthData auth, boolean isDoctor, String gender, int age) {
@@ -159,5 +164,16 @@ public class Mutation implements GraphQLRootResolver {
       throw new GraphQLException("Invalid user");
     }
     return userRepository.setIsGatheringData(user, status);
+  }
+
+  public Message createMessage(
+      String fromId, String toId, String subject, String message, DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      throw new GraphQLException("Please log in");
+    }
+    Message msg = new Message(fromId, toId, subject, message);
+    return messageRepository.createMessage(msg);
   }
 }
