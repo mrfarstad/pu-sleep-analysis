@@ -17,6 +17,11 @@ import java.time.LocalDate;
 import java.util.List;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import tdt4140.gr1816.app.core.DataAccessRequest.DataAccessRequestStatus;
 
 public class TestUserDataFetch {
@@ -147,11 +152,10 @@ public class TestUserDataFetch {
         .thenReturn(deleteDataAccessRequestResponse);
     assertEquals(test.getData("query: dataAccessRequestsForMe", null), dataAccessRequestResponse);
 
-    // UserDataFetch should return a boolean (success)
-    // WILL BE FIXED:
-    /*boolean success = userDataFetch.deleteUser("test", "test");
+   
+    boolean success = userDataFetch.deleteUser("test", "test");
     assertNotNull(success);
-    assertTrue(success);*/
+    assertTrue(success);
   }
 
   @Test
