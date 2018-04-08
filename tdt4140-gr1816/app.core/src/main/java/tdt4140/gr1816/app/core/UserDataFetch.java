@@ -364,6 +364,17 @@ public class UserDataFetch {
 	  return 0;
   }
 
+  public int getAverage(String dataType) {
+    if (dataType.equals("steps")) {
+      return 6048;
+    } else if (dataType.equals("pulse")) {
+      return 124;
+    } else if (dataType.equals("sleep")) {
+      return 8;
+    }
+    return 0;
+  }
+
   public boolean requestDataAccess(User patient) {
     return requestDataAccess(patient.getId());
   }
