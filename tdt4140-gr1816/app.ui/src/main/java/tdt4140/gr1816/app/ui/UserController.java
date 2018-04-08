@@ -4,7 +4,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -73,14 +72,14 @@ public class UserController implements Initializable {
   @FXML private BarChart<String, Number> sleepBarChart;
   @FXML private CategoryAxis sleepChartXAxis;
   @FXML private NumberAxis sleepChartYAxis;
-  
+
   // Edit profile
-  @FXML private Button editProfileButton;  
+  @FXML private Button editProfileButton;
   @FXML private Text editProfileResponse;
-  
+
   @FXML private HBox profileBox;
   @FXML private VBox editProfileBox;
-  
+
   @FXML private TextField newUsernameField;
   @FXML private TextField newAgeField;
   @FXML private RadioButton male;
@@ -100,65 +99,60 @@ public class UserController implements Initializable {
     }
     setInitialDataButtonValue();
   }
-  
+
   public void handleEditProfileButton() {
-	 profileBox.setVisible(false);
-	 editProfileBox.setVisible(true);
+    profileBox.setVisible(false);
+    editProfileBox.setVisible(true);
   }
-  
+
   public void handleSaveButton() {
-	  boolean success = true;
-	  String msg = "";
-	  PauseTransition pause = new PauseTransition(Duration.seconds(2));
-	  pause.setOnFinished(event -> editProfileResponse.setText(""));
-	  
-	  String newUsername = newUsernameField.getText();
-	  System.out.println(newUsername);
-	  if (newUsername.equals("")) {
-		  newUsername = null;
-	  } else if (userDataFetch.getUserByUsername(newUsername) != null) {
-		  success = false;
-		  msg = "Username already \nin use";
-	  }
-	  newUsernameField.clear();
-	  
-	  String newAge = newAgeField.getText();
-	  System.out.println(newAge);
-	  if (newAge.equals("")) {
-		  int newAgeInt = -1;
-	  } else {
-		  int newAgeInt = Integer.parseInt(newAge);
-		  newAgeField.clear();
-	  }
-	  
-	  String gender = null;
-	  if (male.getToggleGroup().getSelectedToggle() != null) {
-		  RadioButton genderRB = (RadioButton) male.getToggleGroup().getSelectedToggle();
-		  gender = genderRB.getText();
-		  male.getToggleGroup().selectToggle(null);		  
-		  System.out.println(gender); 
-	  }
-	  
-	  if (success) {
-		  msg = "Saved profile";
-		  // userDataFetch.editProfile(newUsername, newAgeInt, gender);
-		  setProfileValues();
-	  }
-	  
-	  editProfileBox.setVisible(false);
-	  profileBox.setVisible(true);
-	  
-	  editProfileResponse.setText(msg);
-	  pause.play();
+    String newUsername = newUsernameField.getText();
+    if (newUsername.equals("")) {
+      newUsername = "null";
+    }
+    newUsernameField.clear();
+
+    String newAge = newAgeField.getText();
+    int newAgeInt;
+    if (newAge.equals("")) {
+      newAgeInt = -1;
+    } else {
+      newAgeInt = Integer.parseInt(newAge);
+      newAgeField.clear();
+    }
+
+    String gender = "null";
+    if (male.getToggleGroup().getSelectedToggle() != null) {
+      RadioButton genderRB = (RadioButton) male.getToggleGroup().getSelectedToggle();
+      gender = genderRB.getText();
+      male.getToggleGroup().selectToggle(null);
+    }
+
+    String msg = "";
+    if (userDataFetch.editUser(newUsername, newAgeInt, gender)) {
+      user = userDataFetch.getCurrentUser();
+      setProfileValues();
+      msg = "Saved profile";
+    } else {
+      msg = "Username in use";
+    }
+
+    editProfileBox.setVisible(false);
+    profileBox.setVisible(true);
+
+    PauseTransition pause = new PauseTransition(Duration.seconds(3));
+    pause.setOnFinished(event -> editProfileResponse.setText(""));
+    editProfileResponse.setText(msg);
+    pause.play();
   }
-  
+
   public void handleCancelButton() {
-	  editProfileBox.setVisible(false);
-	  profileBox.setVisible(true);
-	  
-	  newUsernameField.clear();
-	  newAgeField.clear();
-	  male.getToggleGroup().selectToggle(null);	
+    editProfileBox.setVisible(false);
+    profileBox.setVisible(true);
+
+    newUsernameField.clear();
+    newAgeField.clear();
+    male.getToggleGroup().selectToggle(null);
   }
 
   public void handleDeleteDataButton() {

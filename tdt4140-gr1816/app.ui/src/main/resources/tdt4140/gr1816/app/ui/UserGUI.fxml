@@ -47,7 +47,7 @@
                      <children>
                         <AnchorPane prefHeight="301.0" prefWidth="604.0">
                            <children>
-                              <HBox fx:id="profileBox" prefHeight="292.0" prefWidth="580.0" visible="false">
+                              <HBox fx:id="profileBox" prefHeight="292.0" prefWidth="580.0">
                                  <children>
                                     <VBox prefHeight="300.0" prefWidth="135.0">
                                        <children>
@@ -96,7 +96,7 @@
                                     </VBox>
                                  </children>
                               </HBox>
-                              <VBox fx:id="editProfileBox" layoutX="99.0" prefHeight="294.0" prefWidth="281.0">
+                              <VBox fx:id="editProfileBox" layoutX="99.0" prefHeight="294.0" prefWidth="281.0" visible="false">
                                  <children>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Edit profile">
                                        <font>
