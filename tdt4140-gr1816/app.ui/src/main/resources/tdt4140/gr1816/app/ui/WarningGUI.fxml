@@ -46,8 +46,11 @@
                  </Text>
                  <HBox prefHeight="50.0" prefWidth="600.0">
                  	<children>
-                 		<Button fx:id="yesButton" mnemonicParsing="false" onAction="#handleYesButton" prefHeight="27.0" prefWidth="142.0" text = "Yes"/>
-                 		<HBox spacing="50" />
+                 		<Button fx:id="yesButton" mnemonicParsing="false" onAction="#handleYesButton" prefHeight="27.0" prefWidth="142.0" text = "Yes">
+                 		<HBox.margin>
+                 			<Insets right="80.0" />
+                 		</HBox.margin>
+                 		</Button>
                  		<Button fx:id="noButton" mnemonicParsing="false" onAction="#handleNoButton" prefHeight="27.0" prefWidth="142.0" text = "No"/>
                  	</children>
                  </HBox>

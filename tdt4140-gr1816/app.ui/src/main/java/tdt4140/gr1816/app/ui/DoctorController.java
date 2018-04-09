@@ -1,5 +1,6 @@
 package tdt4140.gr1816.app.ui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -7,7 +8,10 @@ import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -22,10 +26,15 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import tdt4140.gr1816.app.core.*;
 
 public class DoctorController implements Initializable {
+  @FXML private Button logOutButton;
+
+  @FXML private Button deleteUserButton;
 
   @FXML private Button requestButton;
 
@@ -82,6 +91,32 @@ public class DoctorController implements Initializable {
 
   private UserDataFetch userDataFetch;
   private User user;
+
+  private void returnToLoginScreen(Button sceneHolder) throws Exception {
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LoginGUI.fxml"));
+    Parent root1 = (Parent) fxmlLoader.load();
+    Stage stage = new Stage();
+    stage.setScene(new Scene(root1));
+    stage.show();
+    Window stage1 = sceneHolder.getScene().getWindow();
+    stage1.hide();
+  }
+
+  public void handleLogOutButton() throws Exception {
+    user = null;
+    userDataFetch.logOut();
+    returnToLoginScreen(logOutButton);
+  }
+
+  public void handleDeleteUserButton() throws IOException {
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("WarningGUI.fxml"));
+    Parent root1 = (Parent) fxmlLoader.load();
+    Stage stage = new Stage();
+    stage.setScene(new Scene(root1));
+    stage.show();
+    Window stage1 = deleteUserButton.getScene().getWindow();
+    stage1.hide();
+  }
 
   public void handleRequestButton() {
     String username = requestUserTextField.getText();
