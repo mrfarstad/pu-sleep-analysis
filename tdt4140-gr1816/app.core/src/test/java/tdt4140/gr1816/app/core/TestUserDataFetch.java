@@ -147,7 +147,6 @@ public class TestUserDataFetch {
         .thenReturn(deleteDataAccessRequestResponse);
     assertEquals(test.getData("query: dataAccessRequestsForMe", null), dataAccessRequestResponse);
 
-   
     // UserDataFetch should return a boolean (success)
     boolean success = userDataFetch.deleteUser("test", "test");
     assertNotNull(success);

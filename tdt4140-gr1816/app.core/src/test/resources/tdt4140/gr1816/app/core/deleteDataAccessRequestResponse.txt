@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"data":{"deleteDataAccessRequest":true}}
+=======
+{"data":{"deleteDataAccessRequest":true}}
+>>>>>>> 342c2e0... Add delete method and tests for dataAccessRequest in core
