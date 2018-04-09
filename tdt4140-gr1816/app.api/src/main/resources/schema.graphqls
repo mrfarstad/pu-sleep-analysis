@@ -46,7 +46,7 @@ type Mutation {
 
   setIsGatheringData(isGatheringData: Boolean!): Boolean
   
-  createMessage(fromId: ID!, toId: ID!, subject: String!, message: String!): Message
+  createMessage(toId: ID!, subject: String!, message: String!): Message
 }
 
 input AuthData {
