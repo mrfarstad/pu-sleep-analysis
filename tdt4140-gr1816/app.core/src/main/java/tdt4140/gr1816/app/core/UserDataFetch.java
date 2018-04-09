@@ -122,6 +122,13 @@ public class UserDataFetch {
     }
 
     // Rid accessRequests
+    List<DataAccessRequest> requests = getAccessRequestsToUser();
+    for (DataAccessRequest request : requests) {
+      boolean success = deleteDataAccessRequest(request.getId());
+      if (!success) {
+        deleteData = false;
+      }
+    }
 
     // Rid User Credentials
     Map<String, String> variables = new HashMap<>();
@@ -392,5 +399,15 @@ public class UserDataFetch {
     } else {
       return false;
     }
+  }
+
+  public boolean deleteDataAccessRequest(String requestID) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("dataAccessRequestId", requestID);
+    return getGenericData(
+        "deleteDataAccessRequestQuery.txt",
+        Arrays.asList("deleteDataAccessRequest"),
+        new TypeReference<Boolean>() {},
+        variables);
   }
 }

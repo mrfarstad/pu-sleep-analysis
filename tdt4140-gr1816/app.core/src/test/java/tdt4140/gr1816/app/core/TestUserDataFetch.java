@@ -126,8 +126,28 @@ public class TestUserDataFetch {
         .thenReturn(deleteSleepResponse);
     assertEquals(test.getData("query: sleepDataByViewer", null), sleepResponse);
 
-    // UserDataFetch should return a boolean (success)
+    // DataAccessRequest:
+    String dataAccessRequestResponse = "";
+    String deleteDataAccessRequestResponse = "";
+    try {
+      dataAccessRequestResponse =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "accessRequestsToUserResponse.txt")));
+      deleteDataAccessRequestResponse =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "deleteDataAccessRequestResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(Mockito.contains("dataAccessRequestsForMe"), isNull()))
+        .thenReturn(dataAccessRequestResponse);
+    when(test.getData(Mockito.contains("deleteDataAccessRequest"), isNull()))
+        .thenReturn(deleteDataAccessRequestResponse);
+    assertEquals(test.getData("query: dataAccessRequestsForMe", null), dataAccessRequestResponse);
 
+    // UserDataFetch should return a boolean (success)
     boolean success = userDataFetch.deleteUser("test", "test");
     assertNotNull(success);
     assertTrue(success);
