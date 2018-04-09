@@ -5,9 +5,10 @@ public class Demo {
     UserDataFetch userDataFetch = new UserDataFetch(new DataGetter());
     System.out.println("All users: " + userDataFetch.getAllUsers());
     System.out.println(
-        "Create user: " + userDataFetch.createUser("test", "test", true, "male", 22));
+        "Create user: " + userDataFetch.createUser("test", "test", true, "male", 22).getUsername());
     System.out.println(
-        "Create user: " + userDataFetch.createUser("doctor", "test", true, "male", 22));
+        "Create user: "
+            + userDataFetch.createUser("doctor", "test", true, "male", 22).getUsername());
     System.out.println("All users: " + userDataFetch.getAllUsers());
     User test = userDataFetch.signIn("test", "test");
     System.out.println(
