@@ -2,20 +2,17 @@ package tdt4140.gr1816.app.api;
 
 import static com.mongodb.client.model.Filters.eq;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.DeleteResult;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.result.DeleteResult;
-
 import tdt4140.gr1816.app.api.types.SleepData;
 
 public class SleepDataRepository {
@@ -38,7 +35,7 @@ public class SleepDataRepository {
     }
     return allSleepData;
   }
-  
+
   /*
    * This method assumes that the dates are of the correct form 'yyyy-mm-dd'
    */
