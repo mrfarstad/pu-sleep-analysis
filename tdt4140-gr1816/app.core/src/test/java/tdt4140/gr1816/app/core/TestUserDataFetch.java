@@ -127,28 +127,43 @@ public class TestUserDataFetch {
     assertEquals(test.getData("query: sleepDataByViewer", null), sleepResponse);
 
     // DataAccessRequest:
-    String dataAccessRequestResponse = "";
+    String dataAccessRequestToUserResponse = "";
+    String dataAccessRequestByDoctorResponse = "";
     String deleteDataAccessRequestResponse = "";
     try {
-      dataAccessRequestResponse =
+      dataAccessRequestToUserResponse =
           new String(
               Files.readAllBytes(
                   Paths.get(resourceResponsePath + "accessRequestsToUserResponse.txt")));
+      dataAccessRequestByDoctorResponse =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "accessRequestsByDoctorResponse.txt")));
       deleteDataAccessRequestResponse =
           new String(
               Files.readAllBytes(
                   Paths.get(resourceResponsePath + "deleteDataAccessRequestResponse.txt")));
+
     } catch (IOException e) {
       fail("Wrong filename for query");
     }
     when(test.getData(Mockito.contains("dataAccessRequestsForMe"), isNull()))
-        .thenReturn(dataAccessRequestResponse);
+        .thenReturn(dataAccessRequestToUserResponse);
+    when(test.getData(Mockito.contains("myDataAccessRequests"), isNull()))
+        .thenReturn(dataAccessRequestByDoctorResponse);
     when(test.getData(Mockito.contains("deleteDataAccessRequest"), isNull()))
         .thenReturn(deleteDataAccessRequestResponse);
-    assertEquals(test.getData("query: dataAccessRequestsForMe", null), dataAccessRequestResponse);
+
+    assertEquals(
+        test.getData("query: dataAccessRequestsForMe", null), dataAccessRequestToUserResponse);
+    assertEquals(
+        test.getData("query: myDataAccessRequests", null), dataAccessRequestByDoctorResponse);
 
     // UserDataFetch should return a boolean (success)
-    boolean success = userDataFetch.deleteUser("test", "test");
+    boolean success = userDataFetch.deleteUser("test", "test", false);
+    assertNotNull(success);
+    assertTrue(success);
+    success = userDataFetch.deleteUser("test", "test", true);
     assertNotNull(success);
     assertTrue(success);
   }

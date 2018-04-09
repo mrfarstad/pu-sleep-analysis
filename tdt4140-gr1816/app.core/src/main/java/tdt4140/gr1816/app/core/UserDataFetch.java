@@ -92,7 +92,7 @@ public class UserDataFetch {
         variables);
   }
 
-  public Boolean deleteUser(String username, String password) {
+  public Boolean deleteUser(String username, String password, boolean isDoctor) {
 
     boolean deleteData = true;
 
@@ -122,7 +122,12 @@ public class UserDataFetch {
     }
 
     // Rid accessRequests
-    List<DataAccessRequest> requests = getAccessRequestsToUser();
+    List<DataAccessRequest> requests;
+    if (isDoctor) {
+      requests = getAccessRequestsByDoctor();
+    } else {
+      requests = getAccessRequestsToUser();
+    }
     for (DataAccessRequest request : requests) {
       boolean success = deleteDataAccessRequest(request.getId());
       if (!success) {

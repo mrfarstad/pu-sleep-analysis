@@ -33,9 +33,9 @@ public class Demo {
     System.out.println(userDataFetch.getAccessRequestsByDoctor());
     userDataFetch.signIn("test", "test");*/
     System.out.println("Deleting users (And data):");
-    System.out.println(userDataFetch.deleteUser("test", "test"));
+    System.out.println(userDataFetch.deleteUser("test", "test", false));
     userDataFetch.signIn("doctor", "test");
-    System.out.println(userDataFetch.deleteUser("doctor", "test"));
+    System.out.println(userDataFetch.deleteUser("doctor", "test", true));
     System.out.println("All users: " + userDataFetch.getAllUsers());
   }
 }

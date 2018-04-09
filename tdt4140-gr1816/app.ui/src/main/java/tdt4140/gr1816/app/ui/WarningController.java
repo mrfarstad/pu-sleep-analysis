@@ -40,7 +40,7 @@ public class WarningController implements Initializable {
 
   public void handleYesButton() throws Exception {
     String password = passwordField.getText();
-    userDataFetch.deleteUser(user.getUsername(), password);
+    userDataFetch.deleteUser(user.getUsername(), password, user.isDoctor());
     returnToLoginScreen(yesButton);
   }
 

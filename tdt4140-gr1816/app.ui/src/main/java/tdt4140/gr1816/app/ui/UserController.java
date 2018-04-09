@@ -101,8 +101,6 @@ public class UserController implements Initializable {
     returnToLoginScreen(logOutButton);
   }
 
-  public void handleYesButton() {}
-
   public void handleDataButton() {
     if (user.getIsGatheringData()) {
       turnOffDataGathering();
