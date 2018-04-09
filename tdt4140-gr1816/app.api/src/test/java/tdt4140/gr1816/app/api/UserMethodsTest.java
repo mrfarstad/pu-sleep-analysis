@@ -309,6 +309,26 @@ public class UserMethodsTest extends ApiBaseCase {
     Map<String, Object> fetchedUser = (Map<String, Object>) sleepData.get("user");
 
     assertEquals(fetchedUser.get("id"), user.getId());
+    
+    String query1 =
+            "query {\n"
+                + "  sleepDataBetweenDates(userId: \""
+                + user.getId()
+                + "\", startDate: \"2018-01-01\", endDate: \"2018-01-02\") {\n"
+                + "    id\n"
+                + "  }\n"
+                + "}";
+        ExecutionResult res1 = executeQuery(query1, context);
+        System.out.println(res1); 
+        Map<String, Object> result1 = res1.getData();
+        System.out.println(result1);
+
+        @SuppressWarnings("unchecked")
+        ArrayList<Map> pulseDataList = (ArrayList<Map>) result1.get("sleepDataBetweenDates");
+        
+        assertEquals(pulseDataList.size(), 1);
+        assertTrue(pulseDataList.get(0).get("id") != null);
+        assertTrue(pulseDataList.get(0).get("id") instanceof String);
   }
 
   @Test
