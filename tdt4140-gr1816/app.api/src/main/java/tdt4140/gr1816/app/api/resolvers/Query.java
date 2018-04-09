@@ -70,6 +70,14 @@ public class Query implements GraphQLRootResolver {
     }
     return sleepDataRepository.getAllSleepData(userId);
   }
+  
+  public List<SleepData> sleepDataBetweenDates(
+	      String userId, String startDate, String endDate, DataFetchingEnvironment env) {
+	    if (!hasUserAccess(env, userId)) {
+	      throw new GraphQLException("Cannot access user data");
+	    }
+	    return sleepDataRepository.getSleepDataBetweenDates(userId, startDate, endDate);
+	  }
 
   public List<SleepData> sleepDataByViewer(DataFetchingEnvironment env) {
     AuthContext context = env.getContext();

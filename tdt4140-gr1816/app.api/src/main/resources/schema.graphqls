@@ -16,7 +16,10 @@ type Query {
     
     # Returns all user sleep/steps data
     allSleepData(userId: String!): [SleepData]
+    sleepDataBetweenDates(userId: String!, startDate: String!, endDate: String!): [SleepData]
+    
     allStepsData(userId: String!): [StepsData]
+    
     allPulseData(userId: String!): [PulseData]
     pulseDataBetweenDates(userId: String!, startDate: String!, endDate: String!): [PulseData]
     

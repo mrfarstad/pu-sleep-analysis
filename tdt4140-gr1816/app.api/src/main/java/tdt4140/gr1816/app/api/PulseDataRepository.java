@@ -48,7 +48,7 @@ public class PulseDataRepository {
               LocalDate from = LocalDate.parse(startDate, dmf);
               LocalDate to = LocalDate.parse(endDate, dmf);
               LocalDate date = LocalDate.parse(data.getDate(), dmf);
-              return date.compareTo(from) > 0 && date.compareTo(to) < 0;
+              return date.compareTo(from) >= 0 && date.compareTo(to) <= 0;
             })
         .collect(Collectors.toList());
   }
