@@ -340,10 +340,15 @@ public class UserController implements Initializable {
   }
 
   public void showPulseChart() {
+    System.out.println("hei1");
     hideCharts();
+    System.out.println("hei2");
     pulseLineChart.getData().clear();
+    System.out.println("hei3");
     pulseChartXAxis.setLabel("Date");
+    System.out.println("hei4");
     pulseChartYAxis.setLabel("RestHR");
+    System.out.println("hei5");
     ObservableList<XYChart.Data<String, Number>> lineChartData =
         FXCollections.observableArrayList();
     List<PulseData> pulseDataList = Login.userDataFetch.getPulseDataByViewer();
@@ -357,7 +362,7 @@ public class UserController implements Initializable {
     pulseLineChart.getData().add(series);
     pulseLineChart.setVisible(true);
 
-    averageText.setText("Average resting heart rate: ");
+    averageText.setText("Average restHR: ");
     averageNumberText.setText(Integer.toString(Login.userDataFetch.getAverage("pulse")));
   }
 
@@ -381,7 +386,7 @@ public class UserController implements Initializable {
     sleepBarChart.getData().add(series);
     sleepBarChart.setVisible(true);
 
-    averageText.setText("Average hour of sleep: ");
+    averageText.setText("Average sleep duration: ");
     averageNumberText.setText(Integer.toString(Login.userDataFetch.getAverage("sleep")));
   }
 
