@@ -24,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import tdt4140.gr1816.app.core.DataAccessRequest;
+import tdt4140.gr1816.app.core.Message;
 import tdt4140.gr1816.app.core.PulseData;
 import tdt4140.gr1816.app.core.SleepData;
 import tdt4140.gr1816.app.core.StepsData;
@@ -97,7 +98,7 @@ public class UserController implements Initializable {
 
   ObservableList<DataAccessRequest> doctorsListViewItems;
   ObservableList<DataAccessRequest> doctorRequestListViewItems;
-  ObservableList<DataAccessRequest> messagesListViewItems;
+  ObservableList<Message> messagesListViewItems;
   ObservableList<DataAccessRequest> acceptedDoctorsList = FXCollections.observableArrayList();
 
   public void handleDataButton() {
@@ -275,16 +276,17 @@ public class UserController implements Initializable {
   public void handleMessagesListViewClicked() {
 	  Message message = messagesListView.getSelectionModel().getSelectedItem();
 	  subjectText.setText(message.getSubject());
-	  fromText.setText(message.getFrom());
-	  toText.setText(message.getTo());
+	  fromText.setText(message.getFrom().getUsername());
+	  toText.setText(message.getTo().getUsername());
 	  messageTextArea.setText(message.getMessage());
   }
   
   public void handleSendMessageButton() {
 	  String subject = subjectTextField.getText();
-	  User from = user;
-	  DataAccessRequest to = toChoiceBox.getValue();
+	  String to = toChoiceBox.getValue().getRequestedBy().getId();
 	  String message = sendMessageTextArea.getText();
+	  
+	  userDataFetch.createMessage(to, subject, message);
   }
 
   @Override
@@ -354,7 +356,7 @@ public class UserController implements Initializable {
 	  messagesListViewItems = messagesListView.getItems();
 	  messagesListViewItems.clear();
 	  List<Message> messages = userDataFetch.messagesForMe();
-	  messages.stream().forEach(request -> messagesListViewItems.add(message));
+	  messages.stream().forEach(message -> messagesListViewItems.add(message));
   }
 
   private void hideCharts() {
