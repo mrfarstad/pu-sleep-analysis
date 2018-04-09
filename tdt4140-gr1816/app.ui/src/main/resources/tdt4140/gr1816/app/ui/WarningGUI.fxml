@@ -19,10 +19,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tdt4140.gr1816.app.ui.WarningController">
    <top>
-      <VBox alignment="CENTER" prefHeight="81.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="50.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="WARNING" textFill="#ff0000">
                <font>
@@ -39,11 +40,19 @@
                <children>
                	 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure you want to delete your account?" />
                	 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="All data associated with your account will also be deleted." />
-               	 <Text>
+               	 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="If yes, please confirm your password:" >
                	 	<VBox.margin>
-                 		<Insets top="20.0" />
+                 		<Insets top="5.0" />
                  	</VBox.margin>
                  </Text>
+                 <PasswordField fx:id="passwordField">
+                     <opaqueInsets>
+                        <Insets top="40.0" />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" top="15.0" bottom="10.0" />
+                     </VBox.margin>
+                  </PasswordField>
                  <HBox prefHeight="50.0" prefWidth="600.0">
                  	<children>
                  		<Button fx:id="yesButton" mnemonicParsing="false" onAction="#handleYesButton" prefHeight="27.0" prefWidth="142.0" text = "Yes">

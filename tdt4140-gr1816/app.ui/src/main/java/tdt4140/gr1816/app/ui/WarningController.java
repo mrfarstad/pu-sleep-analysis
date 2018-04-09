@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import tdt4140.gr1816.app.core.User;
@@ -17,6 +18,8 @@ import tdt4140.gr1816.app.core.UserDataFetch;
 public class WarningController implements Initializable {
 
   @FXML private Button yesButton;
+
+  @FXML private PasswordField passwordField;
 
   @FXML private Button noButton;
 
@@ -36,14 +39,8 @@ public class WarningController implements Initializable {
   }
 
   public void handleYesButton() throws Exception {
-    // ISSUE?: The UI does not have access to the current users password. Fix: Alloctate password in
-    // LogIn method,
-    // or ask to confirm password here once more. Otherwise, everything justwerkz.
-
-    System.out.println(userDataFetch.getCurrentUser().getPassword());
-    // THIS PRINTS NULL
-
-    userDataFetch.deleteUser(user.getUsername(), "test");
+    String password = passwordField.getText();
+    userDataFetch.deleteUser(user.getUsername(), password);
     returnToLoginScreen(yesButton);
   }
 
