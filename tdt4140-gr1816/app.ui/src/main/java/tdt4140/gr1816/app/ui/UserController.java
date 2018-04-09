@@ -158,9 +158,13 @@ public class UserController implements Initializable {
   public void handleDeleteDataButton() {
     LocalDate ld = dataDatePicker.getValue();
 
+    PauseTransition pause = new PauseTransition(Duration.seconds(3));
+    pause.setOnFinished(event -> dataDeletionResponseText.setText(""));
+
     deleteSleepDataFromDate(ld);
     deleteStepsDataFromDate(ld);
     deletePulseDataFromDate(ld);
+    pause.play();
   }
 
   public void deleteSleepDataFromDate(LocalDate ld) {

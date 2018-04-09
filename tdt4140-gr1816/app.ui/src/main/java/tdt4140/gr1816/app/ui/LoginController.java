@@ -1,14 +1,17 @@
 package tdt4140.gr1816.app.ui;
 
 import java.io.IOException;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.util.Duration;
 import tdt4140.gr1816.app.core.*;
 
 public class LoginController {
@@ -17,6 +20,8 @@ public class LoginController {
   @FXML private PasswordField passwordField;
   @FXML private Button signinButton;
   @FXML private Button createNewUserButton;
+  @FXML private Button forgotPasswordButton;
+  @FXML private Text forgotPasswordText;
 
   public void handleSigninButton() throws IOException {
     String file, username, password;
@@ -37,6 +42,20 @@ public class LoginController {
     stage.show();
     Window stage1 = usernameField.getScene().getWindow();
     stage1.hide();
+  }
+
+  public void handleForgotPasswordButton() {
+    User newPasswordUser = Login.userDataFetch.getUserByUsername(usernameField.getText());
+    PauseTransition pause = new PauseTransition(Duration.seconds(2));
+    pause.setOnFinished(event -> forgotPasswordText.setText(""));
+    if (usernameField.getText().equals("")) {
+      forgotPasswordText.setText("Please write your username");
+    } else if (newPasswordUser == null) {
+      forgotPasswordText.setText("User not found");
+    } else if (Login.userDataFetch.forgotPassword(usernameField.getText())) {
+      forgotPasswordText.setText("New password sent");
+    }
+    pause.play();
   }
 
   public void handleCreateNewUserButton() throws IOException {

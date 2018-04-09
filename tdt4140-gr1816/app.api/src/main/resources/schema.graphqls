@@ -11,6 +11,9 @@ type Query {
     # DataAccess requested by others, for you
     dataAccessRequestsForMe: [DataAccessRequest]
     
+    # Messages sent to you
+    messagesForMe: [Message]
+    
     # Returns all user sleep/steps data
     allSleepData(userId: String!): [SleepData]
     allStepsData(userId: String!): [StepsData]
@@ -27,7 +30,9 @@ type Mutation {
   createUser(authProvider: AuthData!, isDoctor: Boolean!, gender: String!, age: Int!): User
   signinUser(auth: AuthData): SigninPayload
   deleteUser(auth: AuthData!): Boolean
-  editUser(username: String!, newUsername: String!, newAge: Int!, newGender: String!): Boolean  
+  editUser(username: String!, newUsername: String!, newAge: Int!, newGender: String!): Boolean
+  forgotPassword(username: String!): Boolean
+
  
  # date is of the form 'YYYY-MM-DD'
   createSleepData(date: String!, duration: Int!, efficiency: Int!): SleepData
@@ -42,6 +47,8 @@ type Mutation {
   answerDataAccessRequest(dataAccessRequestId: ID!, status: DataAccessRequestStatus!): DataAccessRequest
 
   setIsGatheringData(isGatheringData: Boolean!): Boolean
+  
+  createMessage(fromId: ID!, toId: ID!, subject: String!, message: String!): Message
 }
 
 input AuthData {
@@ -60,6 +67,14 @@ type DataAccessRequest {
         dataOwner: User!
         requestedBy: User!
         status: DataAccessRequestStatus!
+}
+
+type Message {
+	id: ID!
+	from: User!
+	to: User!
+	subject: String!
+	message: String!
 }
 
 # A user can be a doctor, but does not have to be
