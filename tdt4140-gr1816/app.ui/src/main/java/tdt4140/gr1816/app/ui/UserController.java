@@ -17,10 +17,10 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import tdt4140.gr1816.app.core.DataAccessRequest;
@@ -40,7 +40,7 @@ public class UserController implements Initializable {
   @FXML private Button removeDoctorButton;
 
   @FXML private Button deleteDataButton;
-  
+
   @FXML private Button sendButton;
 
   @FXML private Text nameText;
@@ -50,21 +50,21 @@ public class UserController implements Initializable {
   @FXML private Text genderText;
 
   @FXML private Text dataDeletionResponseText;
-  
+
   @FXML private Text subjectText;
-  
+
   @FXML private Text toText;
-  
+
   @FXML private Text fromText;
-  
+
   @FXML private TextField subjectTextField;
-  
+
   @FXML private TextArea sendMessageTextArea;
-  
+
   @FXML private TextArea messageTextArea;
-  
-  @FXML private ChoiceBox<DataAccessRequest> toChoiceBox;
-  
+
+  @FXML private ChoiceBox<User> toChoiceBox;
+
   @FXML private Label sentLabel;
 
   @FXML private DatePicker dataDatePicker;
@@ -72,7 +72,7 @@ public class UserController implements Initializable {
   @FXML private ListView<DataAccessRequest> doctorsListView;
 
   @FXML private ListView<DataAccessRequest> doctorRequestListView;
-  
+
   @FXML private ListView<Message> messagesListView;
 
   // Graph Tab
@@ -99,7 +99,7 @@ public class UserController implements Initializable {
   ObservableList<DataAccessRequest> doctorsListViewItems;
   ObservableList<DataAccessRequest> doctorRequestListViewItems;
   ObservableList<Message> messagesListViewItems;
-  ObservableList<DataAccessRequest> acceptedDoctorsList = FXCollections.observableArrayList();
+  ObservableList<User> acceptedDoctorsList = FXCollections.observableArrayList();
 
   public void handleDataButton() {
     if (user.getIsGatheringData()) {
@@ -172,6 +172,7 @@ public class UserController implements Initializable {
       Login.userDataFetch.answerDataAccessRequest(selected, "ACCEPTED");
       doctorRequestListViewItems.remove(selected);
       updateDoctorsListViewItems();
+      updateToChoiceBox();
     }
   }
 
@@ -272,21 +273,22 @@ public class UserController implements Initializable {
     sleepBarChart.getData().add(series);
     sleepBarChart.setVisible(true);
   }
-  
+
   public void handleMessagesListViewClicked() {
-	  Message message = messagesListView.getSelectionModel().getSelectedItem();
-	  subjectText.setText(message.getSubject());
-	  fromText.setText(message.getFrom().getUsername());
-	  toText.setText(message.getTo().getUsername());
-	  messageTextArea.setText(message.getMessage());
+    Message message = messagesListView.getSelectionModel().getSelectedItem();
+    subjectText.setText(message.getSubject());
+    fromText.setText(message.getFrom().getUsername());
+    toText.setText(message.getTo().getUsername());
+    messageTextArea.setText(message.getMessage());
   }
-  
+
   public void handleSendMessageButton() {
-	  String subject = subjectTextField.getText();
-	  String to = toChoiceBox.getValue().getRequestedBy().getId();
-	  String message = sendMessageTextArea.getText();
-	  
-	  userDataFetch.createMessage(to, subject, message);
+    String subject = subjectTextField.getText();
+    String to = toChoiceBox.getValue().getId();
+    String message = sendMessageTextArea.getText();
+
+    userDataFetch.createMessage(to, subject, message);
+    updateMessagesListViewItems();
   }
 
   @Override
@@ -302,13 +304,13 @@ public class UserController implements Initializable {
     updateDoctorsListViewItems();
 
     updateDoctorRequestListViewItems();
-    
+
     updateMessagesListViewItems();
 
     setDataChoiceBox();
 
     hideCharts();
-    
+
     updateToChoiceBox();
   }
 
@@ -351,12 +353,12 @@ public class UserController implements Initializable {
         .filter(request -> request.getStatusAsString().equals("PENDING"))
         .forEach(request -> doctorRequestListViewItems.add(request));
   }
-  
+
   public void updateMessagesListViewItems() {
-	  messagesListViewItems = messagesListView.getItems();
-	  messagesListViewItems.clear();
-	  List<Message> messages = userDataFetch.messagesForMe();
-	  messages.stream().forEach(message -> messagesListViewItems.add(message));
+    messagesListViewItems = messagesListView.getItems();
+    messagesListViewItems.clear();
+    List<Message> messages = userDataFetch.messagesForMe();
+    messages.stream().forEach(message -> messagesListViewItems.add(message));
   }
 
   private void hideCharts() {
@@ -370,14 +372,14 @@ public class UserController implements Initializable {
     dataChoiceBox.getItems().add("Steps");
     dataChoiceBox.getItems().add("Sleep - duration");
   }
-  
+
   public void updateToChoiceBox() {
-	  acceptedDoctorsList = toChoiceBox.getItems();
-	  acceptedDoctorsList.clear();
-	  List<DataAccessRequest> requests = userDataFetch.getAccessRequestsToUser();
-	    requests
-	        .stream()
-	        .filter(request -> request.getStatusAsString().equals("ACCEPTED"))
-	        .forEach(request -> acceptedDoctorsList.add(request));
+    acceptedDoctorsList.clear();
+    List<DataAccessRequest> requests = userDataFetch.getAccessRequestsToUser();
+    requests
+        .stream()
+        .filter(request -> request.getStatusAsString().equals("ACCEPTED"))
+        .forEach(request -> acceptedDoctorsList.add(request.getRequestedBy()));
+    toChoiceBox.setItems(acceptedDoctorsList);
   }
 }
