@@ -30,6 +30,7 @@ type Mutation {
   createUser(authProvider: AuthData!, isDoctor: Boolean!, gender: String!, age: Int!): User
   signinUser(auth: AuthData): SigninPayload
   deleteUser(auth: AuthData!): Boolean
+  forgotPassword(username: String!): Boolean
  
  # date is of the form 'YYYY-MM-DD'
   createSleepData(date: String!, duration: Int!, efficiency: Int!): SleepData
