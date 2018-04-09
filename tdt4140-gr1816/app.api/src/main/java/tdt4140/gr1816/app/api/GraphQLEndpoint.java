@@ -30,7 +30,7 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
 
   public static final UserRepository userRepository;
   public static final SleepDataRepository sleepDataRepository;
-  private static final DataAccessRequestRepository dataAccessRequestRepository;
+  public static final DataAccessRequestRepository dataAccessRequestRepository;
   public static final StepsDataRepository stepsDataRepository;
   public static final PulseDataRepository pulseDataRepository;
   public static final MessageRepository messageRepository;
