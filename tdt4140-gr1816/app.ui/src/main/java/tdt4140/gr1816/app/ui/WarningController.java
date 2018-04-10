@@ -3,6 +3,7 @@ package tdt4140.gr1816.app.ui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,8 +11,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.util.Duration;
 import tdt4140.gr1816.app.core.User;
 import tdt4140.gr1816.app.core.UserDataFetch;
 
@@ -20,6 +23,8 @@ public class WarningController implements Initializable {
   @FXML private Button yesButton;
 
   @FXML private PasswordField passwordField;
+
+  @FXML private Text wrongPasswordText;
 
   @FXML private Button noButton;
 
@@ -39,9 +44,20 @@ public class WarningController implements Initializable {
   }
 
   public void handleYesButton() throws Exception {
+    boolean match = true;
     String password = passwordField.getText();
-    userDataFetch.deleteUser(user.getUsername(), password, user.isDoctor());
-    returnToLoginScreen(yesButton);
+    try {
+      userDataFetch.deleteUser(user.getUsername(), password, user.isDoctor());
+    } catch (NullPointerException e) {
+      match = false;
+      PauseTransition pause = new PauseTransition(Duration.seconds(3));
+      pause.setOnFinished(event -> wrongPasswordText.setText(""));
+      wrongPasswordText.setText("Password did not match. Please try again:");
+      pause.play();
+    }
+    if (match) {
+      returnToLoginScreen(yesButton);
+    }
   }
 
   public void handleNoButton() throws IOException {
