@@ -276,11 +276,11 @@ public class UserController implements Initializable {
 
   public void handleMessagesListViewClicked() {
     Message message = messagesListView.getSelectionModel().getSelectedItem();
-    if (message != null) {	
-    	subjectText.setText(message.getSubject());
-    	fromText.setText(message.getFrom().getUsername());
-    	toText.setText(message.getTo().getUsername());
-    	messageTextArea.setText(message.getMessage());
+    if (message != null) {
+      subjectText.setText(message.getSubject());
+      fromText.setText(message.getFrom().getUsername());
+      toText.setText(message.getTo().getUsername());
+      messageTextArea.setText(message.getMessage());
     }
   }
 
