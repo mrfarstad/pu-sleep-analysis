@@ -81,8 +81,22 @@
                         </VBox>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Data Gathering" />
-                              <Button fx:id="dataButton" mnemonicParsing="false" onAction="#handleDataButton" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Data Gathering:" />
+                              <Button fx:id="dataButton" mnemonicParsing="false" onAction="#handleDataButton" prefHeight="27.0" prefWidth="100.0" />
+                               <Text>
+                              <VBox.margin>
+                                    <Insets top="20.0" />
+                              </VBox.margin>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To Login Screen:" />
+                              <Button fx:id="logOutButton" mnemonicParsing="false" onAction="#handleLogOutButton" prefHeight="27.0" prefWidth="100.0" text="Log Out"/>
+                              <Text>
+                              <VBox.margin>
+                                    <Insets top="20.0" />
+                              </VBox.margin>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Delete Account:" />
+                              <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#handleDeleteUserButton" prefHeight="27.0" prefWidth="100.0" text="Delete User" />
                            </children>
                         </VBox>
                      </children>

@@ -68,6 +68,10 @@ public class UserDataFetch {
     return data;
   }
 
+  public void logOut() {
+    this.currentToken = null;
+  }
+
   public List<User> getAllUsers() {
     return getGenericData(
         "allUsersQuery.txt", Arrays.asList("allUsers"), new TypeReference<List<User>>() {}, null);
@@ -88,15 +92,60 @@ public class UserDataFetch {
         variables);
   }
 
-  public Boolean deleteUser(String username, String password) {
+  public Boolean deleteUser(String username, String password, boolean isDoctor) {
+
+    boolean deleteData = true;
+
+    // Rid steps Data
+    List<StepsData> stepsData = getStepsDataByViewer();
+    for (StepsData entry : stepsData) {
+      boolean success = deleteStepsData(entry.getId());
+      if (!success) {
+        deleteData = false;
+      }
+    }
+    // Rid pulse Data
+    List<PulseData> pulseData = getPulseDataByViewer();
+    for (PulseData entry : pulseData) {
+      boolean success = deletePulseData(entry.getId());
+      if (!success) {
+        deleteData = false;
+      }
+    }
+    // Rid Sleep Data
+    List<SleepData> sleepData = getSleepDataByViewer();
+    for (SleepData entry : sleepData) {
+      boolean success = deleteSleepData(entry.getId());
+      if (!success) {
+        deleteData = false;
+      }
+    }
+
+    // Rid accessRequests
+    List<DataAccessRequest> requests;
+    if (isDoctor) {
+      requests = getAccessRequestsByDoctor();
+    } else {
+      requests = getAccessRequestsToUser();
+    }
+    for (DataAccessRequest request : requests) {
+      boolean success = deleteDataAccessRequest(request.getId());
+      if (!success) {
+        deleteData = false;
+      }
+    }
+
+    // Rid User Credentials
     Map<String, String> variables = new HashMap<>();
     variables.put("username", username);
     variables.put("password", password);
-    return getGenericData(
-        "deleteUserQuery.txt",
-        Arrays.asList("deleteUser"),
-        new TypeReference<Boolean>() {},
-        variables);
+    boolean deleteCredentials =
+        getGenericData(
+            "deleteUserQuery.txt",
+            Arrays.asList("deleteUser"),
+            new TypeReference<Boolean>() {},
+            variables);
+    return (deleteCredentials && deleteData);
   }
 
   public boolean forgotPassword(String username) {
@@ -355,5 +404,15 @@ public class UserDataFetch {
     } else {
       return false;
     }
+  }
+
+  public boolean deleteDataAccessRequest(String requestID) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("dataAccessRequestId", requestID);
+    return getGenericData(
+        "deleteDataAccessRequestQuery.txt",
+        Arrays.asList("deleteDataAccessRequest"),
+        new TypeReference<Boolean>() {},
+        variables);
   }
 }

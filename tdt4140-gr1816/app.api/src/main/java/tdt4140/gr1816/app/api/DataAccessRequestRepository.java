@@ -4,6 +4,7 @@ import static com.mongodb.client.model.Filters.eq;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.DeleteResult;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
@@ -78,5 +79,11 @@ public class DataAccessRequestRepository {
         eq("_id", new ObjectId(dataRequestId)),
         new Document("$set", new Document("status", DataAccessRequest.statusToString((status)))));
     return findById(dataRequestId);
+  }
+
+  public boolean deleteDataAccessRequest(DataAccessRequest request) {
+    Document doc = dataAccessRequests.find(eq("_id", new ObjectId(request.getId()))).first();
+    DeleteResult result = dataAccessRequests.deleteOne(doc);
+    return result.wasAcknowledged();
   }
 }

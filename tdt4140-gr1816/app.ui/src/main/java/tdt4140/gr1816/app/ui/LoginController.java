@@ -27,21 +27,28 @@ public class LoginController {
     String file, username, password;
     username = usernameField.getText();
     password = passwordField.getText();
-    User loginUser = Login.userDataFetch.signIn(username, password);
-    if (loginUser.isDoctor()) {
-      file = "DoctorGUI.fxml";
-    } else if (!loginUser.isDoctor()) {
-      file = "UserGUI.fxml";
-    } else {
-      throw new IllegalArgumentException();
+    try {
+      User loginUser = Login.userDataFetch.signIn(username, password);
+      if (loginUser.isDoctor()) {
+        file = "DoctorGUI.fxml";
+      } else if (!loginUser.isDoctor()) {
+        file = "UserGUI.fxml";
+      } else {
+        throw new IllegalArgumentException();
+      }
+      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file));
+      Parent root1 = (Parent) fxmlLoader.load();
+      Stage stage = new Stage();
+      stage.setScene(new Scene(root1));
+      stage.show();
+      Window stage1 = usernameField.getScene().getWindow();
+      stage1.hide();
+    } catch (NullPointerException e) {
+      PauseTransition pause = new PauseTransition(Duration.seconds(2));
+      pause.setOnFinished(event -> forgotPasswordText.setText(""));
+      forgotPasswordText.setText("Wrong username / password");
+      pause.play();
     }
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file));
-    Parent root1 = (Parent) fxmlLoader.load();
-    Stage stage = new Stage();
-    stage.setScene(new Scene(root1));
-    stage.show();
-    Window stage1 = usernameField.getScene().getWindow();
-    stage1.hide();
   }
 
   public void handleForgotPasswordButton() {

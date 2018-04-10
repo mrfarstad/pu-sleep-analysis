@@ -1,0 +1,3 @@
+mutation($dataAccessRequestId: ID!) {
+  deleteDataAccessRequest(dataAccessRequestId: $dataAccessRequestId)
+}

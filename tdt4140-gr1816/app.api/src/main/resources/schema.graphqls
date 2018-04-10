@@ -43,6 +43,7 @@ type Mutation {
   
   requestDataAccess(dataOwnerId: ID!): DataAccessRequest
   answerDataAccessRequest(dataAccessRequestId: ID!, status: DataAccessRequestStatus!): DataAccessRequest
+  deleteDataAccessRequest(dataAccessRequestId: ID!): Boolean
 
   setIsGatheringData(isGatheringData: Boolean!): Boolean
   

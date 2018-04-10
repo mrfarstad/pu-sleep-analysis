@@ -162,6 +162,14 @@ public class Mutation implements GraphQLRootResolver {
     return dataAccessRequestRepository.answerDataAccessRequest(dataAccessRequestId, status, user);
   }
 
+  public Boolean deleteDataAccessRequest(String requestId) {
+    DataAccessRequest request = dataAccessRequestRepository.findById(requestId);
+    if (request == null) {
+      throw new GraphQLException("Invalid request id");
+    }
+    return dataAccessRequestRepository.deleteDataAccessRequest(request);
+  }
+
   public boolean setIsGatheringData(Boolean status, DataFetchingEnvironment env) {
     AuthContext context = env.getContext();
     User user = context.getUser();
