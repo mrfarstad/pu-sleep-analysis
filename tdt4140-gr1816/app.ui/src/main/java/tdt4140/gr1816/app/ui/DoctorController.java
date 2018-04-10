@@ -21,7 +21,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -68,7 +67,7 @@ public class DoctorController implements Initializable {
 
   @FXML private ChoiceBox<User> toChoiceBox;
 
-  @FXML private Label sentLabel;
+  @FXML private Text sentText;
 
   @FXML private Tab dataTab;
 
@@ -274,12 +273,23 @@ public class DoctorController implements Initializable {
   }
 
   public void handleSendMessageButton() {
-    String subject = subjectTextField.getText();
-    String to = toChoiceBox.getValue().getId();
-    String message = sendMessageTextArea.getText();
+    PauseTransition pause = new PauseTransition(Duration.seconds(5));
+    pause.setOnFinished(event -> sentText.setText(""));
 
-    userDataFetch.createMessage(to, subject, message);
-    updateMessagesListViewItems();
+    String subject = subjectTextField.getText();
+    String message = sendMessageTextArea.getText();
+    User toUser = toChoiceBox.getValue();
+
+    if (toUser != null && !subject.equals("") && !message.equals("")) {
+      userDataFetch.createMessage(toUser.getId(), subject, message);
+      updateMessagesListViewItems();
+      subjectTextField.setText("");
+      sendMessageTextArea.setText("");
+      sentText.setText("Message Sent!");
+    } else {
+      sentText.setText("Fill in subject, to and message");
+    }
+    pause.play();
   }
 
   @Override

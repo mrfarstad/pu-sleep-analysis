@@ -65,7 +65,7 @@ public class UserController implements Initializable {
 
   @FXML private ChoiceBox<User> toChoiceBox;
 
-  @FXML private Label sentLabel;
+  @FXML private Text sentText;
 
   @FXML private DatePicker dataDatePicker;
 
@@ -385,12 +385,23 @@ public class UserController implements Initializable {
   }
 
   public void handleSendMessageButton() {
-    String subject = subjectTextField.getText();
-    String to = toChoiceBox.getValue().getId();
-    String message = sendMessageTextArea.getText();
+    PauseTransition pause = new PauseTransition(Duration.seconds(5));
+    pause.setOnFinished(event -> sentText.setText(""));
 
-    userDataFetch.createMessage(to, subject, message);
-    updateMessagesListViewItems();
+    String subject = subjectTextField.getText();
+    String message = sendMessageTextArea.getText();
+    User toUser = toChoiceBox.getValue();
+
+    if (toUser != null && !subject.equals("") && !message.equals("")) {
+      userDataFetch.createMessage(toUser.getId(), subject, message);
+      updateMessagesListViewItems();
+      subjectTextField.setText("");
+      sendMessageTextArea.setText("");
+      sentText.setText("Message Sent!");
+    } else {
+      sentText.setText("Fill in subject, to and message");
+    }
+    pause.play();
   }
 
   @Override
