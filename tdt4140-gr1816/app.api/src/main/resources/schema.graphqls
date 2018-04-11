@@ -30,7 +30,7 @@ type Mutation {
   createUser(authProvider: AuthData!, isDoctor: Boolean!, gender: String!, age: Int!): User
   signinUser(auth: AuthData): SigninPayload
   deleteUser(auth: AuthData!): Boolean
-  editUser(username: String!, newUsername: String!, newAge: Int!, newGender: String!): Boolean
+  editUser(username: String!, newUsername: String!, newPassword: String!, newAge: Int!, newGender: String!): Boolean
   forgotPassword(username: String!): Boolean
 
  

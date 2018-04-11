@@ -10,6 +10,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -106,12 +107,17 @@
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Leave field empty if no change" />
                                     <TextField fx:id="newUsernameField" prefHeight="26.0" prefWidth="145.0" promptText="Username">
                                        <VBox.margin>
-                                          <Insets top="20.0" />
+                                          <Insets top="15.0" />
                                        </VBox.margin>
                                     </TextField>
+                                    <PasswordField fx:id="newPasswordField" promptText="Password">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </PasswordField>
                                     <TextField fx:id="newAgeField" promptText="Age">
                                        <VBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="5.0" />
                                        </VBox.margin>
                                     </TextField>
                                     <HBox prefHeight="21.0" prefWidth="281.0">

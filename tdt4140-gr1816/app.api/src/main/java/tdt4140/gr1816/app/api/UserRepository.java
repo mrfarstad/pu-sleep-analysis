@@ -95,7 +95,8 @@ public class UserRepository {
     return result.wasAcknowledged();
   }
 
-  public boolean editUser(String username, String newUsername, int newAge, String newGender) {
+  public boolean editUser(
+      String username, String newUsername, String newPassword, int newAge, String newGender) {
     User u = findByUsername(newUsername);
     if (u != null) {
       return false;
@@ -107,6 +108,9 @@ public class UserRepository {
     Document doc = new Document();
     if (!newUsername.equals("null")) {
       doc.append("username", newUsername);
+    }
+    if (!newPassword.equals("null")) {
+      doc.append("password", newPassword);
     }
     if (newAge > 0) {
       doc.append("age", newAge);

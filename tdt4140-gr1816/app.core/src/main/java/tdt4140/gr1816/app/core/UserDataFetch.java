@@ -88,10 +88,12 @@ public class UserDataFetch {
         variables);
   }
 
-  public boolean editUser(String newUsername, Integer newAge, String newGender) {
+  public boolean editUser(
+      String newUsername, String newPassword, Integer newAge, String newGender) {
     Map<String, String> variables = new HashMap<>();
     variables.put("username", getCurrentUser().getUsername());
     variables.put("newUsername", newUsername);
+    variables.put("newPassword", newPassword);
     variables.put("newAge", newAge.toString());
     variables.put("newGender", newGender);
     return getGenericData(

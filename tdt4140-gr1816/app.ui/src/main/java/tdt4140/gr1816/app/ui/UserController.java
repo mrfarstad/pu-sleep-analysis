@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -81,6 +82,7 @@ public class UserController implements Initializable {
   @FXML private VBox editProfileBox;
 
   @FXML private TextField newUsernameField;
+  @FXML private PasswordField newPasswordField;
   @FXML private TextField newAgeField;
   @FXML private RadioButton male;
   @FXML private Button saveButton;
@@ -112,6 +114,12 @@ public class UserController implements Initializable {
     }
     newUsernameField.clear();
 
+    String newPassword = newPasswordField.getText();
+    if (newPassword.equals("")) {
+      newPassword = "null";
+    }
+    newPasswordField.clear();
+
     String newAge = newAgeField.getText();
     int newAgeInt;
     if (newAge.equals("")) {
@@ -121,15 +129,15 @@ public class UserController implements Initializable {
       newAgeField.clear();
     }
 
-    String gender = "null";
+    String newGender = "null";
     if (male.getToggleGroup().getSelectedToggle() != null) {
       RadioButton genderRB = (RadioButton) male.getToggleGroup().getSelectedToggle();
-      gender = genderRB.getText();
+      newGender = genderRB.getText();
       male.getToggleGroup().selectToggle(null);
     }
-
+    System.out.println(newUsername + newPassword + newAgeInt + newGender);
     String msg = "";
-    if (userDataFetch.editUser(newUsername, newAgeInt, gender)) {
+    if (userDataFetch.editUser(newUsername, newPassword, newAgeInt, newGender)) {
       user = userDataFetch.getCurrentUser();
       setProfileValues();
       msg = "Saved profile";
