@@ -1,6 +1,9 @@
 package tdt4140.gr1816.app.api;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import graphql.ExecutionResult;
 import java.util.ArrayList;
@@ -174,6 +177,17 @@ public class UserMethodsTest extends ApiBaseCase {
 
     assertEquals(dataAccessRequestsForMe.size(), 1);
     assertEquals(dataAccessRequestsForMe.get(0).get("status"), "PENDING");
+
+    String requestId = (String) dataAccessRequestsForMe.get(0).get("id");
+
+    ExecutionResult deleteRes =
+        executeQuery(
+            "mutation {deleteDataAccessRequest(dataAccessRequestId: \"" + requestId + "\")}",
+            userContext);
+
+    Map<String, Object> deleteResult = deleteRes.getData();
+
+    assertTrue((Boolean) deleteResult.get("deleteDataAccessRequest"));
   }
 
   @Test

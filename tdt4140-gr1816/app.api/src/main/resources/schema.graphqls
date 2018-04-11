@@ -45,10 +45,11 @@ type Mutation {
   
   requestDataAccess(dataOwnerId: ID!): DataAccessRequest
   answerDataAccessRequest(dataAccessRequestId: ID!, status: DataAccessRequestStatus!): DataAccessRequest
+  deleteDataAccessRequest(dataAccessRequestId: ID!): Boolean
 
   setIsGatheringData(isGatheringData: Boolean!): Boolean
   
-  createMessage(fromId: ID!, toId: ID!, subject: String!, message: String!): Message
+  createMessage(toId: ID!, subject: String!, message: String!): Message
 }
 
 input AuthData {

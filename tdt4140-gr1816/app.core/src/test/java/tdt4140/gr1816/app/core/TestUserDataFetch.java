@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.Test;
+import org.mockito.Mockito;
 import tdt4140.gr1816.app.core.DataAccessRequest.DataAccessRequestStatus;
 
 public class TestUserDataFetch {
@@ -25,6 +26,7 @@ public class TestUserDataFetch {
 
   private UserDataFetch userDataFetch = new UserDataFetch(test);
   String resourceResponsePath = "src/test/resources/tdt4140/gr1816/app/core/";
+  String resourceQueryPath = "src/main/resources/tdt4140/gr1816/app/core/";
 
   @Test
   public void testCreateUserQuery() {
@@ -61,11 +63,107 @@ public class TestUserDataFetch {
       fail("Wrong filename for query");
     }
     when(test.getData(anyString(), isNull())).thenReturn(response);
-
     assertEquals(test.getData("", null), response);
 
+    // Steps:
+
+    String stepsResponse = "";
+    String deleteStepsResponse = "";
+    try {
+      stepsResponse =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "stepsDataByViewerResponse.txt")));
+      deleteStepsResponse =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "deleteStepsDataResponse.txt")));
+
+    } catch (IOException e) {
+      fail("Wrong filename(s) for query/responce (steps)");
+    }
+
+    when(test.getData(Mockito.contains("stepsDataByViewer"), isNull())).thenReturn(stepsResponse);
+    when(test.getData(Mockito.contains("deleteStepsData"), isNull()))
+        .thenReturn(deleteStepsResponse);
+    assertEquals(test.getData("query: stepsDataByViewer", null), stepsResponse);
+
+    // Pulse:
+    String pulseResponse = "";
+    String deletePulseResponse = "";
+    try {
+      pulseResponse =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "pulseDataByViewerResponse.txt")));
+      deletePulseResponse =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "deletePulseDataResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename(s) for query/responce (pulse)");
+    }
+
+    when(test.getData(Mockito.contains("pulseDataByViewer"), isNull())).thenReturn(pulseResponse);
+    when(test.getData(Mockito.contains("deletePulseData"), isNull()))
+        .thenReturn(deletePulseResponse);
+    assertEquals(test.getData("query: pulseDataByViewer", null), pulseResponse);
+
+    // Sleep:
+    String sleepResponse = "";
+    String deleteSleepResponse = "";
+    try {
+      sleepResponse =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "sleepDataByViewerResponse.txt")));
+      deleteSleepResponse =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "deleteSleepDataResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(Mockito.contains("sleepDataByViewer"), isNull())).thenReturn(sleepResponse);
+    when(test.getData(Mockito.contains("deleteSleepData"), isNull()))
+        .thenReturn(deleteSleepResponse);
+    assertEquals(test.getData("query: sleepDataByViewer", null), sleepResponse);
+
+    // DataAccessRequest:
+    String dataAccessRequestToUserResponse = "";
+    String dataAccessRequestByDoctorResponse = "";
+    String deleteDataAccessRequestResponse = "";
+    try {
+      dataAccessRequestToUserResponse =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "accessRequestsToUserResponse.txt")));
+      dataAccessRequestByDoctorResponse =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "accessRequestsByDoctorResponse.txt")));
+      deleteDataAccessRequestResponse =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "deleteDataAccessRequestResponse.txt")));
+
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(Mockito.contains("dataAccessRequestsForMe"), isNull()))
+        .thenReturn(dataAccessRequestToUserResponse);
+    when(test.getData(Mockito.contains("myDataAccessRequests"), isNull()))
+        .thenReturn(dataAccessRequestByDoctorResponse);
+    when(test.getData(Mockito.contains("deleteDataAccessRequest"), isNull()))
+        .thenReturn(deleteDataAccessRequestResponse);
+
+    assertEquals(
+        test.getData("query: dataAccessRequestsForMe", null), dataAccessRequestToUserResponse);
+    assertEquals(
+        test.getData("query: myDataAccessRequests", null), dataAccessRequestByDoctorResponse);
+
     // UserDataFetch should return a boolean (success)
-    boolean success = userDataFetch.deleteUser("test", "test");
+    boolean success = userDataFetch.deleteUser("test", "test", false);
+    assertNotNull(success);
+    assertTrue(success);
+    success = userDataFetch.deleteUser("test", "test", true);
     assertNotNull(success);
     assertTrue(success);
   }
@@ -236,7 +334,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void testRequestDataAccessRequest() {
+  public void testRequestDataAccess() {
     String response = "";
     try {
       response =
@@ -248,11 +346,9 @@ public class TestUserDataFetch {
     }
     when(test.getData(anyString(), anyString())).thenReturn(response);
 
-    String oldToken = userDataFetch.currentToken;
     userDataFetch.currentToken = "5ab173c1c13edf146111e7bb";
     assertEquals(test.getData("", "5ab173c1c13edf146111e7bb"), response);
     assertTrue(userDataFetch.requestDataAccess("5ab26b19c13edf233e48b451"));
-    userDataFetch.currentToken = oldToken;
   }
 
   @Test
@@ -348,7 +444,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void createSleepData() {
+  public void testCreateSleepData() {
     String response = "";
     try {
       response =
@@ -367,7 +463,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void deleteSleepData() {
+  public void testDeleteSleepData() {
     String response = "";
     try {
       response =
@@ -382,7 +478,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void getAllStepsData() {
+  public void testGetAllStepsData() {
     String response = "";
     try {
       response =
@@ -403,7 +499,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void stepsDataByViewer() {
+  public void testStepsDataByViewer() {
     String response = "";
     try {
       response =
@@ -427,7 +523,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void createStepsData() {
+  public void testCreateStepsData() {
     String response = "";
     try {
       response =
@@ -445,7 +541,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void deleteStepsData() {
+  public void testDeleteStepsData() {
     String response = "";
     try {
       response =
@@ -460,7 +556,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void getAllPulseData() {
+  public void testGetAllPulseData() {
     String response = "";
     try {
       response =
@@ -481,7 +577,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void getPulseDataByViewer() {
+  public void testGetPulseDataByViewer() {
     String response = "";
     try {
       response =
@@ -505,7 +601,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void createPulseData() {
+  public void testCreatePulseData() {
     String response = "";
     try {
       response =
@@ -523,7 +619,7 @@ public class TestUserDataFetch {
   }
 
   @Test
-  public void deletePulseData() {
+  public void testDeletePulseData() {
     String response = "";
     try {
       response =
@@ -535,5 +631,50 @@ public class TestUserDataFetch {
     when(test.getData(anyString(), isNull())).thenReturn(response);
     Boolean deletePulse = userDataFetch.deletePulseData("");
     assertTrue(deletePulse);
+  }
+
+  @Test
+  public void testMessagesForMe() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "messagesForMeResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    List<Message> messages = userDataFetch.messagesForMe();
+    assertTrue(messages.size() > 0);
+    String viewerId = messages.get(0).getTo().getId();
+    for (Message message : messages) {
+      assertTrue(message.getId() instanceof String);
+      assertTrue(message.getFrom() instanceof User);
+      assertTrue(message.getFrom().getId().equals("5ab24b5fc13edf233e48b42c"));
+      assertTrue(message.getTo() instanceof User);
+      assertTrue(message.getTo().getId().equals(viewerId));
+      assertTrue(message.getSubject() instanceof String);
+      assertTrue(message.getSubject().length() > 0);
+      assertTrue(message.getMessage() instanceof String);
+      assertTrue(message.getMessage().length() > 0);
+    }
+  }
+
+  @Test
+  public void testCreateMessage() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "createMessageResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), anyString())).thenReturn(response);
+
+    User to = new User("5ab24b72c13edf233e48b42d", "test", "test", true, "female", 22, true);
+    userDataFetch.currentToken = "5ab24b5fc13edf233e48b42c";
+    assertEquals(test.getData("", "5ab24b5fc13edf233e48b42c"), response);
+    assertTrue(userDataFetch.createMessage(to.getId(), "subject", "message content"));
   }
 }

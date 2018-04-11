@@ -1,0 +1,21 @@
+mutation($toId: ID!, $subject: String!, $message: String!) {
+  createMessage(toId: $toId, subject: $subject, message: $message) {
+    id
+    from {
+      id
+      username
+      isDoctor
+      age
+      gender
+    }
+    to {
+      id
+      username
+      isDoctor
+      age
+      gender
+    }
+  subject
+  message
+  }
+}

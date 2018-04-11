@@ -1,0 +1,21 @@
+query {
+  messagesForMe {
+    id
+    from {
+      id
+      username
+      isDoctor
+      age
+      gender
+    }
+    to {
+      id
+      username
+      isDoctor
+      age
+      gender
+    }
+    subject
+    message
+  }
+}

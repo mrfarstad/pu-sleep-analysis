@@ -167,6 +167,14 @@ public class Mutation implements GraphQLRootResolver {
     return dataAccessRequestRepository.answerDataAccessRequest(dataAccessRequestId, status, user);
   }
 
+  public Boolean deleteDataAccessRequest(String requestId) {
+    DataAccessRequest request = dataAccessRequestRepository.findById(requestId);
+    if (request == null) {
+      throw new GraphQLException("Invalid request id");
+    }
+    return dataAccessRequestRepository.deleteDataAccessRequest(request);
+  }
+
   public boolean setIsGatheringData(Boolean status, DataFetchingEnvironment env) {
     AuthContext context = env.getContext();
     User user = context.getUser();
@@ -177,13 +185,13 @@ public class Mutation implements GraphQLRootResolver {
   }
 
   public Message createMessage(
-      String fromId, String toId, String subject, String message, DataFetchingEnvironment env) {
+      String toId, String subject, String message, DataFetchingEnvironment env) {
     AuthContext context = env.getContext();
     User user = context.getUser();
     if (user == null) {
       throw new GraphQLException("Please log in");
     }
-    Message msg = new Message(fromId, toId, subject, message);
+    Message msg = new Message(user.getId(), toId, subject, message);
     return messageRepository.createMessage(msg);
   }
 }

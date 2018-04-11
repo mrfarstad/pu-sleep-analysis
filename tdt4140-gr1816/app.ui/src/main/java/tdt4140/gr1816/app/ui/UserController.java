@@ -1,5 +1,6 @@
 package tdt4140.gr1816.app.ui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
@@ -8,39 +9,39 @@ import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.ListView;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
-import tdt4140.gr1816.app.core.DataAccessRequest;
-import tdt4140.gr1816.app.core.PulseData;
-import tdt4140.gr1816.app.core.SleepData;
-import tdt4140.gr1816.app.core.StepsData;
-import tdt4140.gr1816.app.core.User;
-import tdt4140.gr1816.app.core.UserDataFetch;
+import tdt4140.gr1816.app.core.*;
 
 public class UserController implements Initializable {
 
   @FXML private Button dataButton;
+
+  @FXML private Button deleteUserButton;
+
+  @FXML private Button logOutButton;
 
   @FXML private Button acceptDoctorButton;
 
   @FXML private Button removeDoctorButton;
 
   @FXML private Button deleteDataButton;
+
+  @FXML private Button sendButton;
 
   @FXML private Text nameText;
 
@@ -50,11 +51,29 @@ public class UserController implements Initializable {
 
   @FXML private Text dataDeletionResponseText;
 
+  @FXML private Text subjectText;
+
+  @FXML private Text toText;
+
+  @FXML private Text fromText;
+
+  @FXML private TextField subjectTextField;
+
+  @FXML private TextArea sendMessageTextArea;
+
+  @FXML private TextArea messageTextArea;
+
+  @FXML private ChoiceBox<User> toChoiceBox;
+
+  @FXML private Label sentLabel;
+
   @FXML private DatePicker dataDatePicker;
 
   @FXML private ListView<DataAccessRequest> doctorsListView;
 
   @FXML private ListView<DataAccessRequest> doctorRequestListView;
+
+  @FXML private ListView<Message> messagesListView;
 
   // Graph Tab
   @FXML private ChoiceBox<String> dataChoiceBox;
@@ -92,6 +111,24 @@ public class UserController implements Initializable {
 
   ObservableList<DataAccessRequest> doctorsListViewItems;
   ObservableList<DataAccessRequest> doctorRequestListViewItems;
+  ObservableList<Message> messagesListViewItems;
+  ObservableList<User> acceptedDoctorsList = FXCollections.observableArrayList();
+
+  private void returnToLoginScreen(Button sceneHolder) throws Exception {
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LoginGUI.fxml"));
+    Parent root1 = (Parent) fxmlLoader.load();
+    Stage stage = new Stage();
+    stage.setScene(new Scene(root1));
+    stage.show();
+    Window stage1 = sceneHolder.getScene().getWindow();
+    stage1.hide();
+  }
+
+  public void handleLogOutButton() throws Exception {
+    user = null;
+    userDataFetch.logOut();
+    returnToLoginScreen(logOutButton);
+  }
 
   public void handleDataButton() {
     if (user.getIsGatheringData()) {
@@ -163,6 +200,16 @@ public class UserController implements Initializable {
     male.getToggleGroup().selectToggle(null);
   }
 
+  public void handleDeleteUserButton() throws IOException {
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("WarningGUI.fxml"));
+    Parent root1 = (Parent) fxmlLoader.load();
+    Stage stage = new Stage();
+    stage.setScene(new Scene(root1));
+    stage.show();
+    Window stage1 = deleteUserButton.getScene().getWindow();
+    stage1.hide();
+  }
+
   public void handleDeleteDataButton() {
     LocalDate ld = dataDatePicker.getValue();
 
@@ -225,6 +272,7 @@ public class UserController implements Initializable {
       Login.userDataFetch.answerDataAccessRequest(selected, "ACCEPTED");
       doctorRequestListViewItems.remove(selected);
       updateDoctorsListViewItems();
+      updateToChoiceBox();
     }
   }
 
@@ -326,6 +374,25 @@ public class UserController implements Initializable {
     sleepBarChart.setVisible(true);
   }
 
+  public void handleMessagesListViewClicked() {
+    Message message = messagesListView.getSelectionModel().getSelectedItem();
+    if (message != null) {
+      subjectText.setText(message.getSubject());
+      fromText.setText(message.getFrom().getUsername());
+      toText.setText(message.getTo().getUsername());
+      messageTextArea.setText(message.getMessage());
+    }
+  }
+
+  public void handleSendMessageButton() {
+    String subject = subjectTextField.getText();
+    String to = toChoiceBox.getValue().getId();
+    String message = sendMessageTextArea.getText();
+
+    userDataFetch.createMessage(to, subject, message);
+    updateMessagesListViewItems();
+  }
+
   @Override
   public void initialize(URL arg0, ResourceBundle arg1) {
 
@@ -340,9 +407,13 @@ public class UserController implements Initializable {
 
     updateDoctorRequestListViewItems();
 
+    updateMessagesListViewItems();
+
     setDataChoiceBox();
 
     hideCharts();
+
+    updateToChoiceBox();
   }
 
   public void setProfileValues() {
@@ -385,6 +456,13 @@ public class UserController implements Initializable {
         .forEach(request -> doctorRequestListViewItems.add(request));
   }
 
+  public void updateMessagesListViewItems() {
+    messagesListViewItems = messagesListView.getItems();
+    messagesListViewItems.clear();
+    List<Message> messages = userDataFetch.messagesForMe();
+    messages.stream().forEach(message -> messagesListViewItems.add(message));
+  }
+
   private void hideCharts() {
     stepBarChart.setVisible(false);
     pulseLineChart.setVisible(false);
@@ -395,5 +473,15 @@ public class UserController implements Initializable {
     dataChoiceBox.getItems().add("Pulse");
     dataChoiceBox.getItems().add("Steps");
     dataChoiceBox.getItems().add("Sleep - duration");
+  }
+
+  public void updateToChoiceBox() {
+    acceptedDoctorsList.clear();
+    List<DataAccessRequest> requests = userDataFetch.getAccessRequestsToUser();
+    requests
+        .stream()
+        .filter(request -> request.getStatusAsString().equals("ACCEPTED"))
+        .forEach(request -> acceptedDoctorsList.add(request.getRequestedBy()));
+    toChoiceBox.setItems(acceptedDoctorsList);
   }
 }
