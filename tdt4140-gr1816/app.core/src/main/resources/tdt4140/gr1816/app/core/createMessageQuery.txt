@@ -17,5 +17,6 @@ mutation($toId: ID!, $subject: String!, $message: String!) {
     }
   subject
   message
+  date
   }
 }
