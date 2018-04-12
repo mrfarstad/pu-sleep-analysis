@@ -158,19 +158,21 @@
                                     </AnchorPane>
                                  </children>
                               </VBox>
-                              <VBox alignment="TOP_CENTER" prefHeight="368.0" prefWidth="419.0">
+                              <VBox alignment="TOP_CENTER" prefHeight="305.0" prefWidth="434.0">
                                  <children>
                                     <AnchorPane prefHeight="54.0" prefWidth="401.0">
                                        <children>
-                                          <Text fx:id="averageText" layoutX="31.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="169.0">
+                                          <Text fx:id="groupAverageText" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="143.0" />
+                                          <Text fx:id="groupAverageNumberText" fill="#1755eb" layoutX="155.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="67.0">
                                              <font>
-                                                <Font size="14.0" />
+                                                <Font size="18.0" />
+                                             </font></Text>
+                                          <Text fx:id="pasientAverageText" layoutX="222.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="121.0" />
+                                          <Text fx:id="pasientAverageNumberText" fill="#1755eb" layoutX="354.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="67.0">
+                                             <font>
+                                                <Font size="18.0" />
                                              </font>
                                           </Text>
-                                          <Text fx:id="averageNumberText" fill="#1755eb" layoutX="220.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="67.0">
-                                             <font>
-                                                <Font size="24.0" />
-                                             </font></Text>
                                        </children>
                                     </AnchorPane>
                                     <StackPane prefHeight="324.0" prefWidth="419.0">
@@ -192,7 +194,7 @@
                                               <NumberAxis fx:id="pulseChartYAxis" side="LEFT" upperBound="220.0" />
                                             </yAxis>
                                           </LineChart>
-                                          <BarChart fx:id="stepBarChart" prefHeight="302.0" prefWidth="422.0" title="Step Chart">
+                                          <BarChart fx:id="stepBarChart" prefHeight="249.0" prefWidth="401.0" title="Step Chart">
                                             <xAxis>
                                               <CategoryAxis fx:id="stepChartXAxis" side="BOTTOM" />
                                             </xAxis>

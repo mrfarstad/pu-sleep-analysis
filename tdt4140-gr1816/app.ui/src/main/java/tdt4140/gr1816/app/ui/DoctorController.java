@@ -114,8 +114,10 @@ public class DoctorController implements Initializable {
   @FXML private CategoryAxis stepChartXAxis;
   @FXML private NumberAxis stepChartYAxis;
 
-  @FXML private Text averageNumberText;
-  @FXML private Text averageText;
+  @FXML private Text groupAverageNumberText;
+  @FXML private Text groupAverageText;
+  @FXML private Text pasientAverageNumberText;
+  @FXML private Text pasientAverageText;
 
   private UserDataFetch userDataFetch;
   private User user;
@@ -205,8 +207,10 @@ public class DoctorController implements Initializable {
     sleepBarChart.getData().add(series);
     sleepBarChart.setVisible(true);
 
-    averageText.setText("Average hours of sleep: ");
-    averageNumberText.setText(Integer.toString(Login.userDataFetch.getAverage("sleep")));
+    groupAverageText.setText("Average of same age: ");
+    groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("sleep")));
+    pasientAverageText.setText("Pasients average: ");
+    pasientAverageNumberText.setText(Integer.toString(Login.userDataFetch.getPasientAverage("sleep")));
   }
   // Piechart
   /*
@@ -244,8 +248,10 @@ public class DoctorController implements Initializable {
     pulseLineChart.getData().add(series);
     pulseLineChart.setVisible(true);
 
-    averageText.setText("Average heart rate: ");
-    averageNumberText.setText(Integer.toString(Login.userDataFetch.getAverage("pulse")));
+    groupAverageText.setText("Average of same age: ");
+    groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("pulse")));
+    pasientAverageText.setText("Pasients average: ");
+    pasientAverageNumberText.setText(Integer.toString(Login.userDataFetch.getPasientAverage("pulse")));
   }
 
   private void showStepChart() {
@@ -266,8 +272,10 @@ public class DoctorController implements Initializable {
     stepBarChart.getData().add(series);
     stepBarChart.setVisible(true);
 
-    averageText.setText("Average steps: ");
-    averageNumberText.setText(Integer.toString(Login.userDataFetch.getAverage("steps")));
+    groupAverageText.setText("Average of same age: ");
+    groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("steps")));
+    pasientAverageText.setText("Pasients average: ");
+    pasientAverageNumberText.setText(Integer.toString(Login.userDataFetch.getPasientAverage("steps")));
   }
 
   private void hideCharts() {

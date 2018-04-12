@@ -364,7 +364,7 @@ public class UserDataFetch {
 	  return 0;
   }
 
-  public int getAverage(String dataType) {
+  public int getGroupAverage(String dataType) {
     if (dataType.equals("steps")) {
       return 6048;
     } else if (dataType.equals("pulse")) {
@@ -374,6 +374,18 @@ public class UserDataFetch {
     }
     return 0;
   }
+  
+  public int getPasientAverage(String dataType) {
+	  if (dataType.equals("steps")) {
+	      return 4048;
+	    } else if (dataType.equals("pulse")) {
+	      return 94;
+	    } else if (dataType.equals("sleep")) {
+	      return 6;
+	    }
+	    return 0;
+	  }
+  
 
   public boolean requestDataAccess(User patient) {
     return requestDataAccess(patient.getId());
