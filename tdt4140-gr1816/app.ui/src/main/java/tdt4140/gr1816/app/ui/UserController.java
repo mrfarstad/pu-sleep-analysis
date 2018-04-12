@@ -343,7 +343,8 @@ public class UserController implements Initializable {
     groupAverageText.setText("Average of same age: ");
     groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("steps")));
     pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(Integer.toString(Login.userDataFetch.getPasientAverage("steps")));
+    pasientAverageNumberText.setText(
+        Integer.toString(Login.userDataFetch.getPasientAverage("steps")));
   }
 
   public void showPulseChart() {
@@ -367,7 +368,8 @@ public class UserController implements Initializable {
     groupAverageText.setText("Average of same age: ");
     groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("pulse")));
     pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(Integer.toString(Login.userDataFetch.getPasientAverage("pulse")));
+    pasientAverageNumberText.setText(
+        Integer.toString(Login.userDataFetch.getPasientAverage("pulse")));
   }
 
   public void showSleepDChart() {
@@ -393,7 +395,8 @@ public class UserController implements Initializable {
     groupAverageText.setText("Average of same age: ");
     groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("sleep")));
     pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(Integer.toString(Login.userDataFetch.getPasientAverage("sleep")));
+    pasientAverageNumberText.setText(
+        Integer.toString(Login.userDataFetch.getPasientAverage("sleep")));
   }
 
   public void handleMessagesListViewClicked() {

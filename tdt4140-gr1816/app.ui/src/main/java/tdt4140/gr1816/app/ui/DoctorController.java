@@ -210,7 +210,8 @@ public class DoctorController implements Initializable {
     groupAverageText.setText("Average of same age: ");
     groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("sleep")));
     pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(Integer.toString(Login.userDataFetch.getPasientAverage("sleep")));
+    pasientAverageNumberText.setText(
+        Integer.toString(Login.userDataFetch.getPasientAverage("sleep")));
   }
   // Piechart
   /*
@@ -251,7 +252,8 @@ public class DoctorController implements Initializable {
     groupAverageText.setText("Average of same age: ");
     groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("pulse")));
     pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(Integer.toString(Login.userDataFetch.getPasientAverage("pulse")));
+    pasientAverageNumberText.setText(
+        Integer.toString(Login.userDataFetch.getPasientAverage("pulse")));
   }
 
   private void showStepChart() {
@@ -275,7 +277,8 @@ public class DoctorController implements Initializable {
     groupAverageText.setText("Average of same age: ");
     groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("steps")));
     pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(Integer.toString(Login.userDataFetch.getPasientAverage("steps")));
+    pasientAverageNumberText.setText(
+        Integer.toString(Login.userDataFetch.getPasientAverage("steps")));
   }
 
   private void hideCharts() {
