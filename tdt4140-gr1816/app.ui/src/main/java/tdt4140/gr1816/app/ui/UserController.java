@@ -112,6 +112,11 @@ public class UserController implements Initializable {
   @FXML private Text averageText;
   @FXML private Text averageNumberText;
 
+  @FXML private Text groupAverageText;
+  @FXML private Text groupAverageNumberText;
+  @FXML private Text pasientAverageText;
+  @FXML private Text pasientAverageNumberText;
+
   private User user;
   private UserDataFetch userDataFetch;
 
@@ -335,20 +340,17 @@ public class UserController implements Initializable {
     stepBarChart.getData().add(series);
     stepBarChart.setVisible(true);
 
-    averageText.setText("Average steps: ");
-    averageNumberText.setText(Integer.toString(Login.userDataFetch.getAverage("steps")));
+    groupAverageText.setText("Average of same age: ");
+    groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("steps")));
+    pasientAverageText.setText("Pasients average: ");
+    pasientAverageNumberText.setText(Integer.toString(Login.userDataFetch.getPasientAverage("steps")));
   }
 
   public void showPulseChart() {
-    System.out.println("hei1");
     hideCharts();
-    System.out.println("hei2");
     pulseLineChart.getData().clear();
-    System.out.println("hei3");
     pulseChartXAxis.setLabel("Date");
-    System.out.println("hei4");
     pulseChartYAxis.setLabel("RestHR");
-    System.out.println("hei5");
     ObservableList<XYChart.Data<String, Number>> lineChartData =
         FXCollections.observableArrayList();
     List<PulseData> pulseDataList = Login.userDataFetch.getPulseDataByViewer();
@@ -362,8 +364,10 @@ public class UserController implements Initializable {
     pulseLineChart.getData().add(series);
     pulseLineChart.setVisible(true);
 
-    averageText.setText("Average restHR: ");
-    averageNumberText.setText(Integer.toString(Login.userDataFetch.getAverage("pulse")));
+    groupAverageText.setText("Average of same age: ");
+    groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("pulse")));
+    pasientAverageText.setText("Pasients average: ");
+    pasientAverageNumberText.setText(Integer.toString(Login.userDataFetch.getPasientAverage("pulse")));
   }
 
   public void showSleepDChart() {
@@ -386,8 +390,10 @@ public class UserController implements Initializable {
     sleepBarChart.getData().add(series);
     sleepBarChart.setVisible(true);
 
-    averageText.setText("Average sleep duration: ");
-    averageNumberText.setText(Integer.toString(Login.userDataFetch.getAverage("sleep")));
+    groupAverageText.setText("Average of same age: ");
+    groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("sleep")));
+    pasientAverageText.setText("Pasients average: ");
+    pasientAverageNumberText.setText(Integer.toString(Login.userDataFetch.getPasientAverage("sleep")));
   }
 
   public void handleMessagesListViewClicked() {
@@ -505,8 +511,8 @@ public class UserController implements Initializable {
     stepBarChart.setVisible(false);
     pulseLineChart.setVisible(false);
     sleepBarChart.setVisible(false);
-    averageText.setText("");
-    averageNumberText.setText("");
+    groupAverageText.setText("");
+    groupAverageNumberText.setText("");
   }
 
   public void setDataChoiceBox() {

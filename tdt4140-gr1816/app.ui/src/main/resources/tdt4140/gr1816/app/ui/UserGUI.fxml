@@ -260,9 +260,15 @@
                               <Text layoutX="30.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Health Type" wrappingWidth="108.82275390625" />
                               <Text layoutX="32.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From:" />
                               <Text layoutX="29.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To:" wrappingWidth="40.21875" />
-                              <Button fx:id="viewGraphButton" layoutX="61.0" layoutY="204.0" mnemonicParsing="false" onAction="#handleViewGraphButton" text="View graph" />
-                              <Text fx:id="averageText" layoutY="264.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" wrappingWidth="157.0" />
-                              <Text fx:id="averageNumberText" fill="#1755eb" layoutX="142.0" layoutY="266.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" wrappingWidth="55.21875">
+                              <Button fx:id="viewGraphButton" layoutX="62.0" layoutY="179.0" mnemonicParsing="false" onAction="#handleViewGraphButton" text="View graph" />
+                              <Text fx:id="groupAverageText" layoutX="-4.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" wrappingWidth="146.0" />
+                              <Text fx:id="groupAverageNumberText" fill="#1755eb" layoutX="147.0" layoutY="240.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" wrappingWidth="55.21875">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="pasientAverageText" layoutY="273.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" wrappingWidth="142.0" />
+                              <Text fx:id="pasientAverageNumberText" fill="#1755eb" layoutX="147.0" layoutY="274.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" wrappingWidth="55.21875">
                                  <font>
                                     <Font name="System Bold" size="18.0" />
                                  </font>
