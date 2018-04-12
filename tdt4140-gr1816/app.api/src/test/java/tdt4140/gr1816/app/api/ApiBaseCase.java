@@ -52,16 +52,18 @@ public class ApiBaseCase {
         new User("doctor", "doctor", true, "male", 32, true));
   }
 
-  public SleepData createSleepData(String userId, String date) {
-    return GraphQLEndpoint.sleepDataRepository.saveSleepData(new SleepData(userId, date, 40, 80));
+  public SleepData createSleepData(
+      String userId, String date, int sleepDuration, int sleepEfficiency) {
+    return GraphQLEndpoint.sleepDataRepository.saveSleepData(
+        new SleepData(userId, date, sleepDuration, sleepEfficiency));
   }
 
-  public StepsData createStepsData(String userId, String date) {
-    return GraphQLEndpoint.stepsDataRepository.saveStepsData(new StepsData(userId, date, 2000));
+  public StepsData createStepsData(String userId, String date, int steps) {
+    return GraphQLEndpoint.stepsDataRepository.saveStepsData(new StepsData(userId, date, steps));
   }
 
-  public PulseData createPulseData(String userId, String date) {
-    return GraphQLEndpoint.pulseDataRepository.savePulseData(new PulseData(userId, date, 120));
+  public PulseData createPulseData(String userId, String date, int pulse) {
+    return GraphQLEndpoint.pulseDataRepository.savePulseData(new PulseData(userId, date, pulse));
   }
 
   public AuthContext forceAuth(String username) {
