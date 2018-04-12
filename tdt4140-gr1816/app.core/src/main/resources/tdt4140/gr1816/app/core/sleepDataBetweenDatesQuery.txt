@@ -1,0 +1,12 @@
+query ($userId: String!, $startDate: String!, $endDate: String!) {
+  sleepDataBetweenDates(userId: $userId, startDate: $startDate, endDate: $endDate) {
+    id
+    date
+    user {
+      id
+      username
+    }
+    duration
+    efficiency
+  }
+}
