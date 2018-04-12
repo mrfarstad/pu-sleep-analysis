@@ -71,6 +71,14 @@ public class Query implements GraphQLRootResolver {
     return sleepDataRepository.getAllSleepData(userId);
   }
 
+  public List<SleepData> sleepDataBetweenDates(
+      String userId, String startDate, String endDate, DataFetchingEnvironment env) {
+    if (!hasUserAccess(env, userId)) {
+      throw new GraphQLException("Cannot access user data");
+    }
+    return sleepDataRepository.getSleepDataBetweenDates(userId, startDate, endDate);
+  }
+
   public List<SleepData> sleepDataByViewer(DataFetchingEnvironment env) {
     AuthContext context = env.getContext();
     User user = context.getUser();
@@ -87,6 +95,14 @@ public class Query implements GraphQLRootResolver {
     return stepsDataRepository.getAllStepsData(userId);
   }
 
+  public List<StepsData> stepsDataBetweenDates(
+      String userId, String startDate, String endDate, DataFetchingEnvironment env) {
+    if (!hasUserAccess(env, userId)) {
+      throw new GraphQLException("Cannot access user data");
+    }
+    return stepsDataRepository.getStepsDataBetweenDates(userId, startDate, endDate);
+  }
+
   public List<StepsData> stepsDataByViewer(DataFetchingEnvironment env) {
     AuthContext context = env.getContext();
     User user = context.getUser();
@@ -101,6 +117,14 @@ public class Query implements GraphQLRootResolver {
       throw new GraphQLException("Cannot access user data");
     }
     return pulseDataRepository.getAllPulseData(userId);
+  }
+
+  public List<PulseData> pulseDataBetweenDates(
+      String userId, String startDate, String endDate, DataFetchingEnvironment env) {
+    if (!hasUserAccess(env, userId)) {
+      throw new GraphQLException("Cannot access user data");
+    }
+    return pulseDataRepository.getPulseDataBetweenDates(userId, startDate, endDate);
   }
 
   public List<PulseData> pulseDataByViewer(DataFetchingEnvironment env) {
