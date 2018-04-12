@@ -58,6 +58,8 @@ public class DoctorController implements Initializable {
   @FXML private Text toText;
 
   @FXML private Text fromText;
+  
+  @FXML private Text dateText;
 
   @FXML private TextField subjectTextField;
 
