@@ -7,7 +7,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -22,7 +21,6 @@ import tdt4140.gr1816.app.core.DataAccessRequest.DataAccessRequestStatus;
 public class TestUserDataFetch extends CoreBaseTest {
 
   //  create mock
-
 
   @Test
   public void testCreateUserQuery() {
