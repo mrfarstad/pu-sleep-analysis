@@ -1,15 +1,13 @@
 package tdt4140.gr1816.app.api.resolvers;
 
+import com.coxautodev.graphql.tools.GraphQLRootResolver;
+import graphql.GraphQLException;
+import graphql.schema.DataFetchingEnvironment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import com.coxautodev.graphql.tools.GraphQLRootResolver;
-
-import graphql.GraphQLException;
-import graphql.schema.DataFetchingEnvironment;
 import tdt4140.gr1816.app.api.DataAccessRequestRepository;
 import tdt4140.gr1816.app.api.MessageRepository;
 import tdt4140.gr1816.app.api.PulseDataRepository;
