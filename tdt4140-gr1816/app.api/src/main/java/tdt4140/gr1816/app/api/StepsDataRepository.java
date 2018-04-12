@@ -14,6 +14,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import tdt4140.gr1816.app.api.types.StepsData;
+import tdt4140.gr1816.app.api.types.User;
 
 public class StepsDataRepository {
 
@@ -26,6 +27,16 @@ public class StepsDataRepository {
   public StepsData findById(String id) {
     Document doc = stepsDoc.find(eq("_id", new ObjectId(id))).first();
     return stepsData(doc);
+  }
+
+  public int getAverageForGroup(List<User> users) {
+    return (int)
+        users
+            .stream()
+            .map(user -> getAllStepsData(user.getId()))
+            .mapToDouble(data -> data.stream().mapToInt(el -> el.getSteps()).average().orElse(0))
+            .average()
+            .orElse(0);
   }
 
   public List<StepsData> getAllStepsData(String userId) {

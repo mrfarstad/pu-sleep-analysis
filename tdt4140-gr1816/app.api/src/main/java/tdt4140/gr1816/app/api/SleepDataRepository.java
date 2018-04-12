@@ -14,6 +14,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import tdt4140.gr1816.app.api.types.SleepData;
+import tdt4140.gr1816.app.api.types.User;
 
 public class SleepDataRepository {
 
@@ -83,6 +84,25 @@ public class SleepDataRepository {
     Document doc = sleepsDoc.find(eq("_id", new ObjectId(sleepData.getId()))).first();
     DeleteResult result = sleepsDoc.deleteOne(doc);
     return result.wasAcknowledged();
+  }
+
+  public SleepData getAverageForGroup(List<User> users) {
+    double avgEff =
+        users
+            .stream()
+            .map(user -> getAllSleepData(user.getId()))
+            .mapToDouble(
+                data -> data.stream().mapToInt(el -> el.getEfficiency()).average().orElse(0))
+            .average()
+            .orElse(0);
+    double avgDur =
+        users
+            .stream()
+            .map(user -> getAllSleepData(user.getId()))
+            .mapToDouble(data -> data.stream().mapToInt(el -> el.getDuration()).average().orElse(0))
+            .average()
+            .orElse(0);
+    return new SleepData(null, null, null, (int) avgDur, (int) avgEff);
   }
 
   private SleepData sleepData(Document doc) {
