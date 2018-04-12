@@ -321,7 +321,10 @@ public class DoctorController implements Initializable {
     messagesListViewItems = messagesListView.getItems();
     messagesListViewItems.clear();
     List<Message> messages = userDataFetch.messagesForMe();
-    messages.stream().forEach(message -> messagesListViewItems.add(message));
+    messages
+        .stream()
+        .filter(message -> !(message == null))
+        .forEach(message -> messagesListViewItems.add(message));
   }
 
   public void setPatientChoiceBoxes() {
