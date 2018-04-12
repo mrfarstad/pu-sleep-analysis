@@ -189,7 +189,9 @@ public class DoctorController implements Initializable {
     sleepChartYAxis.setLabel("Duration in hours");
     ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
     sleepBarChart.getData().clear();
-    List<SleepData> sleepDataList = userDataFetch.getAllSleepData(user.getId());
+    List<SleepData> sleepDataList =
+        userDataFetch.getSleepDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     sleepDataList
         .stream()
         .forEach(
@@ -225,7 +227,9 @@ public class DoctorController implements Initializable {
     pulseChartYAxis.setLabel("Pulse, restHR");
     ObservableList<XYChart.Data<String, Number>> lineChartData =
         FXCollections.observableArrayList();
-    List<PulseData> pulseDataList = userDataFetch.getAllPulseData(user.getId());
+    List<PulseData> pulseDataList =
+        userDataFetch.getPulseDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     pulseDataList
         .stream()
         .forEach(
@@ -245,7 +249,9 @@ public class DoctorController implements Initializable {
     stepChartXAxis.setLabel("Date");
     stepChartYAxis.setLabel("Steps");
     ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
-    List<StepsData> stepDataList = userDataFetch.getAllStepsData(user.getId());
+    List<StepsData> stepDataList =
+        userDataFetch.getStepsDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     stepDataList
         .stream()
         .forEach(

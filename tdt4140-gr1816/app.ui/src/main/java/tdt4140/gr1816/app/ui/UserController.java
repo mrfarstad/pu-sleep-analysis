@@ -316,12 +316,13 @@ public class UserController implements Initializable {
 
   public void showStepChart() {
     hideCharts();
-    stepBarChart.getData().clear();
     stepBarChart.setBarGap(0);
     stepChartXAxis.setLabel("Date");
     stepChartYAxis.setLabel("Steps");
     ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
-    List<StepsData> stepsDataList = Login.userDataFetch.getStepsDataByViewer();
+    List<StepsData> stepsDataList =
+        Login.userDataFetch.getStepsDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     stepsDataList
         .stream()
         .forEach(
@@ -330,39 +331,43 @@ public class UserController implements Initializable {
                     new XYChart.Data<>(stepData.getDate().toString(), stepData.getSteps())));
     XYChart.Series<String, Number> series = new XYChart.Series<>(barChartData);
 
+    stepBarChart.getData().clear();
     stepBarChart.getData().add(series);
     stepBarChart.setVisible(true);
   }
 
   public void showPulseChart() {
     hideCharts();
-    pulseLineChart.getData().clear();
     pulseChartXAxis.setLabel("Date");
-    pulseChartYAxis.setLabel("RestHR");
+    pulseChartYAxis.setLabel("Pulse, restHR");
     ObservableList<XYChart.Data<String, Number>> lineChartData =
         FXCollections.observableArrayList();
-    List<PulseData> pulseDataList = Login.userDataFetch.getPulseDataByViewer();
+    List<PulseData> pulseDataList =
+        Login.userDataFetch.getPulseDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     pulseDataList
         .stream()
         .forEach(
             pulseData ->
                 lineChartData.add(
                     new XYChart.Data<>(pulseData.getDate().toString(), pulseData.getRestHr())));
-    XYChart.Series<String, Number> series = new XYChart.Series<>(lineChartData);
 
+    XYChart.Series<String, Number> series = new XYChart.Series<>(lineChartData);
+    pulseLineChart.getData().clear();
     pulseLineChart.getData().add(series);
     pulseLineChart.setVisible(true);
   }
 
   public void showSleepDChart() {
     hideCharts();
-    sleepBarChart.getData().clear();
     sleepBarChart.setBarGap(0);
     sleepChartXAxis.setLabel("Date");
     sleepChartYAxis.setLabel("Duration in hours");
     ObservableList<XYChart.Data<String, Number>> sleepBarChartData =
         FXCollections.observableArrayList();
-    List<SleepData> sleepDataList = Login.userDataFetch.getSleepDataByViewer();
+    List<SleepData> sleepDataList =
+        Login.userDataFetch.getSleepDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     sleepDataList
         .stream()
         .forEach(
@@ -372,6 +377,7 @@ public class UserController implements Initializable {
                         sleepData.getDate().toString(), sleepData.getDuration() / 60)));
     XYChart.Series<String, Number> series = new XYChart.Series<>(sleepBarChartData);
 
+    sleepBarChart.getData().clear();
     sleepBarChart.getData().add(series);
     sleepBarChart.setVisible(true);
   }
