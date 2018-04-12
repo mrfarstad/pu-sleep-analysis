@@ -479,5 +479,32 @@ public class UserMethodsTest extends ApiBaseCase {
     assertEquals(fetchedSubject, "summon studass");
     assertEquals(fetchedMessage, "studass pls notice me");
     assertTrue(fetchedDate instanceof String);
+
+    query =
+        "{\n"
+            + "  messagesByMe {\n"
+            + "    id\n"
+            + "    to {\n"
+            + "      id\n"
+            + "      username\n"
+            + "    }\n"
+            + "    from {\n"
+            + "      id\n"
+            + "      username\n"
+            + "    }\n"
+            + "    subject\n"
+            + "    message\n"
+            + "  }\n"
+            + "}";
+    
+    res = executeQuery(query, context);
+    result = res.getData();
+
+    @SuppressWarnings("unchecked")
+    ArrayList<Map> messagesByMe = (ArrayList<Map>) result.get("messagesByMe");
+
+    assertEquals(messagesByMe.size(), 1);
+    assertEquals(messagesByMe.get(0).get("subject"), "summon studass");
+    assertEquals(messagesByMe.get(0).get("message"), "studass pls notice me");
   }
 }
