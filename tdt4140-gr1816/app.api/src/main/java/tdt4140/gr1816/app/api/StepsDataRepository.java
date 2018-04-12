@@ -26,7 +26,7 @@ public class StepsDataRepository {
     return stepsData(doc);
   }
 
-  public int getAverangeForGroup(List<User> users) {
+  public int getAverageForGroup(List<User> users) {
     return (int)
         users
             .stream()

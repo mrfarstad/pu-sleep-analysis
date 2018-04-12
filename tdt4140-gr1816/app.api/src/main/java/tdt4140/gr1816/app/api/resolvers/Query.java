@@ -182,9 +182,9 @@ public class Query implements GraphQLRootResolver {
   }
 
   public AverageData getAverageDataForUsers(String fromDate, String toDate, List<User> users) {
-    SleepData data = sleepDataRepository.getAverangeForGroup(users);
-    int steps = stepsDataRepository.getAverangeForGroup(users);
-    int restHr = pulseDataRepository.getAverangeForGroup(users);
+    SleepData data = sleepDataRepository.getAverageForGroup(users);
+    int steps = stepsDataRepository.getAverageForGroup(users);
+    int restHr = pulseDataRepository.getAverageForGroup(users);
 
     return new AverageData(restHr, data.getDuration(), data.getEfficiency(), steps, "");
   }

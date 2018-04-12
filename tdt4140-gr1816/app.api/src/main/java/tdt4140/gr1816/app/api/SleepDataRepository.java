@@ -66,7 +66,7 @@ public class SleepDataRepository {
     return result.wasAcknowledged();
   }
 
-  public SleepData getAverangeForGroup(List<User> users) {
+  public SleepData getAverageForGroup(List<User> users) {
     double avgEff =
         users
             .stream()
