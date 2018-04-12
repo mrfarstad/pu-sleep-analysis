@@ -19,14 +19,10 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import tdt4140.gr1816.app.core.DataAccessRequest.DataAccessRequestStatus;
 
-public class TestUserDataFetch {
+public class TestUserDataFetch extends CoreBaseTest {
 
   //  create mock
-  private DataGetter test = mock(DataGetter.class);
 
-  private UserDataFetch userDataFetch = new UserDataFetch(test);
-  String resourceResponsePath = "src/test/resources/tdt4140/gr1816/app/core/";
-  String resourceQueryPath = "src/main/resources/tdt4140/gr1816/app/core/";
 
   @Test
   public void testCreateUserQuery() {
