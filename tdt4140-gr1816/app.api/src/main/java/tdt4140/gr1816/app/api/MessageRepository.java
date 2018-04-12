@@ -22,12 +22,20 @@ public class MessageRepository {
     return message(doc);
   }
 
-  public List<Message> getAllMessagesToUser(String userId) {
-    List<Message> messagesToUser = new ArrayList<>();
-    for (Document doc : messages.find(eq("toId", userId))) {
-      messagesToUser.add(message(doc));
+  public List<Message> getAllMessages(String userId, String field) {
+    List<Message> messagesForField = new ArrayList<>();
+    for (Document doc : messages.find(eq(field, userId))) {
+      messagesForField.add(message(doc));
     }
-    return messagesToUser;
+    return messagesForField;
+  }
+
+  public List<Message> getAllMessagesToUser(String userId) {
+    return getAllMessages(userId, "toId");
+  }
+
+  public List<Message> getAllMessagesByUser(String userId) {
+    return getAllMessages(userId, "fromId");
   }
 
   public Message createMessage(Message message) {

@@ -14,6 +14,9 @@ type Query {
     # Messages sent to you
     messagesForMe: [Message]
     
+    # Messages sent by you
+    messagesByMe: [Message]
+    
     # Returns all user sleep/steps data
     allSleepData(userId: String!): [SleepData]
     sleepDataBetweenDates(userId: String!, startDate: String!, endDate: String!): [SleepData]
