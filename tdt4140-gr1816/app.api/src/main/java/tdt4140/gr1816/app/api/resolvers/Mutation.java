@@ -4,6 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLRootResolver;
 import graphql.GraphQLException;
 import graphql.schema.DataFetchingEnvironment;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import tdt4140.gr1816.app.api.DataAccessRequestRepository;
 import tdt4140.gr1816.app.api.MessageRepository;
 import tdt4140.gr1816.app.api.PulseDataRepository;
@@ -187,7 +188,8 @@ public class Mutation implements GraphQLRootResolver {
 
   public Message createMessage(
       String toId, String subject, String message, DataFetchingEnvironment env) {
-    String date = String.join(" ", LocalDateTime.now().withNano(0).toString().split("T"));
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    String date = LocalDateTime.now().withNano(0).format(formatter);
     AuthContext context = env.getContext();
     User user = context.getUser();
     if (user == null) {
