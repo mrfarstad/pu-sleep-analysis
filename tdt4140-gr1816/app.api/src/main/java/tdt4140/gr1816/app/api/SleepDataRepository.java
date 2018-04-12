@@ -86,11 +86,11 @@ public class SleepDataRepository {
     return result.wasAcknowledged();
   }
 
-  public SleepData getAverageForGroup(List<User> users) {
+  public SleepData getAverageForGroup(List<User> users, String fromDate, String toDate) {
     double avgEff =
         users
             .stream()
-            .map(user -> getAllSleepData(user.getId()))
+            .map(user -> getSleepDataBetweenDates(user.getId(), fromDate, toDate))
             .mapToDouble(
                 data -> data.stream().mapToInt(el -> el.getEfficiency()).average().orElse(0))
             .average()
@@ -98,7 +98,7 @@ public class SleepDataRepository {
     double avgDur =
         users
             .stream()
-            .map(user -> getAllSleepData(user.getId()))
+            .map(user -> getSleepDataBetweenDates(user.getId(), fromDate, toDate))
             .mapToDouble(data -> data.stream().mapToInt(el -> el.getDuration()).average().orElse(0))
             .average()
             .orElse(0);

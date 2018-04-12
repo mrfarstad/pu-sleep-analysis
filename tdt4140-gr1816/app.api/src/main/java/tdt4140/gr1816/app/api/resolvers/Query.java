@@ -228,9 +228,9 @@ public class Query implements GraphQLRootResolver {
   }
 
   public AverageData getAverageDataForUsers(String fromDate, String toDate, List<User> users) {
-    SleepData data = sleepDataRepository.getAverageForGroup(users);
-    int steps = stepsDataRepository.getAverageForGroup(users);
-    int restHr = pulseDataRepository.getAverageForGroup(users);
+    SleepData data = sleepDataRepository.getAverageForGroup(users, fromDate, toDate);
+    int steps = stepsDataRepository.getAverageForGroup(users, fromDate, toDate);
+    int restHr = pulseDataRepository.getAverageForGroup(users, fromDate, toDate);
 
     return new AverageData(restHr, data.getDuration(), data.getEfficiency(), steps, "");
   }
