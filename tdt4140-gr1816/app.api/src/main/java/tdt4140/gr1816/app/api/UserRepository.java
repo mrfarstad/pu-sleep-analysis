@@ -95,6 +95,34 @@ public class UserRepository {
     return result.wasAcknowledged();
   }
 
+  public boolean editUser(
+      String username, String newUsername, String newPassword, int newAge, String newGender) {
+    User u = findByUsername(newUsername);
+    if (u != null) {
+      return false;
+    }
+
+    User user = findByUsername(username);
+    Document userDoc = users.find(eq("_id", new ObjectId(user.getId()))).first();
+
+    Document doc = new Document();
+    if (!newUsername.equals("null")) {
+      doc.append("username", newUsername);
+    }
+    if (!newPassword.equals("null")) {
+      doc.append("password", newPassword);
+    }
+    if (newAge > 0) {
+      doc.append("age", newAge);
+    }
+    if (!newGender.equals("null")) {
+      doc.append("gender", newGender);
+    }
+    users.updateOne(
+        eq("_id", new ObjectId(userDoc.get("_id").toString())), new Document("$set", doc));
+    return true;
+  }
+
   public boolean setIsGatheringData(User user, Boolean status) {
     Document userDoc = users.find(eq("_id", new ObjectId(user.getId()))).first();
 

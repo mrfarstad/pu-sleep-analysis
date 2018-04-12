@@ -18,24 +18,14 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
-import tdt4140.gr1816.app.core.DataAccessRequest;
-import tdt4140.gr1816.app.core.Message;
-import tdt4140.gr1816.app.core.PulseData;
-import tdt4140.gr1816.app.core.SleepData;
-import tdt4140.gr1816.app.core.StepsData;
-import tdt4140.gr1816.app.core.User;
-import tdt4140.gr1816.app.core.UserDataFetch;
+import tdt4140.gr1816.app.core.*;
 
 public class UserController implements Initializable {
 
@@ -103,6 +93,19 @@ public class UserController implements Initializable {
   @FXML private CategoryAxis sleepChartXAxis;
   @FXML private NumberAxis sleepChartYAxis;
 
+  // Edit profile
+  @FXML private Button editProfileButton;
+  @FXML private Text editProfileResponse;
+
+  @FXML private HBox profileBox;
+  @FXML private VBox editProfileBox;
+
+  @FXML private TextField newUsernameField;
+  @FXML private PasswordField newPasswordField;
+  @FXML private TextField newAgeField;
+  @FXML private RadioButton male;
+  @FXML private Button saveButton;
+
   private User user;
   private UserDataFetch userDataFetch;
 
@@ -134,6 +137,67 @@ public class UserController implements Initializable {
       turnOnDataGathering();
     }
     setInitialDataButtonValue();
+  }
+
+  public void handleEditProfileButton() {
+    profileBox.setVisible(false);
+    editProfileBox.setVisible(true);
+  }
+
+  public void handleSaveButton() {
+    String newUsername = newUsernameField.getText();
+    if (newUsername.equals("")) {
+      newUsername = "null";
+    }
+    newUsernameField.clear();
+
+    String newPassword = newPasswordField.getText();
+    if (newPassword.equals("")) {
+      newPassword = "null";
+    }
+    newPasswordField.clear();
+
+    String newAge = newAgeField.getText();
+    int newAgeInt;
+    if (newAge.equals("")) {
+      newAgeInt = -1;
+    } else {
+      newAgeInt = Integer.parseInt(newAge);
+      newAgeField.clear();
+    }
+
+    String newGender = "null";
+    if (male.getToggleGroup().getSelectedToggle() != null) {
+      RadioButton genderRB = (RadioButton) male.getToggleGroup().getSelectedToggle();
+      newGender = genderRB.getText();
+      male.getToggleGroup().selectToggle(null);
+    }
+    System.out.println(newUsername + newPassword + newAgeInt + newGender);
+    String msg = "";
+    if (userDataFetch.editUser(newUsername, newPassword, newAgeInt, newGender)) {
+      user = userDataFetch.getCurrentUser();
+      setProfileValues();
+      msg = "Saved profile";
+    } else {
+      msg = "Username in use";
+    }
+
+    editProfileBox.setVisible(false);
+    profileBox.setVisible(true);
+
+    PauseTransition pause = new PauseTransition(Duration.seconds(3));
+    pause.setOnFinished(event -> editProfileResponse.setText(""));
+    editProfileResponse.setText(msg);
+    pause.play();
+  }
+
+  public void handleCancelButton() {
+    editProfileBox.setVisible(false);
+    profileBox.setVisible(true);
+
+    newUsernameField.clear();
+    newAgeField.clear();
+    male.getToggleGroup().selectToggle(null);
   }
 
   public void handleDeleteUserButton() throws IOException {
