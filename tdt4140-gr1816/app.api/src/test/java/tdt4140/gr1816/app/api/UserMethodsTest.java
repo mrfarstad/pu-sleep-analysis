@@ -434,4 +434,50 @@ public class UserMethodsTest extends ApiBaseCase {
     assertTrue(pulseDataList.get(0).get("id") != null);
     assertTrue(pulseDataList.get(0).get("id") instanceof String);
   }
+
+  @Test
+  public void testMessage() {
+    createUser();
+    createDoctor();
+    User user = GraphQLEndpoint.userRepository.findByUsername("test");
+    User doctor = GraphQLEndpoint.userRepository.findByUsername("doctor");
+    AuthContext context = forceAuth(doctor);
+
+    String query =
+        "mutation {\n"
+            + "  createMessage(toId: \""
+            + user.getId()
+            + "\" subject: \"summon studass\" message: \"studass pls notice me\") {\n"
+            + "    id\n"
+            + "    to {\n"
+            + "      id\n"
+            + "    }\n"
+            + "    from {\n"
+            + "      id\n"
+            + "    }\n"
+            + "    subject\n"
+            + "    message\n"
+            + "    date\n"
+            + "  }\n"
+            + "}";
+    ExecutionResult res = executeQuery(query, context);
+    Map<String, Object> result = res.getData();
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> message = (Map<String, Object>) result.get("createMessage");
+
+    assertNotNull(message);
+
+    String fetchedSubject = (String) message.get("subject");
+    String fetchedMessage = (String) message.get("message");
+    String fetchedDate = (String) message.get("date");
+    Map<String, Object> fetchedUser = (Map<String, Object>) message.get("to");
+    Map<String, Object> fetchedDoctor = (Map<String, Object>) message.get("from");
+
+    assertEquals(fetchedUser.get("id"), user.getId());
+    assertEquals(fetchedDoctor.get("id"), doctor.getId());
+    assertEquals(fetchedSubject, "summon studass");
+    assertEquals(fetchedMessage, "studass pls notice me");
+    assertTrue(fetchedDate instanceof String);
+  }
 }

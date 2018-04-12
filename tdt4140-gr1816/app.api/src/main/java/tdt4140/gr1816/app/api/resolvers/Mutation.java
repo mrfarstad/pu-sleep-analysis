@@ -3,6 +3,7 @@ package tdt4140.gr1816.app.api.resolvers;
 import com.coxautodev.graphql.tools.GraphQLRootResolver;
 import graphql.GraphQLException;
 import graphql.schema.DataFetchingEnvironment;
+import java.time.LocalDateTime;
 import tdt4140.gr1816.app.api.DataAccessRequestRepository;
 import tdt4140.gr1816.app.api.MessageRepository;
 import tdt4140.gr1816.app.api.PulseDataRepository;
@@ -186,12 +187,13 @@ public class Mutation implements GraphQLRootResolver {
 
   public Message createMessage(
       String toId, String subject, String message, DataFetchingEnvironment env) {
+    String date = String.join(" ", LocalDateTime.now().withNano(0).toString().split("T"));
     AuthContext context = env.getContext();
     User user = context.getUser();
     if (user == null) {
       throw new GraphQLException("Please log in");
     }
-    Message msg = new Message(user.getId(), toId, subject, message);
+    Message msg = new Message(user.getId(), toId, subject, message, date);
     return messageRepository.createMessage(msg);
   }
 }

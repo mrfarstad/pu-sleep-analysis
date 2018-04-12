@@ -37,6 +37,7 @@ public class MessageRepository {
     doc.append("toId", message.getToId());
     doc.append("subject", message.getSubject());
     doc.append("message", message.getMessage());
+    doc.append("date", message.getDate());
 
     messages.insertOne(doc);
     return message(doc);
@@ -48,6 +49,7 @@ public class MessageRepository {
         doc.getString("fromId"),
         doc.getString("toId"),
         doc.getString("subject"),
-        doc.getString("message"));
+        doc.getString("message"),
+        doc.getString("date"));
   }
 }

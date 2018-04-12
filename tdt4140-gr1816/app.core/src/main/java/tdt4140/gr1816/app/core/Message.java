@@ -76,8 +76,6 @@ public class Message {
         + this.to.getUsername()
         + "\nSubject: "
         + this.subject
-        + "\nMessage: "
-        + this.message
         + "\n-------------------";
   }
 }

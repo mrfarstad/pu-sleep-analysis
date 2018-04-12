@@ -81,6 +81,7 @@ type Message {
 	to: User!
 	subject: String!
 	message: String!
+	date: String!
 }
 
 # A user can be a doctor, but does not have to be
