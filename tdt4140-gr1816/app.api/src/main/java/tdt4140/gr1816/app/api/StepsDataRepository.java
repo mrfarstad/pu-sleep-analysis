@@ -29,11 +29,11 @@ public class StepsDataRepository {
     return stepsData(doc);
   }
 
-  public int getAverageForGroup(List<User> users) {
+  public int getAverageForGroup(List<User> users, String fromDate, String toDate) {
     return (int)
         users
             .stream()
-            .map(user -> getAllStepsData(user.getId()))
+            .map(user -> getStepsDataBetweenDates(user.getId(), fromDate, toDate))
             .mapToDouble(data -> data.stream().mapToInt(el -> el.getSteps()).average().orElse(0))
             .average()
             .orElse(0);

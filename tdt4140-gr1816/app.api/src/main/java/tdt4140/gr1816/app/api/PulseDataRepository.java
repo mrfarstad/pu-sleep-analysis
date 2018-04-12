@@ -29,11 +29,11 @@ public class PulseDataRepository {
     return pulseData(doc);
   }
 
-  public int getAverageForGroup(List<User> users) {
+  public int getAverageForGroup(List<User> users, String fromDate, String toDate) {
     return (int)
         users
             .stream()
-            .map(user -> getAllPulseData(user.getId()))
+            .map(user -> getPulseDataBetweenDates(user.getId(), fromDate, toDate))
             .mapToDouble(data -> data.stream().mapToInt(el -> el.getRestHr()).average().orElse(0))
             .average()
             .orElse(0);

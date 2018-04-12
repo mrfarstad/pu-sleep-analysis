@@ -3,6 +3,7 @@ package tdt4140.gr1816.app.api;
 import com.coxautodev.graphql.tools.SchemaParser;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
+import graphql.ErrorType;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
 import graphql.schema.GraphQLSchema;
@@ -99,10 +100,18 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
   }
 
   @Override
+  protected boolean isClientError(GraphQLError error) {
+    if (error.getErrorType() == ErrorType.MutationNotSupported) {
+      return false;
+    }
+    return (error.getErrorType() == ErrorType.InvalidSyntax);
+  }
+
+  @Override
   protected List<GraphQLError> filterGraphQLErrors(List<GraphQLError> errors) {
     return errors
         .stream()
-        .filter(e -> e instanceof ExceptionWhileDataFetching || super.isClientError(e))
+        .filter(e -> e instanceof ExceptionWhileDataFetching ? true : isClientError(e))
         .map(
             e ->
                 e instanceof ExceptionWhileDataFetching
