@@ -5,10 +5,22 @@ import graphql.GraphQLException;
 import graphql.schema.DataFetchingEnvironment;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
-import tdt4140.gr1816.app.api.*;
+import tdt4140.gr1816.app.api.DataAccessRequestRepository;
+import tdt4140.gr1816.app.api.MessageRepository;
+import tdt4140.gr1816.app.api.PulseDataRepository;
+import tdt4140.gr1816.app.api.SleepDataRepository;
+import tdt4140.gr1816.app.api.StepsDataRepository;
+import tdt4140.gr1816.app.api.UserRepository;
 import tdt4140.gr1816.app.api.auth.AuthContext;
-import tdt4140.gr1816.app.api.types.*;
+import tdt4140.gr1816.app.api.types.DataAccessRequest;
+import tdt4140.gr1816.app.api.types.DataAccessRequestStatus;
+import tdt4140.gr1816.app.api.types.Message;
+import tdt4140.gr1816.app.api.types.PulseData;
+import tdt4140.gr1816.app.api.types.SleepData;
+import tdt4140.gr1816.app.api.types.StepsData;
+import tdt4140.gr1816.app.api.types.User;
 
 public class Query implements GraphQLRootResolver {
 
@@ -169,12 +181,21 @@ public class Query implements GraphQLRootResolver {
         .collect(Collectors.toList());
   }
 
-  public List<Message> messagesForMe(DataFetchingEnvironment env) {
+  public List<Message> messagesForField(
+      Function<String, List<Message>> func, DataFetchingEnvironment env) {
     AuthContext context = env.getContext();
     User user = context.getUser();
     if (user == null) {
       return new ArrayList<Message>();
     }
-    return messageRepository.getAllMessagesToUser(user.getId());
+    return func.apply(user.getId());
+  }
+
+  public List<Message> messagesForMe(DataFetchingEnvironment env) {
+    return messagesForField(messageRepository::getAllMessagesToUser, env);
+  }
+
+  public List<Message> messagesByMe(DataFetchingEnvironment env) {
+    return messagesForField(messageRepository::getAllMessagesByUser, env);
   }
 }

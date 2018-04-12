@@ -1,0 +1,15 @@
+query {
+	messagesByMe {
+    id
+    to {
+      id
+      username
+    }
+    from {
+      id
+      username
+    }
+    subject
+    message
+  }
+}

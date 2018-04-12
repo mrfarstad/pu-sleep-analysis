@@ -661,6 +661,33 @@ public class TestUserDataFetch {
   }
 
   @Test
+  public void testMessagesByMe() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(Paths.get(resourceResponsePath + "messagesByMeResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    List<Message> messages = userDataFetch.messagesByMe();
+    assertTrue(messages.size() > 0);
+    String viewerId = messages.get(0).getFrom().getId();
+    for (Message message : messages) {
+      assertTrue(message.getId() instanceof String);
+      assertTrue(message.getTo() instanceof User);
+      assertTrue(message.getTo().getId().equals("5acf1b56b6bf2c20e6192e8e"));
+      assertTrue(message.getFrom() instanceof User);
+      assertTrue(message.getFrom().getId().equals(viewerId));
+      assertTrue(message.getSubject() instanceof String);
+      assertTrue(message.getSubject().length() > 0);
+      assertTrue(message.getMessage() instanceof String);
+      assertTrue(message.getMessage().length() > 0);
+    }
+  }
+
+  @Test
   public void testCreateMessage() {
     String response = "";
     try {
