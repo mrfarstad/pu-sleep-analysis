@@ -11,6 +11,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import tdt4140.gr1816.app.api.types.PulseData;
+import tdt4140.gr1816.app.api.types.User;
 
 public class PulseDataRepository {
 
@@ -23,6 +24,16 @@ public class PulseDataRepository {
   public PulseData findById(String id) {
     Document doc = pulseDataDoc.find(eq("_id", new ObjectId(id))).first();
     return pulseData(doc);
+  }
+
+  public int getAverangeForGroup(List<User> users) {
+    return (int)
+        users
+            .stream()
+            .map(user -> getAllPulseData(user.getId()))
+            .mapToDouble(data -> data.stream().mapToInt(el -> el.getRestHr()).average().orElse(0))
+            .average()
+            .orElse(0);
   }
 
   public List<PulseData> getAllPulseData(String userId) {

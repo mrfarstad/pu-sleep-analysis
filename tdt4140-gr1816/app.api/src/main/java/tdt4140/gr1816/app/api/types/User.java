@@ -65,4 +65,8 @@ public class User {
   public int getAge() {
     return age;
   }
+
+  public boolean isInSameGroup(User user) {
+    return user.getAge() == age;
+  }
 }

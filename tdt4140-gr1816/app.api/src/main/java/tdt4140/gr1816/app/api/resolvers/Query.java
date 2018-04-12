@@ -4,6 +4,7 @@ import com.coxautodev.graphql.tools.GraphQLRootResolver;
 import graphql.GraphQLException;
 import graphql.schema.DataFetchingEnvironment;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import tdt4140.gr1816.app.api.*;
@@ -152,5 +153,39 @@ public class Query implements GraphQLRootResolver {
       return new ArrayList<Message>();
     }
     return messageRepository.getAllMessagesToUser(user.getId());
+  }
+
+  public AverageData getMyAverageData(String fromDate, String toDate, DataFetchingEnvironment env) {
+
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      return null;
+    }
+
+    return getAverageDataForUsers(fromDate, toDate, Arrays.asList(user));
+  }
+
+  public AverageData getAverageData(String fromDate, String toDate, DataFetchingEnvironment env) {
+    AuthContext context = env.getContext();
+    User user = context.getUser();
+    if (user == null) {
+      return null;
+    }
+    List<User> users =
+        userRepository
+            .getAllUsers()
+            .stream()
+            .filter(localUser -> user.isInSameGroup(localUser))
+            .collect(Collectors.toList());
+    return getAverageDataForUsers(fromDate, toDate, users);
+  }
+
+  public AverageData getAverageDataForUsers(String fromDate, String toDate, List<User> users) {
+    SleepData data = sleepDataRepository.getAverangeForGroup(users);
+    int steps = stepsDataRepository.getAverangeForGroup(users);
+    int restHr = pulseDataRepository.getAverangeForGroup(users);
+
+    return new AverageData(restHr, data.getDuration(), data.getEfficiency(), steps, "");
   }
 }

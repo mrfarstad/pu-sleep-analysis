@@ -23,6 +23,8 @@ type Query {
     sleepDataByViewer: [SleepData]
     stepsDataByViewer: [StepsData]
     pulseDataByViewer: [PulseData]
+    getAverageData(fromDate: String!, toDate: String!): AverageData
+    getMyAverageData(fromDate: String!, toDate: String!): AverageData
 }
 
 
@@ -113,6 +115,14 @@ type PulseData {
 type SigninPayload {
   token: String
   user: User
+}
+
+type AverageData {
+    restHr: Int!
+    sleepDuration: Int!
+    sleepEfficiency: Int!
+    steps: Int!
+    ageGroup: String!
 }
 
 schema {
