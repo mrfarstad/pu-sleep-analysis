@@ -496,7 +496,7 @@ public class UserMethodsTest extends ApiBaseCase {
             + "    message\n"
             + "  }\n"
             + "}";
-    
+
     res = executeQuery(query, context);
     result = res.getData();
 

@@ -400,6 +400,14 @@ public class UserDataFetch {
         null);
   }
 
+  public List<Message> messagesByMe() {
+    return getGenericData(
+        "messagesByMeQuery.txt",
+        Arrays.asList("messagesByMe"),
+        new TypeReference<List<Message>>() {},
+        null);
+  }
+
   public Boolean createMessage(String toId, String subject, String message) {
     Map<String, String> variables = new HashMap<>();
     variables.put("toId", toId);
