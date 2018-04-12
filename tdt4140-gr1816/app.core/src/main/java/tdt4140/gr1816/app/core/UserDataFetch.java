@@ -1,5 +1,12 @@
 package tdt4140.gr1816.app.core;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -8,14 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class UserDataFetch {
 
@@ -444,6 +443,17 @@ public class UserDataFetch {
     return getGenericData(
         "getMyAverageDataQuery.txt",
         Arrays.asList("getMyAverageData"),
+        new TypeReference<AverageData>() {},
+        variables);
+  }
+
+  public AverageData getAverageData(String fromDate, String toDate) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("fromDate", fromDate);
+    variables.put("toDate", toDate);
+    return getGenericData(
+        "getAverageDataQuery.txt",
+        Arrays.asList("getAverageData"),
         new TypeReference<AverageData>() {},
         variables);
   }
