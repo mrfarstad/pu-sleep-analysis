@@ -7,18 +7,21 @@ public class Message {
   private final String toId;
   private final String subject;
   private final String message;
+  private final String date;
 
-  public Message(String fromId, String toId, String subject, String message) {
-    this(null, fromId, toId, subject, message);
+  public Message(String fromId, String toId, String subject, String message, String date) {
+    this(null, fromId, toId, subject, message, date);
   }
 
-  public Message(String id, String fromId, String toId, String subject, String message) {
+  public Message(
+      String id, String fromId, String toId, String subject, String message, String date) {
     super();
     this.id = id;
     this.fromId = fromId;
     this.toId = toId;
     this.subject = subject;
     this.message = message;
+    this.date = date;
   }
 
   public String getId() {
@@ -39,5 +42,9 @@ public class Message {
 
   public String getMessage() {
     return message;
+  }
+
+  public String getDate() {
+    return date;
   }
 }
