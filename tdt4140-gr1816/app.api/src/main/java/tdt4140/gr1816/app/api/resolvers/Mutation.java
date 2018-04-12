@@ -189,7 +189,7 @@ public class Mutation implements GraphQLRootResolver {
   public Message createMessage(
       String toId, String subject, String message, DataFetchingEnvironment env) {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    String date = LocalDateTime.now().withNano(0).format(formatter);
+    String date = LocalDateTime.now().format(formatter);
     AuthContext context = env.getContext();
     User user = context.getUser();
     if (user == null) {
