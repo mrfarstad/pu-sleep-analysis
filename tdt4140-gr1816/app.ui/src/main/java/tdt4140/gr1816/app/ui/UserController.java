@@ -3,6 +3,7 @@ package tdt4140.gr1816.app.ui;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.PauseTransition;
@@ -56,6 +57,8 @@ public class UserController implements Initializable {
   @FXML private Text toText;
 
   @FXML private Text fromText;
+
+  @FXML private Text dateText;
 
   @FXML private TextField subjectTextField;
 
@@ -172,7 +175,6 @@ public class UserController implements Initializable {
       newGender = genderRB.getText();
       male.getToggleGroup().selectToggle(null);
     }
-    System.out.println(newUsername + newPassword + newAgeInt + newGender);
     String msg = "";
     if (userDataFetch.editUser(newUsername, newPassword, newAgeInt, newGender)) {
       user = userDataFetch.getCurrentUser();
@@ -380,6 +382,7 @@ public class UserController implements Initializable {
       subjectText.setText(message.getSubject());
       fromText.setText(message.getFrom().getUsername());
       toText.setText(message.getTo().getUsername());
+      dateText.setText(message.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
       messageTextArea.setText(message.getMessage());
     }
   }
@@ -470,11 +473,18 @@ public class UserController implements Initializable {
   public void updateMessagesListViewItems() {
     messagesListViewItems = messagesListView.getItems();
     messagesListViewItems.clear();
-    List<Message> messages = userDataFetch.messagesForMe();
-    messages
+    List<Message> fromMessages = userDataFetch.messagesForMe();
+    fromMessages
         .stream()
         .filter(message -> !(message == null))
         .forEach(message -> messagesListViewItems.add(message));
+    List<Message> toMessages = userDataFetch.messagesByMe();
+    toMessages
+        .stream()
+        .filter(message -> !(message == null))
+        .forEach(message -> messagesListViewItems.add(message));
+
+    FXCollections.sort(messagesListViewItems, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
   }
 
   private void hideCharts() {
