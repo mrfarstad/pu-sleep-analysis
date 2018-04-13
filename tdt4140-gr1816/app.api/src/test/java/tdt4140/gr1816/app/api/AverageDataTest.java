@@ -136,6 +136,76 @@ public class AverageDataTest extends ApiBaseCase {
     return (int) obj.get(field);
   }
 
+  private Map<String, Object> getAverageDataForUserResult(
+      String userId, String fromDate, String toDate, AuthContext context) {
+    String query =
+        "query {\n"
+            + "  getAverageDataForUser(userId: \""
+            + userId
+            + "\", fromDate: \""
+            + fromDate
+            + "\", toDate: \""
+            + toDate
+            + "\") {\n"
+            + "sleepDuration\n"
+            + "steps\n"
+            + "sleepEfficiency\n"
+            + "restHr\n"
+            + "ageGroup\n"
+            + "  }\n"
+            + "}";
+
+    ExecutionResult res = executeQuery(query, context);
+    Map<String, Object> result = res.getData();
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> message = (Map<String, Object>) result.get("getAverageDataForUser");
+    return message;
+  }
+
+  private Map<String, Object> getAverageDataForUsersInAgeGroupResult(
+      String fromDate, String toDate, int fromAge, int toAge, AuthContext context) {
+    String query =
+        "query {\n"
+            + "  getAverageDataForUsersInAgeGroup(fromDate: \""
+            + fromDate
+            + "\", toDate: \""
+            + toDate
+            + "\", fromAge: "
+            + fromAge
+            + ", toAge: "
+            + toAge
+            + ") {\n"
+            + "sleepDuration\n"
+            + "steps\n"
+            + "sleepEfficiency\n"
+            + "restHr\n"
+            + "ageGroup\n"
+            + "  }\n"
+            + "}";
+
+    ExecutionResult res = executeQuery(query, context);
+    Map<String, Object> result = res.getData();
+
+    @SuppressWarnings("unchecked")
+    Map<String, Object> message =
+        (Map<String, Object>) result.get("getAverageDataForUsersInAgeGroup");
+    return message;
+  }
+
+  private void verifyAverageDate(
+      Map<String, Object> message, int sleepDuration, int steps, int restHr, int sleepEfficiency) {
+    int sleepDurationFromDb = getIntFromObject(message, "sleepDuration");
+    int stepsFromDb = getIntFromObject(message, "steps");
+    int restHrFromDb = getIntFromObject(message, "restHr");
+    int sleepEfficiencyFromDb = getIntFromObject(message, "sleepEfficiency");
+
+    assertEquals(sleepDuration, sleepDurationFromDb);
+    assertEquals(steps, stepsFromDb);
+    assertEquals(restHr, restHrFromDb);
+    assertEquals(sleepEfficiency, sleepEfficiencyFromDb);
+  }
+
   @Test
   public void testAverageData() {
     // This test tests that the data actually changes as the date interval is limited
@@ -156,27 +226,23 @@ public class AverageDataTest extends ApiBaseCase {
     createPulseData(user.getId(), "2018-01-03", 70);
 
     Map<String, Object> message = getMyAverageResult("2018-01-01", "2018-01-03", userContext);
-
-    int sleepDuration = getIntFromObject(message, "sleepDuration");
-    int steps = getIntFromObject(message, "steps");
-    int restHr = getIntFromObject(message, "restHr");
-    int sleepEfficiency = getIntFromObject(message, "sleepEfficiency");
-
-    assertEquals(sleepDuration, 40);
-    assertEquals(steps, 1100);
-    assertEquals(restHr, 65);
-    assertEquals(sleepEfficiency, 70);
+    verifyAverageDate(message, 40, 1100, 65, 70);
 
     message = getMyAverageResult("2018-01-01", "2018-01-02", userContext);
+    verifyAverageDate(message, 35, 1050, 62, 65);
 
-    sleepDuration = getIntFromObject(message, "sleepDuration");
-    steps = getIntFromObject(message, "steps");
-    restHr = getIntFromObject(message, "restHr");
-    sleepEfficiency = getIntFromObject(message, "sleepEfficiency");
+    message = getAverageDataForUserResult(user.getId(), "2018-01-01", "2018-01-03", userContext);
+    verifyAverageDate(message, 40, 1100, 65, 70);
 
-    assertEquals(sleepDuration, 35);
-    assertEquals(steps, 1050);
-    assertEquals(restHr, 62);
-    assertEquals(sleepEfficiency, 65);
+    message = getAverageDataForUserResult(user.getId(), "2018-01-01", "2018-01-02", userContext);
+    verifyAverageDate(message, 35, 1050, 62, 65);
+
+    message =
+        getAverageDataForUsersInAgeGroupResult("2018-01-01", "2018-01-03", 25, 31, userContext);
+    verifyAverageDate(message, 40, 1100, 65, 70);
+
+    message =
+        getAverageDataForUsersInAgeGroupResult("2018-01-01", "2018-01-02", 25, 31, userContext);
+    verifyAverageDate(message, 35, 1050, 62, 65);
   }
 }
