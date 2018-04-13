@@ -233,7 +233,7 @@ public class UserController implements Initializable {
   }
 
   public void deleteSleepDataFromDate(LocalDate ld) {
-    List<SleepData> sleepDataList = Login.userDataFetch.getSleepDataByViewer();
+    List<SleepData> sleepDataList = userDataFetch.getSleepDataByViewer();
     SleepData sleepData =
         sleepDataList.stream().filter(sd -> sd.getDate().equals(ld)).findFirst().orElse(null);
     if (sleepData != null) {
@@ -245,7 +245,7 @@ public class UserController implements Initializable {
   }
 
   public void deleteStepsDataFromDate(LocalDate ld) {
-    List<StepsData> stepsDataList = Login.userDataFetch.getStepsDataByViewer();
+    List<StepsData> stepsDataList = userDataFetch.getStepsDataByViewer();
     StepsData stepsData =
         stepsDataList.stream().filter(sd -> sd.getDate().equals(ld)).findFirst().orElse(null);
     if (stepsData != null) {
@@ -257,7 +257,7 @@ public class UserController implements Initializable {
   }
 
   public void deletePulseDataFromDate(LocalDate ld) {
-    List<PulseData> pulseDataList = Login.userDataFetch.getPulseDataByViewer();
+    List<PulseData> pulseDataList = userDataFetch.getPulseDataByViewer();
     PulseData pulseData =
         pulseDataList.stream().filter(pd -> pd.getDate().equals(ld)).findFirst().orElse(null);
     if (pulseData != null) {
@@ -271,7 +271,7 @@ public class UserController implements Initializable {
   public void handleRemoveDoctorButton() {
     DataAccessRequest selected = doctorsListView.getSelectionModel().getSelectedItem();
     if (selected != null) {
-      Login.userDataFetch.answerDataAccessRequest(selected, "REJECTED");
+      userDataFetch.answerDataAccessRequest(selected, "REJECTED");
       doctorsListViewItems.remove(selected);
     }
   }
@@ -279,7 +279,7 @@ public class UserController implements Initializable {
   public void handleAcceptDoctorButton() {
     DataAccessRequest selected = doctorRequestListView.getSelectionModel().getSelectedItem();
     if (selected != null) {
-      Login.userDataFetch.answerDataAccessRequest(selected, "ACCEPTED");
+      userDataFetch.answerDataAccessRequest(selected, "ACCEPTED");
       doctorRequestListViewItems.remove(selected);
       updateDoctorsListViewItems();
       updateToChoiceBox();
@@ -289,7 +289,7 @@ public class UserController implements Initializable {
   public void handleRejectDoctorButton() {
     DataAccessRequest selected = doctorRequestListView.getSelectionModel().getSelectedItem();
     if (selected != null) {
-      Login.userDataFetch.answerDataAccessRequest(selected, "REJECTED");
+      userDataFetch.answerDataAccessRequest(selected, "REJECTED");
       doctorRequestListViewItems.remove(selected);
       updateDoctorsListViewItems();
     }
@@ -329,7 +329,7 @@ public class UserController implements Initializable {
     stepChartXAxis.setLabel("Date");
     stepChartYAxis.setLabel("Steps");
     ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
-    List<StepsData> stepsDataList = Login.userDataFetch.getStepsDataByViewer();
+    List<StepsData> stepsDataList = userDataFetch.getStepsDataByViewer();
     stepsDataList
         .stream()
         .forEach(
@@ -341,10 +341,9 @@ public class UserController implements Initializable {
     stepBarChart.setVisible(true);
 
     groupAverageText.setText("Average of same age: ");
-    groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("steps")));
+    groupAverageNumberText.setText(Integer.toString(userDataFetch.getGroupAverage("steps")));
     pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(
-        Integer.toString(Login.userDataFetch.getPasientAverage("steps")));
+    pasientAverageNumberText.setText(Integer.toString(userDataFetch.getPasientAverage("steps")));
   }
 
   public void showPulseChart() {
@@ -354,7 +353,7 @@ public class UserController implements Initializable {
     pulseChartYAxis.setLabel("RestHR");
     ObservableList<XYChart.Data<String, Number>> lineChartData =
         FXCollections.observableArrayList();
-    List<PulseData> pulseDataList = Login.userDataFetch.getPulseDataByViewer();
+    List<PulseData> pulseDataList = userDataFetch.getPulseDataByViewer();
     pulseDataList
         .stream()
         .forEach(
@@ -366,10 +365,9 @@ public class UserController implements Initializable {
     pulseLineChart.setVisible(true);
 
     groupAverageText.setText("Average of same age: ");
-    groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("pulse")));
+    groupAverageNumberText.setText(Integer.toString(userDataFetch.getGroupAverage("pulse")));
     pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(
-        Integer.toString(Login.userDataFetch.getPasientAverage("pulse")));
+    pasientAverageNumberText.setText(Integer.toString(userDataFetch.getPasientAverage("pulse")));
   }
 
   public void showSleepDChart() {
@@ -380,7 +378,7 @@ public class UserController implements Initializable {
     sleepChartYAxis.setLabel("Duration in hours");
     ObservableList<XYChart.Data<String, Number>> sleepBarChartData =
         FXCollections.observableArrayList();
-    List<SleepData> sleepDataList = Login.userDataFetch.getSleepDataByViewer();
+    List<SleepData> sleepDataList = userDataFetch.getSleepDataByViewer();
     sleepDataList
         .stream()
         .forEach(
@@ -393,10 +391,9 @@ public class UserController implements Initializable {
     sleepBarChart.setVisible(true);
 
     groupAverageText.setText("Average of same age: ");
-    groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("sleep")));
+    groupAverageNumberText.setText(Integer.toString(userDataFetch.getGroupAverage("sleep")));
     pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(
-        Integer.toString(Login.userDataFetch.getPasientAverage("sleep")));
+    pasientAverageNumberText.setText(Integer.toString(userDataFetch.getPasientAverage("sleep")));
   }
 
   public void handleMessagesListViewClicked() {

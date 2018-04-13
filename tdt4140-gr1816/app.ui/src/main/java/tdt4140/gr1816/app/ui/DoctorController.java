@@ -17,7 +17,6 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -104,8 +103,6 @@ public class DoctorController implements Initializable {
   @FXML private CategoryAxis sleepChartXAxis;
   @FXML private NumberAxis sleepChartYAxis;
 
-  @FXML private PieChart sleepPieChart;
-
   @FXML private LineChart<String, Number> pulseLineChart;
   @FXML private CategoryAxis pulseChartXAxis;
   @FXML private NumberAxis pulseChartYAxis;
@@ -113,6 +110,10 @@ public class DoctorController implements Initializable {
   @FXML private BarChart<String, Number> stepBarChart;
   @FXML private CategoryAxis stepChartXAxis;
   @FXML private NumberAxis stepChartYAxis;
+
+  @FXML private Text graphResponse;
+  @FXML private TextField fromAge;
+  @FXML private TextField toAge;
 
   @FXML private Text groupAverageNumberText;
   @FXML private Text groupAverageText;
@@ -155,7 +156,7 @@ public class DoctorController implements Initializable {
     pause.setOnFinished(event -> requestFeedbackText.setText(""));
     if (newPatient == null) {
       requestFeedbackText.setText("User not found");
-    } else if (Login.userDataFetch.requestDataAccess(newPatient)) {
+    } else if (userDataFetch.requestDataAccess(newPatient)) {
       updatePatientListViewItems();
       requestFeedbackText.setText("Request sent");
     } else {
@@ -173,16 +174,27 @@ public class DoctorController implements Initializable {
   }
 
   public void handleViewGraphButton() {
-    if (dataChoiceBox.getValue().equals("Sleep")) {
-      hideCharts();
-      // showSleepPieChart();
-      showSleepBarChart();
-    } else if (dataChoiceBox.getValue().equals("Pulse")) {
-      hideCharts();
-      showPulseChart();
-    } else if (dataChoiceBox.getValue().equals("Steps")) {
-      hideCharts();
-      showStepChart();
+    PauseTransition pause = new PauseTransition(Duration.seconds(3));
+    pause.setOnFinished(event -> graphResponse.setText(""));
+    if (this.patientChoiceBox.getValue() == null
+        || this.dataChoiceBox.getValue() == null
+        || this.fromDate.getValue() == null
+        || this.toDate.getValue() == null
+        || this.fromAge.getText().equals("")
+        || this.toAge.getText().equals("")) {
+      graphResponse.setText("Please fill in all fields!");
+      pause.play();
+    } else {
+      if (dataChoiceBox.getValue().equals("Sleep")) {
+        hideCharts();
+        showSleepBarChart();
+      } else if (dataChoiceBox.getValue().equals("Pulse")) {
+        hideCharts();
+        showPulseChart();
+      } else if (dataChoiceBox.getValue().equals("Steps")) {
+        hideCharts();
+        showStepChart();
+      }
     }
   }
 
@@ -208,28 +220,11 @@ public class DoctorController implements Initializable {
     sleepBarChart.setVisible(true);
 
     groupAverageText.setText("Average of same age: ");
-    groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("sleep")));
+    groupAverageNumberText.setText(Integer.toString(userDataFetch.getGroupAverage("sleep")));
     pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(
-        Integer.toString(Login.userDataFetch.getPasientAverage("sleep")));
+    pasientAverageNumberText.setText(Integer.toString(userDataFetch.getPasientAverage("sleep")));
   }
-  // Piechart
-  /*
-    private void showSleepPieChart() {
-  	User user = getSelectedPatientCB();
-      System.out.println("showSleepPieChart");
-      ObservableList<PieChart.Data> pieChartData =
-          FXCollections.observableArrayList(
-              new PieChart.Data("Grapefruit", 13),
-              new PieChart.Data("Oranges", 25),
-              new PieChart.Data("Plums", 10),
-              new PieChart.Data("Pears", 22),
-              new PieChart.Data("Apples", 30));
-      sleepPieChart.getData().clear();
-      sleepPieChart.setData(pieChartData);
-      sleepPieChart.setVisible(true);
-    }
-  */
+
   private void showPulseChart() {
     User user = getSelectedPatientCB();
     pulseChartXAxis.setLabel("Date");
@@ -250,10 +245,9 @@ public class DoctorController implements Initializable {
     pulseLineChart.setVisible(true);
 
     groupAverageText.setText("Average of same age: ");
-    groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("pulse")));
+    groupAverageNumberText.setText(Integer.toString(userDataFetch.getGroupAverage("pulse")));
     pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(
-        Integer.toString(Login.userDataFetch.getPasientAverage("pulse")));
+    pasientAverageNumberText.setText(Integer.toString(userDataFetch.getPasientAverage("pulse")));
   }
 
   private void showStepChart() {
@@ -275,14 +269,12 @@ public class DoctorController implements Initializable {
     stepBarChart.setVisible(true);
 
     groupAverageText.setText("Average of same age: ");
-    groupAverageNumberText.setText(Integer.toString(Login.userDataFetch.getGroupAverage("steps")));
+    groupAverageNumberText.setText(Integer.toString(userDataFetch.getGroupAverage("steps")));
     pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(
-        Integer.toString(Login.userDataFetch.getPasientAverage("steps")));
+    pasientAverageNumberText.setText(Integer.toString(userDataFetch.getPasientAverage("steps")));
   }
 
   private void hideCharts() {
-    sleepPieChart.setVisible(false);
     pulseLineChart.setVisible(false);
     stepBarChart.setVisible(false);
     sleepBarChart.setVisible(false);
