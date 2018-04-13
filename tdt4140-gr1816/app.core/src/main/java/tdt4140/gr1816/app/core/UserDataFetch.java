@@ -457,4 +457,30 @@ public class UserDataFetch {
         new TypeReference<AverageData>() {},
         variables);
   }
+
+  public AverageData getAverageDataForUser(String userId, String fromDate, String toDate) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("userId", userId);
+    variables.put("fromDate", fromDate);
+    variables.put("toDate", toDate);
+    return getGenericData(
+        "getAverageDataForUserQuery.txt",
+        Arrays.asList("getAverageDataForUser"),
+        new TypeReference<AverageData>() {},
+        variables);
+  }
+
+  public AverageData getAverageDataForUsersInAgeGroup(
+      String fromDate, String toDate, int fromAge, int toAge) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("fromDate", fromDate);
+    variables.put("toDate", toDate);
+    variables.put("fromAge", new Integer(fromAge).toString());
+    variables.put("toAge", new Integer(toAge).toString());
+    return getGenericData(
+        "getAverageDataForUsersInAgeGroupQuery.txt",
+        Arrays.asList("getAverageDataForUsersInAgeGroup"),
+        new TypeReference<AverageData>() {},
+        variables);
+  }
 }
