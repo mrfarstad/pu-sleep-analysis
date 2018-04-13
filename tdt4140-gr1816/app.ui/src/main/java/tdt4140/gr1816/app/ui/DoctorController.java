@@ -310,6 +310,8 @@ public class DoctorController implements Initializable {
 
     updatePatientListViewItems();
     updateMessagesListViewItems();
+
+    selectFirstListViewItem();
   }
 
   public void setProfileValues() {
@@ -369,5 +371,10 @@ public class DoctorController implements Initializable {
     dataChoiceBox.getItems().add("Pulse");
     dataChoiceBox.getItems().add("Steps");
     dataChoiceBox.getItems().add("Sleep");
+  }
+
+  public void selectFirstListViewItem() {
+    messagesListView.getSelectionModel().select(0);
+    handleMessagesListViewClicked();
   }
 }

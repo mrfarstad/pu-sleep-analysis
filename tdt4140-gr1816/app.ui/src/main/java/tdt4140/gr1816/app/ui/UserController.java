@@ -428,6 +428,8 @@ public class UserController implements Initializable {
     hideCharts();
 
     updateToChoiceBox();
+
+    selectFirstListViewItem();
   }
 
   public void setProfileValues() {
@@ -507,5 +509,12 @@ public class UserController implements Initializable {
         .filter(request -> request.getStatusAsString().equals("ACCEPTED"))
         .forEach(request -> acceptedDoctorsList.add(request.getRequestedBy()));
     toChoiceBox.setItems(acceptedDoctorsList);
+  }
+
+  public void selectFirstListViewItem() {
+    messagesListView.getSelectionModel().select(0);
+    handleMessagesListViewClicked();
+
+    doctorRequestListView.getSelectionModel().select(0);
   }
 }
