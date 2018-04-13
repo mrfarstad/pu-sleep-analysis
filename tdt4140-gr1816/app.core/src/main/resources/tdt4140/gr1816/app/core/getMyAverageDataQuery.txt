@@ -1,0 +1,9 @@
+query($fromDate: String!, $toDate: String!) {
+  getMyAverageData(fromDate: $fromDate toDate: $toDate) {
+    sleepDuration
+    steps
+    sleepEfficiency
+    restHr
+    ageGroup
+  }
+}

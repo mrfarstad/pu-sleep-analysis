@@ -435,4 +435,26 @@ public class UserDataFetch {
         new TypeReference<Boolean>() {},
         variables);
   }
+
+  public AverageData getMyAverageData(String fromDate, String toDate) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("fromDate", fromDate);
+    variables.put("toDate", toDate);
+    return getGenericData(
+        "getMyAverageDataQuery.txt",
+        Arrays.asList("getMyAverageData"),
+        new TypeReference<AverageData>() {},
+        variables);
+  }
+
+  public AverageData getAverageData(String fromDate, String toDate) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("fromDate", fromDate);
+    variables.put("toDate", toDate);
+    return getGenericData(
+        "getAverageDataQuery.txt",
+        Arrays.asList("getAverageData"),
+        new TypeReference<AverageData>() {},
+        variables);
+  }
 }

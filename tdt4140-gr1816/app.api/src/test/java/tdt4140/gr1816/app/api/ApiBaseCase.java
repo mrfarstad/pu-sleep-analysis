@@ -5,6 +5,9 @@ import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
 import org.junit.Before;
 import tdt4140.gr1816.app.api.auth.AuthContext;
+import tdt4140.gr1816.app.api.types.PulseData;
+import tdt4140.gr1816.app.api.types.SleepData;
+import tdt4140.gr1816.app.api.types.StepsData;
 import tdt4140.gr1816.app.api.types.User;
 
 public class ApiBaseCase {
@@ -47,6 +50,20 @@ public class ApiBaseCase {
   public User createDoctor() {
     return GraphQLEndpoint.userRepository.saveUser(
         new User("doctor", "doctor", true, "male", 32, true));
+  }
+
+  public SleepData createSleepData(
+      String userId, String date, int sleepDuration, int sleepEfficiency) {
+    return GraphQLEndpoint.sleepDataRepository.saveSleepData(
+        new SleepData(userId, date, sleepDuration, sleepEfficiency));
+  }
+
+  public StepsData createStepsData(String userId, String date, int steps) {
+    return GraphQLEndpoint.stepsDataRepository.saveStepsData(new StepsData(userId, date, steps));
+  }
+
+  public PulseData createPulseData(String userId, String date, int pulse) {
+    return GraphQLEndpoint.pulseDataRepository.savePulseData(new PulseData(userId, date, pulse));
   }
 
   public AuthContext forceAuth(String username) {
