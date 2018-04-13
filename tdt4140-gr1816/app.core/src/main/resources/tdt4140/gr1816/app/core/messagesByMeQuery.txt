@@ -11,5 +11,6 @@ query {
     }
     subject
     message
+    date
   }
 }
