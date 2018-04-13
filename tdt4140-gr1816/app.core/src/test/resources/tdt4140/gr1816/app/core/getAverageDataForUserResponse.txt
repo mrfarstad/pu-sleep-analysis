@@ -1,1 +1,1 @@
-{"data":{"getAverageDataForUser":{"sleepDuration":487,"steps":6650,"sleepEfficiency":85,"restHr":55,"ageGroup":""}}}
+{"data":{"getAverageDataForUser":{"sleepDuration":487,"steps":6650,"sleepEfficiency":85,"restHr":55,"ageGroup":"20"}}}

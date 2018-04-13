@@ -135,73 +135,75 @@ public class AverageDataTest extends ApiBaseCase {
   private int getIntFromObject(Map<String, Object> obj, String field) {
     return (int) obj.get(field);
   }
-  
+
   private Map<String, Object> getAverageDataForUserResult(
-	      String userId, String fromDate, String toDate, AuthContext context) {
-	    String query =
-	        "query {\n"
-	            + "  getAverageDataForUser(userId: \""
-	            + userId
-	            + "\", fromDate: \""
-	            + fromDate
-	            + "\", toDate: \""
-	            + toDate
-	            + "\") {\n"
-	            + "sleepDuration\n"
-	            + "steps\n"
-	            + "sleepEfficiency\n"
-	            + "restHr\n"
-	            + "ageGroup\n"
-	            + "  }\n"
-	            + "}";
+      String userId, String fromDate, String toDate, AuthContext context) {
+    String query =
+        "query {\n"
+            + "  getAverageDataForUser(userId: \""
+            + userId
+            + "\", fromDate: \""
+            + fromDate
+            + "\", toDate: \""
+            + toDate
+            + "\") {\n"
+            + "sleepDuration\n"
+            + "steps\n"
+            + "sleepEfficiency\n"
+            + "restHr\n"
+            + "ageGroup\n"
+            + "  }\n"
+            + "}";
 
-	    ExecutionResult res = executeQuery(query, context);
-	    Map<String, Object> result = res.getData();
+    ExecutionResult res = executeQuery(query, context);
+    Map<String, Object> result = res.getData();
 
-	    @SuppressWarnings("unchecked")
-	    Map<String, Object> message = (Map<String, Object>) result.get("getAverageDataForUser");
-	    return message;
-	  }
-  
+    @SuppressWarnings("unchecked")
+    Map<String, Object> message = (Map<String, Object>) result.get("getAverageDataForUser");
+    return message;
+  }
+
   private Map<String, Object> getAverageDataForUsersInAgeGroupResult(
-	      String fromDate, String toDate, int fromAge, int toAge, AuthContext context) {
-	    String query =
-	            "query {\n"
-	                + "  getAverageDataForUsersInAgeGroup(fromDate: \""
-	                + fromDate
-	                + "\", toDate: \""
-	                + toDate
-	                + "\", fromAge: "
-	                + fromAge
-	                + ", toAge: "
-	                + toAge
-	                + ") {\n"
-	                + "sleepDuration\n"
-	                + "steps\n"
-	                + "sleepEfficiency\n"
-	                + "restHr\n"
-	                + "ageGroup\n"
-	                + "  }\n"
-	                + "}";
+      String fromDate, String toDate, int fromAge, int toAge, AuthContext context) {
+    String query =
+        "query {\n"
+            + "  getAverageDataForUsersInAgeGroup(fromDate: \""
+            + fromDate
+            + "\", toDate: \""
+            + toDate
+            + "\", fromAge: "
+            + fromAge
+            + ", toAge: "
+            + toAge
+            + ") {\n"
+            + "sleepDuration\n"
+            + "steps\n"
+            + "sleepEfficiency\n"
+            + "restHr\n"
+            + "ageGroup\n"
+            + "  }\n"
+            + "}";
 
-	    ExecutionResult res = executeQuery(query, context);
-	    Map<String, Object> result = res.getData();
+    ExecutionResult res = executeQuery(query, context);
+    Map<String, Object> result = res.getData();
 
-	    @SuppressWarnings("unchecked")
-	    Map<String, Object> message = (Map<String, Object>) result.get("getAverageDataForUsersInAgeGroup");
-	    return message;
-	  }
-  
-  private void verifyAverageDate(Map<String, Object> message, int sleepDuration, int steps, int restHr, int sleepEfficiency) {
-	    int sleepDurationFromDb = getIntFromObject(message, "sleepDuration");
-	    int stepsFromDb = getIntFromObject(message, "steps");
-	    int restHrFromDb = getIntFromObject(message, "restHr");
-	    int sleepEfficiencyFromDb = getIntFromObject(message, "sleepEfficiency");
+    @SuppressWarnings("unchecked")
+    Map<String, Object> message =
+        (Map<String, Object>) result.get("getAverageDataForUsersInAgeGroup");
+    return message;
+  }
 
-	    assertEquals(sleepDuration, sleepDurationFromDb);
-	    assertEquals(steps, stepsFromDb);
-	    assertEquals(restHr, restHrFromDb);
-	    assertEquals(sleepEfficiency, sleepEfficiencyFromDb);
+  private void verifyAverageDate(
+      Map<String, Object> message, int sleepDuration, int steps, int restHr, int sleepEfficiency) {
+    int sleepDurationFromDb = getIntFromObject(message, "sleepDuration");
+    int stepsFromDb = getIntFromObject(message, "steps");
+    int restHrFromDb = getIntFromObject(message, "restHr");
+    int sleepEfficiencyFromDb = getIntFromObject(message, "sleepEfficiency");
+
+    assertEquals(sleepDuration, sleepDurationFromDb);
+    assertEquals(steps, stepsFromDb);
+    assertEquals(restHr, restHrFromDb);
+    assertEquals(sleepEfficiency, sleepEfficiencyFromDb);
   }
 
   @Test
@@ -228,17 +230,19 @@ public class AverageDataTest extends ApiBaseCase {
 
     message = getMyAverageResult("2018-01-01", "2018-01-02", userContext);
     verifyAverageDate(message, 35, 1050, 62, 65);
-    
+
     message = getAverageDataForUserResult(user.getId(), "2018-01-01", "2018-01-03", userContext);
     verifyAverageDate(message, 40, 1100, 65, 70);
-    
+
     message = getAverageDataForUserResult(user.getId(), "2018-01-01", "2018-01-02", userContext);
     verifyAverageDate(message, 35, 1050, 62, 65);
-    
-    message = getAverageDataForUsersInAgeGroupResult("2018-01-01", "2018-01-03", 25, 31, userContext);
+
+    message =
+        getAverageDataForUsersInAgeGroupResult("2018-01-01", "2018-01-03", 25, 31, userContext);
     verifyAverageDate(message, 40, 1100, 65, 70);
-    
-    message = getAverageDataForUsersInAgeGroupResult("2018-01-01", "2018-01-02", 25, 31, userContext);
+
+    message =
+        getAverageDataForUsersInAgeGroupResult("2018-01-01", "2018-01-02", 25, 31, userContext);
     verifyAverageDate(message, 35, 1050, 62, 65);
   }
 }
