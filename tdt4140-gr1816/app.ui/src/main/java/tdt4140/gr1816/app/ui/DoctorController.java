@@ -2,6 +2,7 @@ package tdt4140.gr1816.app.ui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.PauseTransition;
@@ -58,7 +59,7 @@ public class DoctorController implements Initializable {
   @FXML private Text toText;
 
   @FXML private Text fromText;
-  
+
   @FXML private Text dateText;
 
   @FXML private TextField subjectTextField;
@@ -270,6 +271,7 @@ public class DoctorController implements Initializable {
       subjectText.setText(message.getSubject());
       fromText.setText(message.getFrom().getUsername());
       toText.setText(message.getTo().getUsername());
+      dateText.setText(message.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
       messageTextArea.setText(message.getMessage());
     }
   }
@@ -332,11 +334,18 @@ public class DoctorController implements Initializable {
   public void updateMessagesListViewItems() {
     messagesListViewItems = messagesListView.getItems();
     messagesListViewItems.clear();
-    List<Message> messages = userDataFetch.messagesForMe();
-    messages
+    List<Message> fromMessages = userDataFetch.messagesForMe();
+    fromMessages
         .stream()
         .filter(message -> !(message == null))
         .forEach(message -> messagesListViewItems.add(message));
+    List<Message> toMessages = userDataFetch.messagesByMe();
+    toMessages
+        .stream()
+        .filter(message -> !(message == null))
+        .forEach(message -> messagesListViewItems.add(message));
+
+    FXCollections.sort(messagesListViewItems, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
   }
 
   public void setPatientChoiceBoxes() {
