@@ -8,6 +8,7 @@ import graphql.GraphQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import tdt4140.gr1816.app.api.types.User;
@@ -36,6 +37,13 @@ public class UserRepository {
       allUsers.add(user(doc));
     }
     return allUsers;
+  }
+
+  public List<User> getUsersInAgeGroup(int fromAge, int toAge) {
+    return getAllUsers()
+        .stream()
+        .filter(user -> user.getAge() >= fromAge && user.getAge() <= toAge)
+        .collect(Collectors.toList());
   }
 
   public User saveUser(User user) {

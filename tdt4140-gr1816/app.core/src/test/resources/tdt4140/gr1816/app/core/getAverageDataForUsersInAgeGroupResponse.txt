@@ -1,0 +1,1 @@
+{"data":{"getAverageDataForUsersInAgeGroup":{"sleepDuration":487,"steps":6650,"sleepEfficiency":85,"restHr":55,"ageGroup":""}}

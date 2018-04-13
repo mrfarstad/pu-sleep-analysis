@@ -234,4 +234,15 @@ public class Query implements GraphQLRootResolver {
 
     return new AverageData(restHr, data.getDuration(), data.getEfficiency(), steps, "");
   }
+
+  public AverageData getAverageDataForUser(String userId, String fromDate, String toDate) {
+    User user = userRepository.findById(userId);
+    return getAverageDataForUsers(fromDate, toDate, Arrays.asList(user));
+  }
+
+  public AverageData getAverageDataForUsersInAgeGroup(
+      String fromDate, String toDate, int fromAge, int toAge) {
+    return getAverageDataForUsers(
+        fromDate, toDate, userRepository.getUsersInAgeGroup(fromAge, toAge));
+  }
 }

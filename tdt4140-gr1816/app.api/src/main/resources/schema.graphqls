@@ -33,6 +33,9 @@ type Query {
     pulseDataByViewer: [PulseData]
     getAverageData(fromDate: String!, toDate: String!): AverageData
     getMyAverageData(fromDate: String!, toDate: String!): AverageData
+    
+    getAverageDataForUser(userId: String!, fromDate: String!, toDate: String!): AverageData
+    getAverageDataForUsersInAgeGroup(fromDate: String!, toDate: String!, fromAge: Int!, toAge: Int!): AverageData
 }
 
 
