@@ -83,6 +83,8 @@ public class UserController implements Initializable {
   @FXML private DatePicker fromDate;
   @FXML private DatePicker toDate;
   @FXML private Button viewGraphButton;
+  @FXML private Text graphResponse;
+  @FXML private CheckBox groupAverage;
 
   @FXML private BarChart<String, Number> stepBarChart;
   @FXML private CategoryAxis stepChartXAxis;
@@ -95,7 +97,11 @@ public class UserController implements Initializable {
   @FXML private BarChart<String, Number> sleepBarChart;
   @FXML private CategoryAxis sleepChartXAxis;
   @FXML private NumberAxis sleepChartYAxis;
-  
+
+  private AverageData agegroupAverage;
+  private AverageData myAverage;
+  private boolean groupAverageBool;
+
   // Edit profile
   @FXML private Button editProfileButton;
   @FXML private Text editProfileResponse;
@@ -108,7 +114,7 @@ public class UserController implements Initializable {
   @FXML private TextField newAgeField;
   @FXML private RadioButton male;
   @FXML private Button saveButton;
-  
+
   @FXML private Text averageText;
   @FXML private Text averageNumberText;
 
@@ -310,15 +316,34 @@ public class UserController implements Initializable {
   }
 
   public void handleViewGraphButton() {
-    if (dataChoiceBox.getValue().equals("Steps")) {
-      hideCharts();
-      showStepChart();
-    } else if (dataChoiceBox.getValue().equals("Pulse")) {
-      hideCharts();
-      showPulseChart();
-    } else if (dataChoiceBox.getValue().equals("Sleep - duration")) {
-      hideCharts();
-      showSleepDChart();
+    PauseTransition pause = new PauseTransition(Duration.seconds(3));
+    pause.setOnFinished(event -> graphResponse.setText(""));
+    if (dataChoiceBox.getValue() == null
+        || fromDate.getValue() == null
+        || toDate.getValue() == null) {
+      graphResponse.setText("Please fill in all fields!");
+      pause.play();
+    } else {
+      agegroupAverage =
+          userDataFetch.getAverageDataForUsersInAgeGroup(
+              fromDate.getValue().toString(),
+              toDate.getValue().toString(),
+              user.getAge() - 5,
+              user.getAge() - 5);
+      myAverage =
+          userDataFetch.getMyAverageData(
+              fromDate.getValue().toString(), toDate.getValue().toString());
+      groupAverageBool = groupAverage.isSelected();
+      if (dataChoiceBox.getValue().equals("Steps")) {
+        hideCharts();
+        showStepChart();
+      } else if (dataChoiceBox.getValue().equals("Pulse")) {
+        hideCharts();
+        showPulseChart();
+      } else if (dataChoiceBox.getValue().equals("Sleep - duration")) {
+        hideCharts();
+        showSleepDChart();
+      }
     }
   }
 
@@ -340,10 +365,17 @@ public class UserController implements Initializable {
     stepBarChart.getData().add(series);
     stepBarChart.setVisible(true);
 
-    groupAverageText.setText("Average of same age: ");
-    groupAverageNumberText.setText(Integer.toString(userDataFetch.getGroupAverage("steps")));
-    pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(Integer.toString(userDataFetch.getPasientAverage("steps")));
+    if (groupAverageBool) {
+      groupAverageText.setText(
+          "Average age "
+              + Integer.toString(user.getAge() - 5)
+              + "-"
+              + Integer.toString(user.getAge() + 5)
+              + ":");
+      groupAverageNumberText.setText(Integer.toString(agegroupAverage.getSteps()));
+    }
+    pasientAverageText.setText("Your average:");
+    pasientAverageNumberText.setText(Integer.toString(myAverage.getSteps()));
   }
 
   public void showPulseChart() {
@@ -364,10 +396,17 @@ public class UserController implements Initializable {
     pulseLineChart.getData().add(series);
     pulseLineChart.setVisible(true);
 
-    groupAverageText.setText("Average of same age: ");
-    groupAverageNumberText.setText(Integer.toString(userDataFetch.getGroupAverage("pulse")));
-    pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(Integer.toString(userDataFetch.getPasientAverage("pulse")));
+    if (groupAverageBool) {
+      groupAverageText.setText(
+          "Average age "
+              + Integer.toString(user.getAge() - 5)
+              + "-"
+              + Integer.toString(user.getAge() + 5)
+              + ":");
+      groupAverageNumberText.setText(Integer.toString(agegroupAverage.getRestHr()));
+    }
+    pasientAverageText.setText("Your average:");
+    pasientAverageNumberText.setText(Integer.toString(myAverage.getRestHr()));
   }
 
   public void showSleepDChart() {
@@ -390,10 +429,17 @@ public class UserController implements Initializable {
     sleepBarChart.getData().add(series);
     sleepBarChart.setVisible(true);
 
-    groupAverageText.setText("Average of same age: ");
-    groupAverageNumberText.setText(Integer.toString(userDataFetch.getGroupAverage("sleep")));
-    pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(Integer.toString(userDataFetch.getPasientAverage("sleep")));
+    if (groupAverageBool) {
+      groupAverageText.setText(
+          "Average age "
+              + Integer.toString(user.getAge() - 5)
+              + "-"
+              + Integer.toString(user.getAge() + 5)
+              + ":");
+      groupAverageNumberText.setText(Integer.toString(agegroupAverage.getSleepDuration()));
+    }
+    pasientAverageText.setText("Your average:");
+    pasientAverageNumberText.setText(Integer.toString(myAverage.getSleepDuration()));
   }
 
   public void handleMessagesListViewClicked() {

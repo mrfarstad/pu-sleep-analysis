@@ -122,6 +122,8 @@ public class DoctorController implements Initializable {
 
   private UserDataFetch userDataFetch;
   private User user;
+  private AverageData agegroupAverage;
+  private AverageData patientAverage;
 
   private void returnToLoginScreen(Button sceneHolder) throws Exception {
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LoginGUI.fxml"));
@@ -185,6 +187,17 @@ public class DoctorController implements Initializable {
       graphResponse.setText("Please fill in all fields!");
       pause.play();
     } else {
+      agegroupAverage =
+          userDataFetch.getAverageDataForUsersInAgeGroup(
+              fromDate.getValue().toString(),
+              toDate.getValue().toString(),
+              Integer.parseInt(fromAge.getText()),
+              Integer.parseInt(toAge.getText()));
+      patientAverage =
+          userDataFetch.getAverageDataForUser(
+              patientChoiceBox.getValue().getId(),
+              fromDate.getValue().toString(),
+              toDate.getValue().toString());
       if (dataChoiceBox.getValue().equals("Sleep")) {
         hideCharts();
         showSleepBarChart();
@@ -219,10 +232,10 @@ public class DoctorController implements Initializable {
     sleepBarChart.getData().add(series);
     sleepBarChart.setVisible(true);
 
-    groupAverageText.setText("Average of same age: ");
-    groupAverageNumberText.setText(Integer.toString(userDataFetch.getGroupAverage("sleep")));
-    pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(Integer.toString(userDataFetch.getPasientAverage("sleep")));
+    groupAverageText.setText("Agegroup average:");
+    groupAverageNumberText.setText(Integer.toString(agegroupAverage.getSleepDuration()));
+    pasientAverageText.setText("Patient average:");
+    pasientAverageNumberText.setText(Integer.toString(patientAverage.getSleepDuration()));
   }
 
   private void showPulseChart() {
@@ -244,10 +257,10 @@ public class DoctorController implements Initializable {
     pulseLineChart.getData().add(series);
     pulseLineChart.setVisible(true);
 
-    groupAverageText.setText("Average of same age: ");
-    groupAverageNumberText.setText(Integer.toString(userDataFetch.getGroupAverage("pulse")));
-    pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(Integer.toString(userDataFetch.getPasientAverage("pulse")));
+    groupAverageText.setText("Agegroup average:");
+    groupAverageNumberText.setText(Integer.toString(agegroupAverage.getRestHr()));
+    pasientAverageText.setText("Patientt average:");
+    pasientAverageNumberText.setText(Integer.toString(patientAverage.getRestHr()));
   }
 
   private void showStepChart() {
@@ -268,10 +281,10 @@ public class DoctorController implements Initializable {
     stepBarChart.getData().add(series);
     stepBarChart.setVisible(true);
 
-    groupAverageText.setText("Average of same age: ");
-    groupAverageNumberText.setText(Integer.toString(userDataFetch.getGroupAverage("steps")));
-    pasientAverageText.setText("Pasients average: ");
-    pasientAverageNumberText.setText(Integer.toString(userDataFetch.getPasientAverage("steps")));
+    groupAverageText.setText("Agegroup average:");
+    groupAverageNumberText.setText(Integer.toString(agegroupAverage.getSteps()));
+    pasientAverageText.setText("Patient average:");
+    pasientAverageNumberText.setText(Integer.toString(patientAverage.getSteps()));
   }
 
   private void hideCharts() {

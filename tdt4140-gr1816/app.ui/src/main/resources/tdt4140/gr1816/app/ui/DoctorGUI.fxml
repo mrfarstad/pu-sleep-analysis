@@ -152,7 +152,7 @@
                                           <DatePicker fx:id="fromDate" layoutX="11.0" layoutY="112.0" prefHeight="29.0" prefWidth="150.0" promptText="From" />
                                           <DatePicker fx:id="toDate" layoutX="11.0" layoutY="142.0" prefHeight="27.0" prefWidth="150.0" promptText="To" />
                                           <Text layoutX="12.0" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date:" />
-                                          <Text layoutX="13.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Average group age:" />
+                                          <Text layoutX="12.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Average-group age:" />
                                           <TextField fx:id="fromAge" alignment="CENTER" layoutX="11.0" layoutY="190.0" prefHeight="26.0" prefWidth="56.0" promptText="From" />
                                           <TextField fx:id="toAge" alignment="CENTER" layoutX="80.0" layoutY="190.0" prefHeight="26.0" prefWidth="56.0" promptText="To" />
                                           <Text layoutX="71.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-" />
@@ -165,13 +165,13 @@
                                  <children>
                                     <AnchorPane prefHeight="54.0" prefWidth="401.0">
                                        <children>
-                                          <Text fx:id="groupAverageText" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="143.0" />
-                                          <Text fx:id="groupAverageNumberText" fill="#1755eb" layoutX="155.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="67.0">
+                                          <Text fx:id="groupAverageText" layoutX="10.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" wrappingWidth="130.0" />
+                                          <Text fx:id="groupAverageNumberText" fill="#1755eb" layoutX="150.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="60.0">
                                              <font>
                                                 <Font size="18.0" />
                                              </font></Text>
-                                          <Text fx:id="pasientAverageText" layoutX="222.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="121.0" />
-                                          <Text fx:id="pasientAverageNumberText" fill="#1755eb" layoutX="354.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="67.0">
+                                          <Text fx:id="pasientAverageText" layoutX="227.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" wrappingWidth="110.0" />
+                                          <Text fx:id="pasientAverageNumberText" fill="#1755eb" layoutX="345.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="60.0">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
