@@ -17,7 +17,6 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -104,8 +103,6 @@ public class DoctorController implements Initializable {
   @FXML private CategoryAxis sleepChartXAxis;
   @FXML private NumberAxis sleepChartYAxis;
 
-  @FXML private PieChart sleepPieChart;
-
   @FXML private LineChart<String, Number> pulseLineChart;
   @FXML private CategoryAxis pulseChartXAxis;
   @FXML private NumberAxis pulseChartYAxis;
@@ -114,8 +111,19 @@ public class DoctorController implements Initializable {
   @FXML private CategoryAxis stepChartXAxis;
   @FXML private NumberAxis stepChartYAxis;
 
+  @FXML private Text graphResponse;
+  @FXML private TextField fromAge;
+  @FXML private TextField toAge;
+
+  @FXML private Text groupAverageNumberText;
+  @FXML private Text groupAverageText;
+  @FXML private Text pasientAverageNumberText;
+  @FXML private Text pasientAverageText;
+
   private UserDataFetch userDataFetch;
   private User user;
+  private AverageData agegroupAverage;
+  private AverageData patientAverage;
 
   private void returnToLoginScreen(Button sceneHolder) throws Exception {
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LoginGUI.fxml"));
@@ -150,7 +158,7 @@ public class DoctorController implements Initializable {
     pause.setOnFinished(event -> requestFeedbackText.setText(""));
     if (newPatient == null) {
       requestFeedbackText.setText("User not found");
-    } else if (Login.userDataFetch.requestDataAccess(newPatient)) {
+    } else if (userDataFetch.requestDataAccess(newPatient)) {
       updatePatientListViewItems();
       requestFeedbackText.setText("Request sent");
     } else {
@@ -168,7 +176,28 @@ public class DoctorController implements Initializable {
   }
 
   public void handleViewGraphButton() {
-    if (dataChoiceBox.getValue() != null) {
+    PauseTransition pause = new PauseTransition(Duration.seconds(3));
+    pause.setOnFinished(event -> graphResponse.setText(""));
+    if (this.patientChoiceBox.getValue() == null
+        || this.dataChoiceBox.getValue() == null
+        || this.fromDate.getValue() == null
+        || this.toDate.getValue() == null
+        || this.fromAge.getText().equals("")
+        || this.toAge.getText().equals("")) {
+      graphResponse.setText("Please fill in all fields!");
+      pause.play();
+    } else {
+      agegroupAverage =
+          userDataFetch.getAverageDataForUsersInAgeGroup(
+              fromDate.getValue().toString(),
+              toDate.getValue().toString(),
+              Integer.parseInt(fromAge.getText()),
+              Integer.parseInt(toAge.getText()));
+      patientAverage =
+          userDataFetch.getAverageDataForUser(
+              patientChoiceBox.getValue().getId(),
+              fromDate.getValue().toString(),
+              toDate.getValue().toString());
       if (dataChoiceBox.getValue().equals("Sleep")) {
         hideCharts();
         showSleepBarChart();
@@ -190,14 +219,9 @@ public class DoctorController implements Initializable {
     sleepChartYAxis.setLabel("Duration in hours");
     ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
     sleepBarChart.getData().clear();
-    List<SleepData> sleepDataList;
-    if (fromDate.getValue() == null || toDate.getValue() == null) {
-      sleepDataList = Login.userDataFetch.getAllSleepData(user.getId());
-    } else {
-      sleepDataList =
-          Login.userDataFetch.getSleepDataBetweenDates(
-              user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
-    }
+    List<SleepData> sleepDataList =
+        userDataFetch.getSleepDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     sleepDataList
         .stream()
         .forEach(
@@ -209,38 +233,22 @@ public class DoctorController implements Initializable {
     sleepBarChart.getData().clear();
     sleepBarChart.getData().add(series);
     sleepBarChart.setVisible(true);
+
+    groupAverageText.setText("Agegroup average:");
+    groupAverageNumberText.setText(Integer.toString(agegroupAverage.getSleepDuration()));
+    pasientAverageText.setText("Patient average:");
+    pasientAverageNumberText.setText(Integer.toString(patientAverage.getSleepDuration()));
   }
-  // Piechart
-  /*
-    private void showSleepPieChart() {
-  	User user = getSelectedPatientCB();
-      System.out.println("showSleepPieChart");
-      ObservableList<PieChart.Data> pieChartData =
-          FXCollections.observableArrayList(
-              new PieChart.Data("Grapefruit", 13),
-              new PieChart.Data("Oranges", 25),
-              new PieChart.Data("Plums", 10),
-              new PieChart.Data("Pears", 22),
-              new PieChart.Data("Apples", 30));
-      sleepPieChart.getData().clear();
-      sleepPieChart.setData(pieChartData);
-      sleepPieChart.setVisible(true);
-    }
-  */
+
   private void showPulseChart() {
     User user = getSelectedPatientCB();
     pulseChartXAxis.setLabel("Date");
     pulseChartYAxis.setLabel("Pulse, restHR");
     ObservableList<XYChart.Data<String, Number>> lineChartData =
         FXCollections.observableArrayList();
-    List<PulseData> pulseDataList;
-    if (fromDate.getValue() == null || toDate.getValue() == null) {
-      pulseDataList = Login.userDataFetch.getAllPulseData(user.getId());
-    } else {
-      pulseDataList =
-          Login.userDataFetch.getPulseDataBetweenDates(
-              user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
-    }
+    List<PulseData> pulseDataList =
+        userDataFetch.getPulseDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     pulseDataList
         .stream()
         .forEach(
@@ -252,6 +260,11 @@ public class DoctorController implements Initializable {
     pulseLineChart.getData().clear();
     pulseLineChart.getData().add(series);
     pulseLineChart.setVisible(true);
+
+    groupAverageText.setText("Agegroup average:");
+    groupAverageNumberText.setText(Integer.toString(agegroupAverage.getRestHr()));
+    pasientAverageText.setText("Patientt average:");
+    pasientAverageNumberText.setText(Integer.toString(patientAverage.getRestHr()));
   }
 
   private void showStepChart() {
@@ -260,14 +273,9 @@ public class DoctorController implements Initializable {
     stepChartXAxis.setLabel("Date");
     stepChartYAxis.setLabel("Steps");
     ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
-    List<StepsData> stepDataList;
-    if (fromDate.getValue() == null || toDate.getValue() == null) {
-      stepDataList = Login.userDataFetch.getAllStepsData(user.getId());
-    } else {
-      stepDataList =
-          Login.userDataFetch.getStepsDataBetweenDates(
-              user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
-    }
+    List<StepsData> stepDataList =
+        userDataFetch.getStepsDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     stepDataList
         .stream()
         .forEach(
@@ -278,10 +286,14 @@ public class DoctorController implements Initializable {
     stepBarChart.getData().clear();
     stepBarChart.getData().add(series);
     stepBarChart.setVisible(true);
+
+    groupAverageText.setText("Agegroup average:");
+    groupAverageNumberText.setText(Integer.toString(agegroupAverage.getSteps()));
+    pasientAverageText.setText("Patient average:");
+    pasientAverageNumberText.setText(Integer.toString(patientAverage.getSteps()));
   }
 
   private void hideCharts() {
-    sleepPieChart.setVisible(false);
     pulseLineChart.setVisible(false);
     stepBarChart.setVisible(false);
     sleepBarChart.setVisible(false);
@@ -385,7 +397,6 @@ public class DoctorController implements Initializable {
 
   public User getSelectedPatientCB() {
     User user = patientChoiceBox.getValue();
-    patientTF.setText(user.getUsername() + ".");
     return user;
   }
 

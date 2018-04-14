@@ -83,6 +83,8 @@ public class UserController implements Initializable {
   @FXML private DatePicker fromDate;
   @FXML private DatePicker toDate;
   @FXML private Button viewGraphButton;
+  @FXML private Text graphResponse;
+  @FXML private CheckBox groupAverage;
 
   @FXML private BarChart<String, Number> stepBarChart;
   @FXML private CategoryAxis stepChartXAxis;
@@ -96,6 +98,10 @@ public class UserController implements Initializable {
   @FXML private CategoryAxis sleepChartXAxis;
   @FXML private NumberAxis sleepChartYAxis;
 
+  private AverageData agegroupAverage;
+  private AverageData myAverage;
+  private boolean groupAverageBool;
+
   // Edit profile
   @FXML private Button editProfileButton;
   @FXML private Text editProfileResponse;
@@ -108,6 +114,14 @@ public class UserController implements Initializable {
   @FXML private TextField newAgeField;
   @FXML private RadioButton male;
   @FXML private Button saveButton;
+
+  @FXML private Text averageText;
+  @FXML private Text averageNumberText;
+
+  @FXML private Text groupAverageText;
+  @FXML private Text groupAverageNumberText;
+  @FXML private Text pasientAverageText;
+  @FXML private Text pasientAverageNumberText;
 
   private User user;
   private UserDataFetch userDataFetch;
@@ -225,7 +239,7 @@ public class UserController implements Initializable {
   }
 
   public void deleteSleepDataFromDate(LocalDate ld) {
-    List<SleepData> sleepDataList = Login.userDataFetch.getSleepDataByViewer();
+    List<SleepData> sleepDataList = userDataFetch.getSleepDataByViewer();
     SleepData sleepData =
         sleepDataList.stream().filter(sd -> sd.getDate().equals(ld)).findFirst().orElse(null);
     if (sleepData != null) {
@@ -237,7 +251,7 @@ public class UserController implements Initializable {
   }
 
   public void deleteStepsDataFromDate(LocalDate ld) {
-    List<StepsData> stepsDataList = Login.userDataFetch.getStepsDataByViewer();
+    List<StepsData> stepsDataList = userDataFetch.getStepsDataByViewer();
     StepsData stepsData =
         stepsDataList.stream().filter(sd -> sd.getDate().equals(ld)).findFirst().orElse(null);
     if (stepsData != null) {
@@ -249,7 +263,7 @@ public class UserController implements Initializable {
   }
 
   public void deletePulseDataFromDate(LocalDate ld) {
-    List<PulseData> pulseDataList = Login.userDataFetch.getPulseDataByViewer();
+    List<PulseData> pulseDataList = userDataFetch.getPulseDataByViewer();
     PulseData pulseData =
         pulseDataList.stream().filter(pd -> pd.getDate().equals(ld)).findFirst().orElse(null);
     if (pulseData != null) {
@@ -263,7 +277,7 @@ public class UserController implements Initializable {
   public void handleRemoveDoctorButton() {
     DataAccessRequest selected = doctorsListView.getSelectionModel().getSelectedItem();
     if (selected != null) {
-      Login.userDataFetch.answerDataAccessRequest(selected, "REJECTED");
+      userDataFetch.answerDataAccessRequest(selected, "REJECTED");
       doctorsListViewItems.remove(selected);
     }
   }
@@ -271,7 +285,7 @@ public class UserController implements Initializable {
   public void handleAcceptDoctorButton() {
     DataAccessRequest selected = doctorRequestListView.getSelectionModel().getSelectedItem();
     if (selected != null) {
-      Login.userDataFetch.answerDataAccessRequest(selected, "ACCEPTED");
+      userDataFetch.answerDataAccessRequest(selected, "ACCEPTED");
       doctorRequestListViewItems.remove(selected);
       updateDoctorsListViewItems();
       updateToChoiceBox();
@@ -281,7 +295,7 @@ public class UserController implements Initializable {
   public void handleRejectDoctorButton() {
     DataAccessRequest selected = doctorRequestListView.getSelectionModel().getSelectedItem();
     if (selected != null) {
-      Login.userDataFetch.answerDataAccessRequest(selected, "REJECTED");
+      userDataFetch.answerDataAccessRequest(selected, "REJECTED");
       doctorRequestListViewItems.remove(selected);
       updateDoctorsListViewItems();
     }
@@ -302,7 +316,24 @@ public class UserController implements Initializable {
   }
 
   public void handleViewGraphButton() {
-    if (dataChoiceBox.getValue() != null) {
+    PauseTransition pause = new PauseTransition(Duration.seconds(3));
+    pause.setOnFinished(event -> graphResponse.setText(""));
+    if (dataChoiceBox.getValue() == null
+        || fromDate.getValue() == null
+        || toDate.getValue() == null) {
+      graphResponse.setText("Please fill in all fields!");
+      pause.play();
+    } else {
+      agegroupAverage =
+          userDataFetch.getAverageDataForUsersInAgeGroup(
+              fromDate.getValue().toString(),
+              toDate.getValue().toString(),
+              user.getAge() - 5,
+              user.getAge() + 5);
+      myAverage =
+          userDataFetch.getMyAverageData(
+              fromDate.getValue().toString(), toDate.getValue().toString());
+      groupAverageBool = groupAverage.isSelected();
       if (dataChoiceBox.getValue().equals("Steps")) {
         hideCharts();
         showStepChart();
@@ -322,14 +353,9 @@ public class UserController implements Initializable {
     stepChartXAxis.setLabel("Date");
     stepChartYAxis.setLabel("Steps");
     ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
-    List<StepsData> stepsDataList;
-    if (fromDate.getValue() == null || toDate.getValue() == null) {
-      stepsDataList = Login.userDataFetch.getAllStepsData(user.getId());
-    } else {
-      stepsDataList =
-          Login.userDataFetch.getStepsDataBetweenDates(
-              user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
-    }
+    List<StepsData> stepsDataList =
+        userDataFetch.getStepsDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     stepsDataList
         .stream()
         .forEach(
@@ -341,6 +367,18 @@ public class UserController implements Initializable {
     stepBarChart.getData().clear();
     stepBarChart.getData().add(series);
     stepBarChart.setVisible(true);
+
+    if (groupAverageBool) {
+      groupAverageText.setText(
+          "Average, age "
+              + Integer.toString(user.getAge() - 5)
+              + "-"
+              + Integer.toString(user.getAge() + 5)
+              + ":");
+      groupAverageNumberText.setText(Integer.toString(agegroupAverage.getSteps()));
+    }
+    pasientAverageText.setText("Your average:");
+    pasientAverageNumberText.setText(Integer.toString(myAverage.getSteps()));
   }
 
   public void showPulseChart() {
@@ -349,25 +387,32 @@ public class UserController implements Initializable {
     pulseChartYAxis.setLabel("Pulse, restHR");
     ObservableList<XYChart.Data<String, Number>> lineChartData =
         FXCollections.observableArrayList();
-    List<PulseData> pulseDataList;
-    if (fromDate.getValue() == null || toDate.getValue() == null) {
-      pulseDataList = Login.userDataFetch.getAllPulseData(user.getId());
-    } else {
-      pulseDataList =
-          Login.userDataFetch.getPulseDataBetweenDates(
-              user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
-    }
+    List<PulseData> pulseDataList =
+        userDataFetch.getPulseDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     pulseDataList
         .stream()
         .forEach(
             pulseData ->
                 lineChartData.add(
                     new XYChart.Data<>(pulseData.getDate().toString(), pulseData.getRestHr())));
-
     XYChart.Series<String, Number> series = new XYChart.Series<>(lineChartData);
+
     pulseLineChart.getData().clear();
     pulseLineChart.getData().add(series);
     pulseLineChart.setVisible(true);
+
+    if (groupAverageBool) {
+      groupAverageText.setText(
+          "Average, age "
+              + Integer.toString(user.getAge() - 5)
+              + "-"
+              + Integer.toString(user.getAge() + 5)
+              + ":");
+      groupAverageNumberText.setText(Integer.toString(agegroupAverage.getRestHr()));
+    }
+    pasientAverageText.setText("Your average:");
+    pasientAverageNumberText.setText(Integer.toString(myAverage.getRestHr()));
   }
 
   public void showSleepDChart() {
@@ -377,14 +422,9 @@ public class UserController implements Initializable {
     sleepChartYAxis.setLabel("Duration in hours");
     ObservableList<XYChart.Data<String, Number>> sleepBarChartData =
         FXCollections.observableArrayList();
-    List<SleepData> sleepDataList;
-    if (fromDate.getValue() == null || toDate.getValue() == null) {
-      sleepDataList = Login.userDataFetch.getAllSleepData(user.getId());
-    } else {
-      sleepDataList =
-          Login.userDataFetch.getSleepDataBetweenDates(
-              user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
-    }
+    List<SleepData> sleepDataList =
+        userDataFetch.getSleepDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     sleepDataList
         .stream()
         .forEach(
@@ -397,6 +437,18 @@ public class UserController implements Initializable {
     sleepBarChart.getData().clear();
     sleepBarChart.getData().add(series);
     sleepBarChart.setVisible(true);
+
+    if (groupAverageBool) {
+      groupAverageText.setText(
+          "Average, age "
+              + Integer.toString(user.getAge() - 5)
+              + "-"
+              + Integer.toString(user.getAge() + 5)
+              + ":");
+      groupAverageNumberText.setText(Double.toString(agegroupAverage.getSleepDuration() / 60.0));
+    }
+    pasientAverageText.setText("Your average:");
+    pasientAverageNumberText.setText(Double.toString(myAverage.getSleepDuration() / 60.0));
   }
 
   public void handleMessagesListViewClicked() {
@@ -516,6 +568,8 @@ public class UserController implements Initializable {
     stepBarChart.setVisible(false);
     pulseLineChart.setVisible(false);
     sleepBarChart.setVisible(false);
+    groupAverageText.setText("");
+    groupAverageNumberText.setText("");
   }
 
   public void setDataChoiceBox() {
