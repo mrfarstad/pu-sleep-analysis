@@ -413,6 +413,31 @@ public class TestUserDataFetch extends CoreBaseTest {
   }
 
   @Test
+  public void testGetSleepDataBetweenDates() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "sleepDataBetweenDatesResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    List<SleepData> sleepData = userDataFetch.getSleepDataBetweenDates("", "", "");
+    assertTrue(sleepData.size() > 0);
+    String viewerId = sleepData.get(0).getUser().getId();
+    for (SleepData sleep : sleepData) {
+      assertTrue(sleep.getId() instanceof String);
+      assertTrue(sleep.getUser() instanceof User);
+      assertTrue(sleep.getUser().getId().equals(viewerId));
+      assertTrue(sleep.getDate() instanceof LocalDate);
+      assertTrue(sleep.getDuration() > -1);
+      assertTrue(sleep.getEfficiency() > -1);
+    }
+  }
+
+  @Test
   public void testGetSleepDataByViewer() {
     String response = "";
     try {
@@ -493,6 +518,30 @@ public class TestUserDataFetch extends CoreBaseTest {
   }
 
   @Test
+  public void testStepsDataBetweenDates() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "stepsDataBetweenDatesResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    List<StepsData> stepsData = userDataFetch.getStepsDataBetweenDates("", "", "");
+    assertTrue(stepsData.size() > 0);
+    String viewerId = stepsData.get(0).getUser().getId();
+    for (StepsData steps : stepsData) {
+      assertTrue(steps.getId() instanceof String);
+      assertTrue(steps.getUser().getId().equals(viewerId));
+      assertTrue(steps.getUser() instanceof User);
+      assertTrue(steps.getDate() instanceof LocalDate);
+      assertTrue(steps.getSteps() > -1);
+    }
+  }
+
+  @Test
   public void testStepsDataByViewer() {
     String response = "";
     try {
@@ -564,6 +613,30 @@ public class TestUserDataFetch extends CoreBaseTest {
     assertTrue(pulseData.size() > 0);
     for (PulseData pulse : pulseData) {
       assertTrue(pulse.getId() instanceof String);
+      assertTrue(pulse.getUser() instanceof User);
+      assertTrue(pulse.getDate() instanceof LocalDate);
+      assertTrue(pulse.getRestHr() > -1);
+    }
+  }
+
+  @Test
+  public void testGetPulseDataBetweenDates() {
+    String response = "";
+    try {
+      response =
+          new String(
+              Files.readAllBytes(
+                  Paths.get(resourceResponsePath + "pulseDataBetweenDatesResponse.txt")));
+    } catch (IOException e) {
+      fail("Wrong filename for query");
+    }
+    when(test.getData(anyString(), isNull())).thenReturn(response);
+    List<PulseData> pulseData = userDataFetch.getPulseDataBetweenDates("", "", "");
+    assertTrue(pulseData.size() > 0);
+    String viewerId = pulseData.get(0).getUser().getId();
+    for (PulseData pulse : pulseData) {
+      assertTrue(pulse.getId() instanceof String);
+      assertTrue(pulse.getUser().getId().equals(viewerId));
       assertTrue(pulse.getUser() instanceof User);
       assertTrue(pulse.getDate() instanceof LocalDate);
       assertTrue(pulse.getRestHr() > -1);

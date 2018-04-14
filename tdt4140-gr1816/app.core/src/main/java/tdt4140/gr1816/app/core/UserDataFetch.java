@@ -220,6 +220,18 @@ public class UserDataFetch {
         variables);
   }
 
+  public List<SleepData> getSleepDataBetweenDates(String userId, String startDate, String endDate) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("userId", userId);
+    variables.put("startDate", startDate);
+    variables.put("endDate", endDate);
+    return getGenericData(
+        "sleepDataBetweenDatesQuery.txt",
+        Arrays.asList("sleepDataBetweenDates"),
+        new TypeReference<List<SleepData>>() {},
+        variables);
+  }
+
   public List<SleepData> getSleepDataByViewer() {
     return getGenericData(
         "sleepDataByViewerQuery.txt",
@@ -286,6 +298,18 @@ public class UserDataFetch {
         variables);
   }
 
+  public List<StepsData> getStepsDataBetweenDates(String userId, String startDate, String endDate) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("userId", userId);
+    variables.put("startDate", startDate);
+    variables.put("endDate", endDate);
+    return getGenericData(
+        "stepsDataBetweenDatesQuery.txt",
+        Arrays.asList("stepsDataBetweenDates"),
+        new TypeReference<List<StepsData>>() {},
+        variables);
+  }
+
   public List<StepsData> getStepsDataByViewer() {
     return getGenericData(
         "stepsDataByViewerQuery.txt",
@@ -321,6 +345,18 @@ public class UserDataFetch {
     return getGenericData(
         "allPulseDataQuery.txt",
         Arrays.asList("allPulseData"),
+        new TypeReference<List<PulseData>>() {},
+        variables);
+  }
+
+  public List<PulseData> getPulseDataBetweenDates(String userId, String startDate, String endDate) {
+    Map<String, String> variables = new HashMap<>();
+    variables.put("userId", userId);
+    variables.put("startDate", startDate);
+    variables.put("endDate", endDate);
+    return getGenericData(
+        "pulseDataBetweenDatesQuery.txt",
+        Arrays.asList("pulseDataBetweenDates"),
         new TypeReference<List<PulseData>>() {},
         variables);
   }

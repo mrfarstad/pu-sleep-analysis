@@ -1,0 +1,1 @@
+{"data":{"pulseDataBetweenDates":[{"id":"5ad0c6beb6bf2ce49532ee5b","date":"2017-04-02","user":{"id":"5ad0bbaeb6bf2cca5e7ed072","username":"martin","isDoctor":false,"age":22,"gender":"Female"},"restHr":62},{"id":"5ad0c6c0b6bf2ce49532ee5e","date":"2017-04-03","user":{"id":"5ad0bbaeb6bf2cca5e7ed072","username":"martin","isDoctor":false,"age":22,"gender":"Female"},"restHr":60}]}}
