@@ -329,7 +329,7 @@ public class UserController implements Initializable {
               fromDate.getValue().toString(),
               toDate.getValue().toString(),
               user.getAge() - 5,
-              user.getAge() - 5);
+              user.getAge() + 5);
       myAverage =
           userDataFetch.getMyAverageData(
               fromDate.getValue().toString(), toDate.getValue().toString());
@@ -353,9 +353,9 @@ public class UserController implements Initializable {
     stepChartXAxis.setLabel("Date");
     stepChartYAxis.setLabel("Steps");
     ObservableList<XYChart.Data<String, Number>> barChartData = FXCollections.observableArrayList();
-    List<StepsData> stepsDataList = 
-          userDataFetch.getStepsDataBetweenDates(
-              user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
+    List<StepsData> stepsDataList =
+        userDataFetch.getStepsDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     stepsDataList
         .stream()
         .forEach(
@@ -370,7 +370,7 @@ public class UserController implements Initializable {
 
     if (groupAverageBool) {
       groupAverageText.setText(
-          "Average age "
+          "Average, age "
               + Integer.toString(user.getAge() - 5)
               + "-"
               + Integer.toString(user.getAge() + 5)
@@ -387,9 +387,9 @@ public class UserController implements Initializable {
     pulseChartYAxis.setLabel("Pulse, restHR");
     ObservableList<XYChart.Data<String, Number>> lineChartData =
         FXCollections.observableArrayList();
-    List<PulseData> pulseDataList = 
-          userDataFetch.getPulseDataBetweenDates(
-              user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
+    List<PulseData> pulseDataList =
+        userDataFetch.getPulseDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     pulseDataList
         .stream()
         .forEach(
@@ -397,14 +397,14 @@ public class UserController implements Initializable {
                 lineChartData.add(
                     new XYChart.Data<>(pulseData.getDate().toString(), pulseData.getRestHr())));
     XYChart.Series<String, Number> series = new XYChart.Series<>(lineChartData);
-    
+
     pulseLineChart.getData().clear();
     pulseLineChart.getData().add(series);
     pulseLineChart.setVisible(true);
 
     if (groupAverageBool) {
       groupAverageText.setText(
-          "Average age "
+          "Average, age "
               + Integer.toString(user.getAge() - 5)
               + "-"
               + Integer.toString(user.getAge() + 5)
@@ -423,8 +423,8 @@ public class UserController implements Initializable {
     ObservableList<XYChart.Data<String, Number>> sleepBarChartData =
         FXCollections.observableArrayList();
     List<SleepData> sleepDataList =
-          userDataFetch.getSleepDataBetweenDates(
-              user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
+        userDataFetch.getSleepDataBetweenDates(
+            user.getId(), fromDate.getValue().toString(), toDate.getValue().toString());
     sleepDataList
         .stream()
         .forEach(
@@ -440,15 +440,15 @@ public class UserController implements Initializable {
 
     if (groupAverageBool) {
       groupAverageText.setText(
-          "Average age "
+          "Average, age "
               + Integer.toString(user.getAge() - 5)
               + "-"
               + Integer.toString(user.getAge() + 5)
               + ":");
-      groupAverageNumberText.setText(Integer.toString(agegroupAverage.getSleepDuration()));
+      groupAverageNumberText.setText(Double.toString(agegroupAverage.getSleepDuration() / 60.0));
     }
     pasientAverageText.setText("Your average:");
-    pasientAverageNumberText.setText(Integer.toString(myAverage.getSleepDuration()));
+    pasientAverageNumberText.setText(Double.toString(myAverage.getSleepDuration() / 60.0));
   }
 
   public void handleMessagesListViewClicked() {
