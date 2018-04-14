@@ -241,7 +241,7 @@
                                         <CategoryAxis fx:id="pulseChartXAxis" side="BOTTOM" />
                                       </xAxis>
                                       <yAxis>
-                                        <NumberAxis side="LEFT" />
+                                        <NumberAxis fx:id="pulseChartYAxis" side="LEFT" />
                                       </yAxis>
                                     </LineChart>
                                     <BarChart fx:id="sleepBarChart" prefHeight="259.0" prefWidth="392.0" title="Sleep Bar Chart">
