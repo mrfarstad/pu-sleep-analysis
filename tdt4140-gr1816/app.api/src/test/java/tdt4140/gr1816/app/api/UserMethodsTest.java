@@ -1,6 +1,7 @@
 package tdt4140.gr1816.app.api;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -136,6 +137,29 @@ public class UserMethodsTest extends ApiBaseCase {
     assertNotNull(user);
     assertNotNull(user.get("id"));
   }
+  
+  @Test
+  public void testGatheringData() {
+    User testUser = createUser();
+    assertTrue(GraphQLEndpoint.userRepository.setIsGatheringData(testUser, true));
+    assertFalse(GraphQLEndpoint.userRepository.setIsGatheringData(testUser, false));
+  }
+  
+  @Test
+  public void testForgotPassword() {
+    User testUser = null;
+    assertFalse(GraphQLEndpoint.userRepository.forgotPassword(testUser));
+    testUser = createUser();
+    String oldPassword = testUser.getPassword();
+    boolean success = GraphQLEndpoint.userRepository.forgotPassword(testUser);
+    assertTrue(success);
+
+    User newUser = GraphQLEndpoint.userRepository.findById(testUser.getId());
+    String newPassword = newUser.getPassword();
+
+    assertFalse(oldPassword.equals(newPassword));
+  }
+    
 
   @Test
   public void testMessage() {
