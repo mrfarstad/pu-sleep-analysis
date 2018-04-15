@@ -57,11 +57,20 @@ public class DataTest extends ApiBaseCase {
     Map<String, Object> result1 = res1.getData();
 
     @SuppressWarnings("unchecked")
-    ArrayList<Map> pulseDataList = (ArrayList<Map>) result1.get("sleepDataBetweenDates");
+    ArrayList<Map> sleepDataList = (ArrayList<Map>) result1.get("sleepDataBetweenDates");
 
-    assertEquals(pulseDataList.size(), 1);
-    assertTrue(pulseDataList.get(0).get("id") != null);
-    assertTrue(pulseDataList.get(0).get("id") instanceof String);
+    assertEquals(sleepDataList.size(), 1);
+    assertTrue(sleepDataList.get(0).get("id") != null);
+    assertTrue(sleepDataList.get(0).get("id") instanceof String);
+
+    query = "mutation {\n" + "  deleteSleepData(" + "sleepId: " + "\"" + "%s" + "\"" + ")" + "}";
+
+    String ID = (String) sleepDataList.get(0).get("id");
+    ExecutionResult res2 = executeQuery(String.format(query, ID), context);
+    Map<String, Object> result2 = res2.getData();
+
+    boolean success = (boolean) result2.get("deleteSleepData");
+    assertTrue(success);
   }
 
   @Test
@@ -103,11 +112,20 @@ public class DataTest extends ApiBaseCase {
     Map<String, Object> result1 = res1.getData();
 
     @SuppressWarnings("unchecked")
-    ArrayList<Map> pulseDataList = (ArrayList<Map>) result1.get("stepsDataBetweenDates");
+    ArrayList<Map> stepsDataList = (ArrayList<Map>) result1.get("stepsDataBetweenDates");
 
-    assertEquals(pulseDataList.size(), 1);
-    assertTrue(pulseDataList.get(0).get("id") != null);
-    assertTrue(pulseDataList.get(0).get("id") instanceof String);
+    assertEquals(stepsDataList.size(), 1);
+    assertTrue(stepsDataList.get(0).get("id") != null);
+    assertTrue(stepsDataList.get(0).get("id") instanceof String);
+
+    query = "mutation {\n" + "  deleteStepsData(" + "stepsId: " + "\"" + "%s" + "\"" + ")" + "}";
+
+    String ID = (String) stepsDataList.get(0).get("id");
+    ExecutionResult res2 = executeQuery(String.format(query, ID), context);
+    Map<String, Object> result2 = res2.getData();
+
+    boolean success = (boolean) result2.get("deleteStepsData");
+    assertTrue(success);
   }
 
   @Test
@@ -154,5 +172,14 @@ public class DataTest extends ApiBaseCase {
     assertEquals(pulseDataList.size(), 1);
     assertTrue(pulseDataList.get(0).get("id") != null);
     assertTrue(pulseDataList.get(0).get("id") instanceof String);
+
+    query = "mutation {\n" + "  deletePulseData(" + "pulseId: " + "\"" + "%s" + "\"" + ")" + "}";
+
+    String ID = (String) pulseDataList.get(0).get("id");
+    ExecutionResult res2 = executeQuery(String.format(query, ID), context);
+    Map<String, Object> result2 = res2.getData();
+
+    boolean success = (boolean) result2.get("deletePulseData");
+    assertTrue(success);
   }
 }
