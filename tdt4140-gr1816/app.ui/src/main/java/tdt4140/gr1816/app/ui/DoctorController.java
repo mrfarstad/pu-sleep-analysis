@@ -2,6 +2,7 @@ package tdt4140.gr1816.app.ui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -213,6 +214,7 @@ public class DoctorController implements Initializable {
 
   private void showSleepBarChart() {
     hideCharts();
+    DecimalFormat df = new DecimalFormat(".##");
     User user = getSelectedPatientCB();
     sleepBarChart.setBarGap(0);
     sleepChartXAxis.setLabel("Date");
@@ -235,9 +237,9 @@ public class DoctorController implements Initializable {
     sleepBarChart.setVisible(true);
 
     groupAverageText.setText("Agegroup average:");
-    groupAverageNumberText.setText(Integer.toString(agegroupAverage.getSleepDuration()));
+    groupAverageNumberText.setText(df.format((agegroupAverage.getSleepDuration() / 60)));
     pasientAverageText.setText("Patient average:");
-    pasientAverageNumberText.setText(Integer.toString(patientAverage.getSleepDuration()));
+    pasientAverageNumberText.setText(df.format(patientAverage.getSleepDuration() / 60));
   }
 
   private void showPulseChart() {
@@ -263,7 +265,7 @@ public class DoctorController implements Initializable {
 
     groupAverageText.setText("Agegroup average:");
     groupAverageNumberText.setText(Integer.toString(agegroupAverage.getRestHr()));
-    pasientAverageText.setText("Patientt average:");
+    pasientAverageText.setText("Patient average:");
     pasientAverageNumberText.setText(Integer.toString(patientAverage.getRestHr()));
   }
 
