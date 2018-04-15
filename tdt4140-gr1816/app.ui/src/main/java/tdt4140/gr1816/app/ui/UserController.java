@@ -2,6 +2,7 @@ package tdt4140.gr1816.app.ui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -416,6 +417,7 @@ public class UserController implements Initializable {
   }
 
   public void showSleepDChart() {
+    DecimalFormat df = new DecimalFormat(".##");
     hideCharts();
     sleepBarChart.setBarGap(0);
     sleepChartXAxis.setLabel("Date");
@@ -445,10 +447,10 @@ public class UserController implements Initializable {
               + "-"
               + Integer.toString(user.getAge() + 5)
               + ":");
-      groupAverageNumberText.setText(Double.toString(agegroupAverage.getSleepDuration() / 60.0));
+      groupAverageNumberText.setText(df.format(agegroupAverage.getSleepDuration() / 60.0));
     }
     pasientAverageText.setText("Your average:");
-    pasientAverageNumberText.setText(Double.toString(myAverage.getSleepDuration() / 60.0));
+    pasientAverageNumberText.setText(df.format((myAverage.getSleepDuration() / 60.0)));
   }
 
   public void handleMessagesListViewClicked() {

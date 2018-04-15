@@ -1,6 +1,7 @@
 package tdt4140.gr1816.app.api;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -135,6 +136,65 @@ public class UserMethodsTest extends ApiBaseCase {
 
     assertNotNull(user);
     assertNotNull(user.get("id"));
+  }
+
+  @Test
+  public void testGatheringData() {
+    User testUser = createUser();
+    assertTrue(GraphQLEndpoint.userRepository.setIsGatheringData(testUser, true));
+    assertFalse(GraphQLEndpoint.userRepository.setIsGatheringData(testUser, false));
+  }
+
+  @Test
+  public void testForgotPassword() {
+    User testUser = null;
+    assertFalse(GraphQLEndpoint.userRepository.forgotPassword(testUser));
+    testUser = createUser();
+    String oldPassword = testUser.getPassword();
+    boolean success = GraphQLEndpoint.userRepository.forgotPassword(testUser);
+    assertTrue(success);
+
+    User newUser = GraphQLEndpoint.userRepository.findById(testUser.getId());
+    String newPassword = newUser.getPassword();
+
+    assertFalse(oldPassword.equals(newPassword));
+  }
+
+  @Test
+  public void testEditUser() {
+    User testUser = createUser();
+    boolean success = editUser(testUser.getUsername());
+    User newUser = GraphQLEndpoint.userRepository.findById(testUser.getId());
+    AuthContext auth = forceAuth(newUser.getUsername());
+
+    assertNotNull(success);
+    assertTrue(success);
+
+    ExecutionResult res = getGraph().execute("{viewer {username id age gender}}", auth);
+
+    Map<String, Object> result = res.getData();
+    Map<String, Object> fetchedUser = (Map<String, Object>) result.get("viewer");
+
+    assertEquals(fetchedUser.get("id"), testUser.getId());
+    assertEquals(fetchedUser.get("username"), "NewTest");
+    assertEquals(fetchedUser.get("age"), 34);
+    assertEquals(fetchedUser.get("gender"), "female");
+
+    assertFalse(editUser(testUser.getUsername()));
+
+    success =
+        GraphQLEndpoint.userRepository.editUser(
+            (String) fetchedUser.get("username"), "null", "null", 35, "null");
+    assertTrue(success);
+    User finalUser = GraphQLEndpoint.userRepository.findById((String) fetchedUser.get("id"));
+    assertEquals(finalUser.getUsername(), fetchedUser.get("username"));
+    assertTrue((int) fetchedUser.get("age") == (finalUser.getAge() - 1));
+
+    success =
+        GraphQLEndpoint.userRepository.editUser(
+            (String) fetchedUser.get("username"), "DONE", "null", 0, "null");
+
+    assertTrue(success);
   }
 
   @Test

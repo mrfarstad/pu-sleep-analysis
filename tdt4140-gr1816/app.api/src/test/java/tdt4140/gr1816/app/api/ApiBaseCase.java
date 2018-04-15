@@ -70,4 +70,8 @@ public class ApiBaseCase {
     User user = GraphQLEndpoint.userRepository.findByUsername(username);
     return forceAuth(user);
   }
+
+  public boolean editUser(String username) {
+    return GraphQLEndpoint.userRepository.editUser(username, "NewTest", "test", 34, "female");
+  }
 }
