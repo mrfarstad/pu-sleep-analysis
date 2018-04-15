@@ -2,7 +2,7 @@
 > Programvareutvikling
 
 ### About
-In the subject Software Development TDT4140, the task is to create an 
+In the subject Software Development TDT4140, is the task to create an 
 infrastructure for Smart Life and Health. We have created an application to analyze sleep.
 Sleep Analysis is an application for gathering data concerning health,
 with a focus on sleep, but also including information on walking and heart rate.
