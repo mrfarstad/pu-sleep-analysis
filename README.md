@@ -49,7 +49,31 @@ There is a custom plugin for eclipse [here](https://github.com/google/google-jav
 $ mvn verify # Verify your code
 $ mvn com.coveo:fmt-maven-plugin:format # This will format the code
 ```
+##Links
 
+Maven
+https://maven.apache.org/what-is-maven.html
+
+Docker
+https://www.docker.com/what-docker
+
+MongoDB
+https://www.mongodb.com/what-is-mongodb
+
+GraphQL
+https://graphql.org/learn/
+
+Jacoco
+http://www.eclemma.org/jacoco/
+
+Mockito
+http://site.mockito.org/
+
+JavaFX
+https://docs.oracle.com/javafx/2/overview/jfxpub-overview.htm
+
+JUnit
+https://junit.org/junit5/
 
 ## Roles
 
