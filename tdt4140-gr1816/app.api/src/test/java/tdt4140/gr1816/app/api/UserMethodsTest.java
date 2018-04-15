@@ -159,7 +159,7 @@ public class UserMethodsTest extends ApiBaseCase {
 
     assertFalse(oldPassword.equals(newPassword));
   }
-  /*
+
   @Test
   public void testEditUser() {
     User testUser = createUser();
@@ -195,7 +195,7 @@ public class UserMethodsTest extends ApiBaseCase {
             (String) fetchedUser.get("username"), "DONE", "null", 0, "null");
 
     assertTrue(success);
-  }*/
+  }
 
   @Test
   public void testMessage() {
