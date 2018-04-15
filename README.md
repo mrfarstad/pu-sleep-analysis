@@ -49,7 +49,7 @@ There is a custom plugin for eclipse [here](https://github.com/google/google-jav
 $ mvn verify # Verify your code
 $ mvn com.coveo:fmt-maven-plugin:format # This will format the code
 ```
-##Links
+## Links
 
 Maven
 https://maven.apache.org/what-is-maven.html
