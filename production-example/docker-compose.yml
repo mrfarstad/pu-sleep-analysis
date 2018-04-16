@@ -1,3 +1,4 @@
+---
 version: '2'
 
 services:
@@ -5,7 +6,7 @@ services:
   image: mongo:latest
   command: mongod --smallfiles --logpath=/dev/null
  api-server:
-  image: gruppe16:latest
+  image: gruppe16/gruppe16:latest
   environment:
    - MONGO_HOST=mongodb
   ports:
