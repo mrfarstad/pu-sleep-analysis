@@ -1,13 +1,14 @@
 # Gruppe 16 - TDT4140
-> Programvareutvikling
 
-### About
+## About
 In the subject Software Development TDT4140, is the task to create an 
 infrastructure for Smart Life and Health. We have created an application to analyze sleep.
 Sleep Analysis is an application for gathering data concerning health,
 with a focus on sleep, but also including information on walking and heart rate.
 We want to examine the correlation between these health aspects, and how sleep
 can be improved.
+
+## Getting startet
 
 ### Database
 
@@ -18,17 +19,16 @@ $ docker-compose up -d
 
 ### Build project
 
-```
+```bash
 $ mvn -f tdt4140-gr1816/pom.xml install
 ```
 
 ### Run API
 
 ```bash
-
 $ mvn -f tdt4140-gr1816/app.api/pom.xml jetty:run
 ```
-Then open http://localhost:8080
+When API  is running, open http://localhost:8080 
 
 
 ### Build and run UI
@@ -51,29 +51,14 @@ $ mvn com.coveo:fmt-maven-plugin:format # This will format the code
 ```
 ## Links
 
-Maven
-https://maven.apache.org/what-is-maven.html
-
-Docker
-https://www.docker.com/what-docker
-
-MongoDB
-https://www.mongodb.com/what-is-mongodb
-
-GraphQL
-https://graphql.org/learn/
-
-Jacoco
-http://www.eclemma.org/jacoco/
-
-Mockito
-http://site.mockito.org/
-
-JavaFX
-https://docs.oracle.com/javafx/2/overview/jfxpub-overview.htm
-
-JUnit
-https://junit.org/junit5/
+*  [Maven](https://maven.apache.org/what-is-maven.html)
+*  [Docker](https://www.docker.com/what-docker)
+*  [MongoDB](https://www.mongodb.com/what-is-mongodb)
+*  [GraphQL](https://graphql.org/learn/)
+*  [Jacoco](http://www.eclemma.org/jacoco/)
+*  [Mockito](http://site.mockito.org/)
+*  [JavaFX](https://docs.oracle.com/javafx/2/overview/jfxpub-overview.htm)
+*  [JUnit](https://junit.org/junit5/)
 
 ## Roles
 
