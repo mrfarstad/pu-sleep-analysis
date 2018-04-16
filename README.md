@@ -9,7 +9,11 @@ with a focus on sleep, but also including information on walking and heart rate.
 We want to examine the correlation between these health aspects, and how sleep
 can be improved.
 
+
 ### Database
+
+To store persistent data we use `mongodb`. For development purposes it can be started using
+a simple docker container. We currently use `docker-compose` to do this in a simple way.
 
 To start mongodb
 ```bash
@@ -20,6 +24,8 @@ $ docker-compose up -d
 
 ```
 $ mvn -f tdt4140-gr1816/pom.xml install
+$ # To build the docker image for production (see Dockerfile for more information)
+$ docker build -t gruppe16/gruppe16 .
 ```
 
 ### Run API
@@ -49,7 +55,8 @@ There is a custom plugin for eclipse [here](https://github.com/google/google-jav
 $ mvn verify # Verify your code
 $ mvn com.coveo:fmt-maven-plugin:format # This will format the code
 ```
-## Links
+
+## Dependencies
 
 Maven
 https://maven.apache.org/what-is-maven.html
